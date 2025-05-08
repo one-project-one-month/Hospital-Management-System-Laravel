@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'user','guard_name'=>'api']);
         Role::create(['name' => 'patient','guard_name'=>'api']);
         Role::create(['name' => 'doctor','guard_name'=>'api']);
+
+        $this->call(MedicineSeeder::class);
         // User::factory(10)->create();
 
        $user= User::factory()->create([
