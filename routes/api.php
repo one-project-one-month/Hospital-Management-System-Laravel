@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MedicineController;
+use App\Http\Controllers\PatientProfileController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -21,6 +22,7 @@ Route::prefix('v1/auth')->group(function(){
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::apiResource('medicines',MedicineController::class);
+    Route::post('user/upgrade', [PatientProfileController::class, 'upgrade']);
 });
 
 
