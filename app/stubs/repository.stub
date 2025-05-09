@@ -1,0 +1,8 @@
+<?php
+
+namespace {{namespace}};
+
+class {{class}}
+{
+    // Write your code here rock and roll
+}
