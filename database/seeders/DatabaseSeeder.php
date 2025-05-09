@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\DoctorProfile;
+use create;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\DoctorProfile;
+use App\Models\DoctorSchedule;
 use App\Models\PatientProfile;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
