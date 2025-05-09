@@ -7,7 +7,7 @@ use App\Models\DoctorProfile;
 use App\Models\DoctorSchedule;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\PatientProfile;
+use App\Models\DoctorProfile;
 use App\Models\Treatment;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
