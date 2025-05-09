@@ -24,4 +24,9 @@ class PatientProfileRepository
         $patientProfile=PatientProfile::create($data);
         return $patientProfile;
     }
+
+    public function upgradePatient($validator){
+        $validated_data = PatientProfile::create($validator);
+        return $validated_data;
+    }
 }
