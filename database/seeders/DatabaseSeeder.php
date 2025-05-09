@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Appointment;
 use App\Models\DoctorProfile;
+use App\Models\DoctorSchedule;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\PatientProfile;
+use App\Models\DoctorProfile;
+use App\Models\Treatment;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -25,7 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MedicineSeeder::class);
         // User::factory(10)->create();
 
-       $user= User::factory()->create([
+       $user= User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
@@ -44,7 +47,7 @@ class DatabaseSeeder extends Seeder
             'blood_type' => 'O+'
         ]);
 
-        $doctorUser = User::factory()->create([
+        $doctorUser = User::create([
             'name' => 'Dr. John Smith',
             'email' => 'doctor@example.com',
             'password' => bcrypt('password'),
@@ -76,18 +79,18 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create sample appointments
-
-
         Appointment::create([
             'patient_profile_id' => $patient->id,
             'doctor_profile_id' => $doctor->id,
             'appointment_date' => now()->subDays(5)->toDateString(),
             'appointment_time' => '11:15:00',
-            'status' => 'completed',
+            'status' => 'pending',
             'notes' => 'Initial consultation completed',
             'created_at' => now()->subDays(5),
             'updated_at' => now()->subDays(5)
         ]);
+
+
 
 
 

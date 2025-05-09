@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patient_profiles', function (Blueprint $table) {
-            $table->uuid('id')->primary()->defaultUuid();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->date('date_of_birth');
             $table->enum('gender',['male','female','other'])->default('male');
             $table->string('phone')->nullable();

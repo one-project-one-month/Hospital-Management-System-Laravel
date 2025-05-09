@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class DoctorSchedule extends Model
 {
-    protected $guarded=[];
+    protected $fillable = [
+        'doctor_profile_id',
+        'weekday',
+        'start_time',
+        'end_time'
+    ];
 }
