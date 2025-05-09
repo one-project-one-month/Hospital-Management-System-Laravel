@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\PatientProfile;
+namespace App\Http\Requests\Auth;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Traits\HttpResponse;
 
-class StorePatientProfileRequest extends FormRequest
+class DoctorRegister extends FormRequest
 {
     use HttpResponse;
     /**
@@ -26,17 +26,17 @@ class StorePatientProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date_of_birth'=>'required|date',
-            'gender'=>'required|in:male,female',
-            'phone'=>'nullable|string|max:13',
-            'address'=>'required|string|max:255',
-            'relation'=>'required|string|max:20',
-            'blood_type'=>'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+            'name' => 'required|string|max:50',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|max:255|confirmed',
+            'specialty' => 'required|array',
+            'license_number' => 'required|string|max:20',
+            'phone' => 'required|string|max:13',
+            'address' => 'required|string|max:500',
         ];
     }
 
-    public function failedValidation(Validator $validator)
-    {
+    public function failedValidation(Validator $validator){
         throw new HttpResponseException(HttpResponse::fail('fail', $validator->errors(), 'Validation Error', 422));
     }
 }
