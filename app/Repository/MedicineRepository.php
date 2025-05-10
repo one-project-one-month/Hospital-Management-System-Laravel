@@ -21,7 +21,7 @@ class MedicineRepository{
         return $medicine;
     }
 
-    public function  updateMedicine($data,$id){
+    public function updateMedicine($data,$id){
         $medicine=Medicine::findOrFail($id);
         $medicine->update($data);
         return $medicine;

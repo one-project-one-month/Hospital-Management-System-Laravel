@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('patient_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('patient_name');
             $table->date('date_of_birth');
             $table->enum('gender', [ 'male', 'female', 'other']);
             $table->string('phone');
             $table->text('address');
             $table->enum('relation', ['father', 'mother', 'son', 'self', 'daughter', 'other']);
-            $table->string('blood_type');
+            $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
             $table->timestamps();
         });
     }

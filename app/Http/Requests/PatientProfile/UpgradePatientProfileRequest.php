@@ -24,11 +24,12 @@ class UpgradePatientProfileRequest extends FormRequest
     {
         return [
             'date_of_birth' => "required|date",
-            'gender' => "required|string|max:255",
+            'patient_name' => "required|string|max:255",
+            'gender' => "required|string|max:255|in:male,female,other",
             'phone' => "required|string|max:255",
             'address' => "required|string|max:2000",
-            'relation' => "required|string|max:255",
-            'blood_type' => "required|string|max:255",
+            'relation' => "required|string|max:255|in:father,mother,son,self,daughter,other",
+            'blood_type' => "required|string|max:255|in:A+,A-,B+,B-,AB+,AB-,O+,O-",
         ];
     }
 
