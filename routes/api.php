@@ -40,5 +40,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     // Partient Route
     require __DIR__.'/partientProfile/api.php';
 
+    // Record Type Route
+    require __DIR__.'/recordType/api.php';
+
 });
 
