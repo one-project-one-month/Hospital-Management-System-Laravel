@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PatientProfile extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable=[
         'user_id',
