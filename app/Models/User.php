@@ -50,9 +50,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function patientProfile()
+    public function patientProfiles()
     {
-        return $this->hasOne(PatientProfile::class);
+        return $this->hasMany(PatientProfile::class);
     }
 
     public function doctorProfile(): HasOne

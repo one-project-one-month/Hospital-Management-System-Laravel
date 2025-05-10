@@ -14,8 +14,6 @@ class AppointmentRepository{
 
     private function createAppointment($data)
     {
-        $patientProfile = auth()->user()->patientProfile;
-        $data['patient_profile_id'] = $patientProfile->id;
         $appointment = Appointment::create($data);
         return $appointment;
     }
