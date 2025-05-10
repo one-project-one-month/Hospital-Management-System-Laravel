@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\PatientProfile\Gender;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PatientProfile extends Model
 {
-    protected $fillable = [
+    use HasFactory;
+
+    protected $fillable=[
         'user_id',
         'patient_name',
         'date_of_birth',
@@ -18,8 +23,24 @@ class PatientProfile extends Model
         'blood_type',
     ];
 
-    public function user() : BelongsTo
+    protected $appends = [
+        'gender_label'
+    ];
+
+    protected function casts(): array
     {
-        return $this->belongsTo(User::class);
+        return [
+            'gender' => Gender::class
+        ];
+    }
+
+    public function getGenderLabelAttribute(): string
+    {
+        return $this->gender->label();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'user_id');
     }
 }

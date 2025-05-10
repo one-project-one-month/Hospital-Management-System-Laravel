@@ -5,7 +5,7 @@ namespace App\Traits;
 trait HttpResponse
 {
     // Http response for success case
-    protected function success($status,$data, $message, $code)
+    public static function success($status,$data, $message, $code)
     {
         return response()->json([
             'status' => $status,
@@ -16,7 +16,7 @@ trait HttpResponse
     }
 
     // Http response for fail case
-    protected function fail($status, $data, $message, $code){
+    public static function fail($status, $data, $message, $code){
         return response()->json([
             'status' => $status,
             'statusCode' => $code,
