@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\PatientProfileController;
 use App\Http\Controllers\InvoiceMedicineController;
+use App\Http\Controllers\Api\InvoiceController;
 use App\Models\InvoiceMedicine;
 use App\Traits\HttpResponse;
 
@@ -32,6 +33,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
     Route::post('/invoices/{invoice}/medicines/sync',[InvoiceMedicineController::class,'store']);
     Route::get('/invoices/{invoice}/medicines',[InvoiceMedicineController::class,'index']);
+
+    Route::apiResource('invoice', InvoiceController::class);
 
 
     // Partient Route

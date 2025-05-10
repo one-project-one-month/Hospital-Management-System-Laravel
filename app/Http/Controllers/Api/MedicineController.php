@@ -41,14 +41,14 @@ class MedicineController extends Controller
      */
     public function store(StoreMedicineRequest $request)
     {
-        try 
+        try
         {
            $medicine= $request->validated();
             $createdMedicine=$this->medicineRepository->createMedicine($medicine);
             $createdMedicine=$this->medicineRepository->findById($createdMedicine->id);
             return $this->success('success',['medicine'=>MedicineResource::make($createdMedicine)],'Medicines created successfully',201);
 
-        } catch (\Exception $e) 
+        } catch (\Exception $e)
         {
             return $this->fail('fail',null,$e->getMessage(),500);
         }
