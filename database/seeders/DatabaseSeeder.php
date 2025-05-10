@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Treatment;
 use App\Models\Appointment;
 use App\Models\DoctorProfile;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\DoctorSchedule;
 use App\Models\PatientProfile;
 use Illuminate\Database\Seeder;

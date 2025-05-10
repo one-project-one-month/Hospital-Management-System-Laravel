@@ -40,6 +40,11 @@ class AuthController extends Controller
     public function login (LoginRequest $request){
         $validatedData=$request->validated();
         $user=$this->userRepository->loginUser($validatedData);
+
+        if (!$user) {
+            return $this->fail('fail', null, 'Invalid credentials', 401);
+        }
+
         $user->assignRole(Role::findByName('user', 'api'));
 
         $token=$user->createToken('auth_token')->plainTextToken;

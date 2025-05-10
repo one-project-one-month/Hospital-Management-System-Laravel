@@ -5,7 +5,7 @@
 cp .env.example .env
 ```
 
-- change database credentails
+- change database credentail
 
     - using docker
         ```.env
