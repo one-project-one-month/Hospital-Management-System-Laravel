@@ -1,11 +1,14 @@
 <?php
 
+use App\Traits\HttpResponse;
 use Illuminate\Http\Request;
+use App\Models\InvoiceMedicine;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MedicineController;
+use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\InvoiceMedicineController;
 use App\Http\Controllers\Api\PatientProfileController;
-use App\Traits\HttpResponse;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -27,6 +30,12 @@ Route::get('/error', function () {
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::apiResource('medicines',MedicineController::class);
+
+    Route::post('/invoices/{invoice}/medicines/sync',[InvoiceMedicineController::class,'store']);
+    Route::get('/invoices/{invoice}/medicines',[InvoiceMedicineController::class,'index']);
+
+    Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
+    Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
 
     // Partient Route
     require __DIR__.'/partientProfile/api.php';

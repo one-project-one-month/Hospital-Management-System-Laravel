@@ -4,10 +4,13 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\HttpResponse;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
+
+    use HttpResponse;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -29,12 +32,8 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    public function failedValidation(Validator $validator){
-        throw new HttpResponseException (response()->json([
-            'status' => 'error',
-            'status_code' => '422',
-            'message' => 'Validation Error',
-            'data' => $validator->errors()
-        ]));
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(HttpResponse::fail('fail', $validator->errors(), 'Validation Error', 422));
     }
 }
