@@ -16,28 +16,16 @@ class RecordTypeRepository
         return RecordType::create($data);
     }
 
-    public function findById($id)
+    public function findById(RecordType $recordType)
     {
-        return RecordType::findOrFail($id);
+
+        return $recordType;
     }
 
     public function updateRecordType($data, $id)
     {
         $recordType = RecordType::findOrFail($id);
         $recordType->update($data);
-        return $recordType;
-    }
-
-    public function deleteRecordType($id)
-    {
-        $recordType = RecordType::find($id);
-        if (!$recordType) {
-            return response()->json([
-                'message' => 'Record Type not found.'
-            ], 404);
-        }
-
-        $recordType->delete();
         return $recordType;
     }
 }

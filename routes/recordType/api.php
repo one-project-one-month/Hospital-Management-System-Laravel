@@ -13,6 +13,4 @@ Route::prefix('record-types')->group(function () {
 
     Route::put('/{recordType}', [RecordTypeController::class, 'update']);
 
-    Route::delete('/{recordType}', [RecordTypeController::class, 'destroy']);
-
 });

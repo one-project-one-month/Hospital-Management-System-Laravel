@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\RecordType;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateRecordTypeRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class UpdateRecordTypeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +24,17 @@ class UpdateRecordTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:record_types,name,' . $this->record_type->id,
+            'name' => 'required|string|max:255|in:symptom,diagnosis,allergy,family_history,lifestyle',
             'description' => 'required|string|max:255'
         ];
+    }
+
+    public function failedValidation(Validator $validator){
+        throw new HttpResponseException(response()->json([
+            'status' => 'error',
+            'status_code' => '422',
+            'message' => 'Validation Error',
+            'data' => $validator->errors()
+        ]));
     }
 }

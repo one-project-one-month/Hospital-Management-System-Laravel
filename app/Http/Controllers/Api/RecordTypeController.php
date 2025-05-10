@@ -6,6 +6,7 @@ use App\Models\RecordType;
 use App\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repository\RecordTypeRepository;
 use App\Http\Resources\RecordTypeResource;
 use App\Http\Requests\RecordType\StoreRecordTypeRequest;
 use App\Http\Requests\RecordType\UpdateRecordTypeRequest;
@@ -40,7 +41,7 @@ class RecordTypeController extends Controller
         try {
             $recordType = $request->validated();
             $createdRecordType = $this->recordTypeRepository->createRecordType($recordType);
-            $createdRecordType = $this->recordTypeRepository->findById($createdRecordType->id);
+            $createdRecordType = $this->recordTypeRepository->findById($createdRecordType);
             return $this->success('success', ['record_type' => RecordTypeResource::make($createdRecordType)], 'Record type created successfully', 201);
         } catch (\Exception $e) {
             return $this->fail('fail',null,$e->getMessage(),500);
@@ -70,7 +71,7 @@ class RecordTypeController extends Controller
         try {
             $validatedData = $request->validated();
             $recordType = $this->recordTypeRepository->updateRecordType($validatedData, $recordType->id);
-            $findRecordType = $this->recordTypeRepository->findById($recordType->id);
+            $findRecordType = $this->recordTypeRepository->findById($recordType);
             return $this->success('success', ['record_type' => RecordTypeResource::make($findRecordType)], 'Record type updated successfully', 200);
         } catch (\Exception $e) {
             return $this->fail('fail', null, $e->getMessage(), 500);
@@ -85,11 +86,12 @@ class RecordTypeController extends Controller
     {
         try {
             if(!$recordType){
-                return return response()->json([
+                return  response()->json([
                     'message' => 'RecordType not found.'
                 ], 404);
+
                 $recordType = $this->recordTypeRepository->deleteRecordType($recordType->id);
-                return $this->success('success',['record_type'=>RecordTypeResource::make($recordType)],'Record type delected successfully',204);
+                return $this->success('success',['record_type'=>RecordTypeResource::make($recordType)],'Record type deleted successfully',200);
             }
         } catch (\Exception $e) {
             return $this->fail('fail',null,$e->getMessage(),500);
