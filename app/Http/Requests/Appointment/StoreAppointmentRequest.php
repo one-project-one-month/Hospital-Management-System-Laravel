@@ -22,6 +22,7 @@ class StoreAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'patient_profile_id'=>'required|exists:patient_profiles,id',
             'doctor_profile_id' => 'required|exists:doctor_profiles,id',
             'appointment_date' => 'required|date',
             'appointment_time' => 'required',

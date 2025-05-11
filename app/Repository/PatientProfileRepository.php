@@ -7,9 +7,13 @@ use App\Models\PatientProfile;
 class PatientProfileRepository
 {
 
+    public function getAllPatients(){
+        return  PatientProfile::all();
+    }
+
     public function getCurrentUserPatientProfile($user_id)
     {
-        $patientProfile=PatientProfile::where('user_id',$user_id)->get();
+        $patientProfile=PatientProfile::where('user_id',$user_id)->first();
         return $patientProfile;
     }
 

@@ -18,9 +18,7 @@ class UserRepository{
     public function loginUser($data){
         $user=User::where('email',$data['email'])->first();
         if(!$user || !password_verify($data['password'], $user->password)){
-            return response()->json([
-                'message'=>'Invalid credentials'
-            ],401);
+            return null;
         }
         return $user;
     }

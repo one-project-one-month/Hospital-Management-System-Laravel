@@ -8,4 +8,5 @@ enum Role: string
     const USER = 'user';
     const DOCTOR = 'doctor';
     const PATIENT = 'patient';
+    const RECEPTIONIST='receptionist';
 }
