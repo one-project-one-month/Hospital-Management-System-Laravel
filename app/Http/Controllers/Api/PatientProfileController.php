@@ -17,19 +17,55 @@ class PatientProfileController extends Controller
 
     use HttpResponse;
 
-    public function __construct(protected PatientProfileRepository $patientProfileRepository, protected User $user) {
-        $this->user=Auth::user();
+    public function __construct(protected PatientProfileRepository $patientProfileRepository, protected User $user)
+    {
+        $this->user = Auth::user();
     }
+
+
+
+    /**
+     * Display All User Patients and user data
+     */
+
+    public function getAllPatients()
+    {
+
+
+        if ($this->user->hasRole([usr\Role::ADMIN, usr\Role::DOCTOR])) {
+            try {
+                $allPatients = $this->patientProfileRepository->getAllPatients();
+                return $this->success(
+                    'success',
+                    ['patients' => PatientProfileResource::collection($allPatients)],
+                    'All Patient Profiles fetched successfully',
+                    200
+                );
+            } catch (\Exception $e) {
+                return $this->fail('fail', null, $e->getMessage(), 500);
+            }
+        }
+
+        return $this->fail('fail', null, 'User is not authorized to access this resource', 401);
+    }
+
+
+
+
+
+
+
+
 
     /**
      * Display Current User Patient Profile and user data
      */
     public function index(Request $request)
     {
-        if($this->user->hasRole(usr\Role::USER)) {
+        if ($this->user->hasRole(usr\Role::USER)) {
             try {
-                $patientProfile=$this->patientProfileRepository->getCurrentUserPatientProfile($this->user->id);
-                return $this->success('success',['user'=>$this->user, 'patientProfile'=>PatientProfileResource::make($patientProfile)], 'PatientProfile fetched successfully',200);
+                $patientProfile = $this->patientProfileRepository->getCurrentUserPatientProfile($this->user->id);
+                return $this->success('success', ['user' => $this->user, 'patientProfile' => PatientProfileResource::make($patientProfile)], 'PatientProfile fetched successfully', 200);
             } catch (\Exception $e) {
                 // Catch all other exceptions
                 return $this->fail('fail', null, $e->getMessage(), 500);
@@ -40,17 +76,20 @@ class PatientProfileController extends Controller
     }
 
 
+
+
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(StorePatientProfileRequest $request)
     {
-        if($this->user->hasRole(usr\Role::USER)) {
+        if ($this->user->hasRole(usr\Role::USER)) {
             try {
-                $patientProfile=$request->validated();
-                $patientProfile['user_id']=$this->user->id;
-                $createdPatientProfile=$this->patientProfileRepository->create($patientProfile);
-                return $this->success('success',[PatientProfileResource::make($createdPatientProfile)],'PatientProfile created successfully',201);
+                $patientProfile = $request->validated();
+                $patientProfile['user_id'] = $this->user->id;
+                $createdPatientProfile = $this->patientProfileRepository->create($patientProfile);
+                return $this->success('success', [PatientProfileResource::make($createdPatientProfile)], 'PatientProfile created successfully', 201);
             } catch (\Exception $e) {
                 // Catch all other exceptions
                 return $this->fail('fail', null, $e->getMessage(), 500);
@@ -65,14 +104,14 @@ class PatientProfileController extends Controller
      */
     public function show(string $id)
     {
-        if($this->user->hasRole([usr\Role::USER, usr\Role::ADMIN, usr\Role::DOCTOR])) {
+        if ($this->user->hasRole([usr\Role::USER, usr\Role::ADMIN, usr\Role::DOCTOR])) {
             try {
-                $patientProfile=$this->patientProfileRepository->single($id);
+                $patientProfile = $this->patientProfileRepository->single($id);
 
                 if (!$patientProfile) {
                     return $this->fail('fail', null, 'PatientProfile not found', 404);
                 }
-                return $this->success('success',[PatientProfileResource::make($patientProfile)],'PatientProfile fetched successfully',200);
+                return $this->success('success', [PatientProfileResource::make($patientProfile)], 'PatientProfile fetched successfully', 200);
             } catch (\Exception $e) {
                 return $this->fail('fail', null, $e->getMessage(), 500);
             }
