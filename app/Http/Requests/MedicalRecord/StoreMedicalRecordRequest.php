@@ -31,7 +31,6 @@ class StoreMedicalRecordRequest extends FormRequest
             'record_type_id' => 'required|exists:record_types,id',
             'title' => 'required|string|max:100',
             'description' => 'required|string|max:500',
-            'recorded_at' => 'required|date',
             'medicines' => 'nullable|array',
             'medicines.*.id' => 'required|exists:medicines,id',
             'medicines.*.quantity' => 'required|integer|min:1',

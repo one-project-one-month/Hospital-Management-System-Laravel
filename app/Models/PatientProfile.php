@@ -15,6 +15,8 @@ class PatientProfile extends Model
 
     protected $fillable=[
         'user_id',
+        'name',
+        'age',
         'date_of_birth',
         'gender',
         'phone',
