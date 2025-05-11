@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Treatment;
 use App\Models\Appointment;
 use App\Models\DoctorProfile;
 use App\Models\DoctorSchedule;
 use App\Models\PatientProfile;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -108,6 +108,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now()->subDays(5),
             'updated_at' => now()->subDays(5)
         ]);
+
+        
 
 
 

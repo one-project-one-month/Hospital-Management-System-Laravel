@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\DoctorProfile;
 use App\Models\PatientProfile;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Appointment extends Model
@@ -31,5 +32,10 @@ class Appointment extends Model
     public function medicalRecord(): HasOne
     {
         return $this->hasOne(MedicalRecord::class, 'appointment_id');
+    }
+
+    public function treatments() : HasMany
+    {
+        return $this->hasMany(Treatment::class);
     }
 }
