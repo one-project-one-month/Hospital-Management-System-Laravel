@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\PatientProfileController;
+use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\InvoiceMedicineController;
 use App\Models\InvoiceMedicine;
 use App\Traits\HttpResponse;
@@ -29,6 +30,7 @@ Route::get('/error', function () {
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::apiResource('medicines',MedicineController::class);
+    Route::apiResource('appointments/{appointment}/treatments',TreatmentController::class);
 
     Route::post('/invoices/{invoice}/medicines/sync',[InvoiceMedicineController::class,'store']);
     Route::get('/invoices/{invoice}/medicines',[InvoiceMedicineController::class,'index']);
