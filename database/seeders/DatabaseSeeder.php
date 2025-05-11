@@ -25,6 +25,15 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'receptionist','guard_name'=>'api']);
 
         $this->call(MedicineSeeder::class);
+
+        $admin= User::create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('password'),
+        ]);
+
+
+        $admin->assignRole(Role::findByName('admin', 'api'));
         // User::factory(10)->create();
        $user= User::create([
             'name' => 'Patient User',
