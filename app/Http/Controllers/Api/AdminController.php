@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
+use App\Enums\User as usr;
 use App\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -19,34 +21,40 @@ class AdminController extends Controller
 
     protected $adminRepo;
 
-    public function __construct(AdminRepository $adminRepo){
+    public function __construct(AdminRepository $adminRepo,protected User $user){
+        $this->user=auth()->user();
         $this->adminRepo=$adminRepo;
     }
 
     public function createReceptionist(RegisterRequest $request){
 
-        try {
-            $validatedData=$request->validated();
-            $user=$this->adminRepo->createReceptionist($validatedData);
-            $user->assignRole(Role::findByName('receptionist', 'api'));
+        if ($this->user->hasRole([usr\Role::ADMIN])) {
+            try {
+                $validatedData=$request->validated();
+                $user=$this->adminRepo->createReceptionist($validatedData);
+                $user->assignRole(Role::findByName('receptionist', 'api'));
 
-            return $this->success('success',[
-                'user'=>UserResource::make($user),
-            ],'Receptionist registered successfully',201);
-        } catch (\Exception $e) {
-            return $this->success('fail',null,$e->getMessage(),500);
+                return $this->success('success',[
+                    'user'=>UserResource::make($user),
+                ],'Receptionist registered successfully',201);
+            } catch (\Exception $e) {
+                return $this->success('fail',null,$e->getMessage(),500);
+            }
         }
+
     }
 
     public function createDoctor(StoreDoctorRequest $request){
-        try {
-            $validatedData = $request->validated();
-            $doctor = $this->adminRepo->createDoctor($validatedData);
+        if ($this->user->hasRole([usr\Role::ADMIN])) {
+            try {
+                $validatedData = $request->validated();
+                $doctor = $this->adminRepo->createDoctor($validatedData);
 
-            return $this->success('success',['doctor'=>DoctorResource::make($doctor)],'Doctor Created Successfully',201);
+                return $this->success('success',['doctor'=>DoctorResource::make($doctor)],'Doctor Created Successfully',201);
 
-        } catch (\Exception $e) {
-            return $this->fail('fail',null,$e->getMessage(),500);
+            } catch (\Exception $e) {
+                return $this->fail('fail',null,$e->getMessage(),500);
+            }
         }
     }
 }

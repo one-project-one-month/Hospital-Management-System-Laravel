@@ -62,10 +62,10 @@ class PatientProfileController extends Controller
      */
     public function index(Request $request)
     {
-        if ($this->user->hasRole(usr\Role::USER)) {
+        if ($this->user->hasRole(usr\Role::PATIENT)) {
             try {
                 $patientProfile = $this->patientProfileRepository->getCurrentUserPatientProfile($this->user->id);
-                return $this->success('success', ['user' => $this->user, 'patientProfile' => PatientProfileResource::make($patientProfile)], 'PatientProfile fetched successfully', 200);
+                return $this->success('success', [ 'patientProfile' => PatientProfileResource::collection($patientProfile)], 'PatientProfile fetched successfully', 200);
             } catch (\Exception $e) {
                 // Catch all other exceptions
                 return $this->fail('fail', null, $e->getMessage(), 500);
@@ -84,7 +84,7 @@ class PatientProfileController extends Controller
      */
     public function store(StorePatientProfileRequest $request)
     {
-        if ($this->user->hasRole(usr\Role::USER)) {
+        if ($this->user->hasRole(usr\Role::PATIENT)) {
             try {
                 $patientProfile = $request->validated();
                 $patientProfile['user_id'] = $this->user->id;
@@ -104,7 +104,7 @@ class PatientProfileController extends Controller
      */
     public function show(string $id)
     {
-        if ($this->user->hasRole([usr\Role::USER, usr\Role::ADMIN, usr\Role::DOCTOR])) {
+        if ($this->user->hasRole([usr\Role::PATIENT, usr\Role::ADMIN, usr\Role::DOCTOR])) {
             try {
                 $patientProfile = $this->patientProfileRepository->single($id);
 

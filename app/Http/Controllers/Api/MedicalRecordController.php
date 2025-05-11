@@ -8,6 +8,7 @@ use App\Http\Resources\MedicalRecordResource;
 use App\Repository\MedicalRecordRepository;
 use App\Traits\HttpResponse;
 use App\Enums\User as usr;
+use App\Models\MedicalRecord;
 use App\Models\User;
 
 class MedicalRecordController extends Controller
@@ -23,8 +24,8 @@ class MedicalRecordController extends Controller
             try {
                 $medicalRecord = $request->validated();
                 $record = $this->medicalRecordRepository->store($medicalRecord);
-
-                return $this->success('success',[MedicalRecordResource::make($record->load('medicines'))],'Medical Record added successfully',201 );
+                $createdMedicalRecord=MedicalRecord::where('id',$record->id)->first();
+                return $this->success('success',[MedicalRecordResource::make($createdMedicalRecord->load('medicines'))],'Medical Record added successfully',201 );
             } catch (\Exception $e) {
                 return $this->fail('fail', null, $e->getMessage(), 500);
             }
