@@ -77,6 +77,14 @@ class DatabaseSeeder extends Seeder
             'address' => '456 Medical Center Drive, Suite 100'
         ]);
 
+      $receptionistUser = User::create([
+          'name' => 'Receptionist',
+          'email' => 'reception@example.com',
+          'password' => bcrypt('password'),
+      ]);
+
+      $receptionistUser->assignRole(Role::findByName('receptionist','api'));
+
         // Create doctor schedules for Dr. John Smith
         $weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         foreach ($weekdays as $weekday) {

@@ -47,5 +47,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     // Record Type Route
     require __DIR__.'/recordType/api.php';
 
+    // Medical Record Route
+    require __DIR__.'/medicalRecord/api.php';
+
 });
 
