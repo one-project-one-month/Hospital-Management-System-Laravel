@@ -26,7 +26,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request){
         $validatedData=$request->validated();
         $user=$this->userRepository->createUser($validatedData);
-        $user->assignRole(Role::findByName('user', 'api'));
+        $user->assignRole(Role::findByName('patient', 'api'));
 
         $token=$user->createToken('auth_token')->plainTextToken;
 
@@ -40,7 +40,10 @@ class AuthController extends Controller
     public function login (LoginRequest $request){
         $validatedData=$request->validated();
         $user=$this->userRepository->loginUser($validatedData);
-        $user->assignRole(Role::findByName('user', 'api'));
+
+        if (!$user) {
+            return $this->fail('fail', null, 'Invalid credentials', 401);
+        }
 
         $token=$user->createToken('auth_token')->plainTextToken;
 

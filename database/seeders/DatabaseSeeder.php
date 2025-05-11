@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use App\Models\Treatment;
 use App\Models\Appointment;
 use App\Models\DoctorProfile;
 use App\Models\DoctorSchedule;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\DoctorProfile;
-use App\Models\Treatment;
+use App\Models\PatientProfile;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -21,24 +20,25 @@ class DatabaseSeeder extends Seeder
     {
 
         Role::create(['name' => 'admin','guard_name'=>'api']);
-        Role::create(['name' => 'user','guard_name'=>'api']);
         Role::create(['name' => 'patient','guard_name'=>'api']);
         Role::create(['name' => 'doctor','guard_name'=>'api']);
+        Role::create(['name' => 'receptionist','guard_name'=>'api']);
 
         $this->call(MedicineSeeder::class);
         // User::factory(10)->create();
-
        $user= User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Patient User',
+            'email' => 'patient@gmail.com',
             'password' => bcrypt('password'),
         ]);
 
 
-        $user->assignRole(Role::findByName('user', 'api'));
+        $user->assignRole(Role::findByName('patient', 'api'));
 
         $patient=PatientProfile::create([
             'user_id' => $user->id,
+            'name'=>'Mg Mg',
+            'age'=>50,
             'date_of_birth' => '1990-01-01',
             'gender' => 'male',
             'phone' => '1234567890',
@@ -46,6 +46,7 @@ class DatabaseSeeder extends Seeder
             'relation' => 'self',
             'blood_type' => 'O+'
         ]);
+        // $patient->assignRole(Role::findByName('patient','api'));
 
         $doctorUser = User::create([
             'name' => 'Dr. John Smith',
@@ -53,7 +54,8 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        $doctorUser->assignRole(Role::findByName('doctor', 'api'));
+        $doctorUser->assignRole(Role::findByName('doctor','api'));
+
 
       $doctor= DoctorProfile::create([
             'user_id' => $doctorUser->id,

@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\RecordType;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Traits\HttpResponse;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class LoginRequest extends FormRequest
-{
 
-    use HttpResponse;
+class StoreRecordTypeRequest extends FormRequest
+{
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,13 +25,17 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|max:255|exists:users,email',
-            'password' => 'required|string|min:6',
+            'name'=>'required|string|max:255|in:symptom,diagnosis,allergy,family_history,lifestyle',
+            'description'=>'required|string|max:255',
         ];
     }
 
-    public function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(HttpResponse::fail('fail', $validator->errors(), 'Validation Error', 422));
+    public function failedValidation(Validator $validator){
+        throw new HttpResponseException(response()->json([
+            'status' => 'error',
+            'status_code' => '422',
+            'message' => 'Validation Error',
+            'data' => $validator->errors()
+        ]));
     }
 }
