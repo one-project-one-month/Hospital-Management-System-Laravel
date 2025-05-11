@@ -2,10 +2,14 @@
 
 namespace App\Http\Requests\Appointment;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Traits\HttpResponse;
 
 class StoreAppointmentRequest extends FormRequest
 {
+    use HttpResponse;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -28,5 +32,10 @@ class StoreAppointmentRequest extends FormRequest
             'appointment_time' => 'required',
             'notes' => 'nullable|string',
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(HttpResponse::fail('fail', $validator->errors(), 'Validation Error', 422));
     }
 }
