@@ -2,14 +2,32 @@
 
 namespace App\Repository;
 
+use App\Enums\User as usr;
+use App\Models\Appointment;
 use App\Models\Treatment;
+use App\Models\User;
 
 class TreatmentRepository
 {
-    public function getAllTreatments(){
-        $treatments = Treatment::all();
-        return $treatments;
+    public function getAllTreatments(User $user){
+
+        if($user->hasRole(usr\Role::USER))
+        {
+            $treatments = Treatment::where('user_id', $user->id)->get();
+            return $treatments;
+        }
+        if($user->hasRole(usr\Role::RECEPTIONIST)){
+            $treatments = Treatment::all();
+            return $treatments;
+        }
+        if ($user->hasRole(usr\Role::DOCTOR)) {
+        return Treatment::whereHas('appointment', function ($query) use ($user) {
+            $query->where('doctor_profile_id', $user->id);
+        })->get();
+        }
+
     }
+
 
     public function createTreatment($data){
         // dd($data);

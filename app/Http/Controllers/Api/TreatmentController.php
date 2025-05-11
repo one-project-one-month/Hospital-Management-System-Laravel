@@ -31,17 +31,17 @@ class TreatmentController extends Controller
     public function index(Treatment $treatment)
     {
 
-        if($this->user->hasRole(usr\Role::USER,)){
         try
             {
-                $treatments = $this->treatmentRepository->getAllTreatments($treatment->id);
+               $treatments = $this->treatmentRepository->getAllTreatments($this->user);
                 return $this->success('success',['treatments'=>TreatmentResource::collection($treatments)],'Treatments Retrieved Successfully',200);
+
             }
         catch (\Exception $e)
             {
                 return $this->fail('fail',null,$e->getMessage(),500);
             }
-        }
+
 
 
     }

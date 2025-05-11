@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Models\DoctorProfile;
 use App\Models\DoctorSchedule;
 use App\Models\PatientProfile;
+use App\Models\Treatment;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -109,7 +110,14 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now()->subDays(5)
         ]);
 
-        
+        Treatment::create([
+        'title' => 'Blood Pressure Management',
+        'description' => 'Prescribed medication to manage high blood pressure and advised lifestyle changes.',
+        'start_date' => now()->subDays(5)->toDateString(),
+        'end_date' => now()->addDays(10)->toDateString(),
+        ]);
+
+
 
 
 
