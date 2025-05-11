@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Spatie\Permission\Traits\HasRoles;
 
 class DoctorProfile extends Model
 {

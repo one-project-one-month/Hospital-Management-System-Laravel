@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\InvoiceMedicine;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\InvoiceMedicineController;
@@ -36,6 +37,9 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
     Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
+
+    Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
+    Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
 
     // Partient Route
     require __DIR__.'/partientProfile/api.php';
