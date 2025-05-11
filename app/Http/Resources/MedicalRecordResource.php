@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MedicineResource extends JsonResource
+class MedicalRecordResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +16,11 @@ class MedicineResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'stock' => $this->stock,
-            'expired_at' => $this->expired_at
+            'title' => $this->title,
+            'description' => $this->description,
+            'recorded_at' => $this->recorded_at,
+            'appointment' => AppointmentResource::make($this->appointment),
+            'medicines' => MedicineResource::collection($this->medicines)
         ];
     }
 }
