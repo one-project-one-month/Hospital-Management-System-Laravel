@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\PatientProfileController;
+use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\InvoiceMedicineController;
 use App\Models\InvoiceMedicine;
 use App\Traits\HttpResponse;
@@ -37,5 +38,6 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     // Partient Route
     require __DIR__.'/partientProfile/api.php';
 
+    Route::get('admin/doctors', [DoctorProfileController::class, 'index']);
 });
 
