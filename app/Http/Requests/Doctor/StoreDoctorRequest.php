@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Doctor;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Traits\HttpResponse;
 
 class StoreDoctorRequest extends FormRequest
 {
@@ -32,8 +35,11 @@ class StoreDoctorRequest extends FormRequest
             'biography'=>'nullable',
             'phone'=>'nullable|numeric',
             'address'=>'nullable|numeric'
-
-
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(HttpResponse::fail('fail', $validator->errors(), 'Validation Error', 422));
     }
 }

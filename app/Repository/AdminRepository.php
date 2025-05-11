@@ -4,6 +4,9 @@
 namespace App\Repository;
 
 use App\Models\User;
+use App\Models\DoctorProfile;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class AdminRepository{
 
@@ -20,9 +23,9 @@ class AdminRepository{
         ]);
 
         // Assign doctor role
-        $user->assignRole('doctor');
+        $user->assignRole(Role::findByName('doctor', 'api'));
 
-        DoctorProfile::create([
+      $doctor=  DoctorProfile::create([
             'user_id' => $user->id,
             'speciality' => $data['speciality'] ?? null,
             'license_number' => $data['license_number'],
@@ -33,7 +36,7 @@ class AdminRepository{
             'address' => $data['address'] ?? null,
         ]);
 
-        return $user;
+        return $doctor;
     }
 
 }
