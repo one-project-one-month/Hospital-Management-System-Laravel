@@ -6,9 +6,13 @@ use App\Models\LabResult;
 
 class LabResultRepository
 {
-    public function getAll()
+    public function getByPatientId($patientId)
     {
-        return LabResult::all();
+        $labResults = LabResult::whereHas('appointment', function ($query) use ($patientId) {
+            $query->where('patient_profile_id', $patientId);
+        })->get();
+
+        return $labResults;
     }
 
     public function createLabResult(array $data)

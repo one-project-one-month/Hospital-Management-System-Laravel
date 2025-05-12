@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LabResult\StoreLabResultRequest;
 use App\Http\Resources\LabResultResource;
+use App\Models\User;
+use App\Models\LabResult;
 use App\Repository\LabResultRepository;
 use App\Traits\HttpResponse;
 use Illuminate\Http\Request;
@@ -23,10 +25,17 @@ class LabResultController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $labResults = $this->labResultRepositry->getAll();
+            $user = User::findOrFail($request->user_id);
+            $patientProfile = $user->patientProfile;
+
+            if (!$patientProfile) {
+                return $this->fail('fail', null, 'Patient profile not found for this user.', 404);
+            }
+
+            $labResults = $this->labResultRepositry->getByPatientId($patientProfile->id);
 
             return $this->success('success', LabResultResource::collection($labResults), "Lab Results Retrieved Successfully!.", 200);
         } catch (\Exception $e) {
@@ -88,13 +97,6 @@ class LabResultController extends Controller
      */
     public function destroy(string $id)
     {
-        try {
-            $this->labResultRepositry->deleteLabResult($id);
-
-            return $this->success('success', null, 'Lab Result Deleted Successfully.', 200);
-        } catch (\Exception $e) {
-
-            return $this->fail('error', null, $e->getMessage(), 500);
-        }
+        //
     }
 }

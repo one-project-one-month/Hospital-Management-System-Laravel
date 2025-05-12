@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('test_name', 255);
             $table->text('result_summary')->nullable();
             $table->text('detailed_result')->nullable();
+            $table->dateTime('performed_at');
             $table->timestamps();
         });
     }

@@ -26,4 +26,9 @@ class Appointment extends Model
     {
         return $this->belongsTo(DoctorProfile::class, 'doctor_profile_id');
     }
+
+    public function labResults()
+    {
+        return $this->hasMany(LabResult::class);
+    }
 }
