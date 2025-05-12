@@ -99,7 +99,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create sample appointments
-        Appointment::create([
+        $appointment = Appointment::create([
             'patient_profile_id' => $patient->id,
             'doctor_profile_id' => $doctor->id,
             'appointment_date' => now()->subDays(5)->toDateString(),
@@ -108,9 +108,10 @@ class DatabaseSeeder extends Seeder
             'notes' => 'Initial consultation completed',
             'created_at' => now()->subDays(5),
             'updated_at' => now()->subDays(5)
-        ]);
+            ]);
 
         Treatment::create([
+        'appointment_id' => $appointment->id,
         'title' => 'Blood Pressure Management',
         'description' => 'Prescribed medication to manage high blood pressure and advised lifestyle changes.',
         'start_date' => now()->subDays(5)->toDateString(),

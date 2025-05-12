@@ -11,21 +11,30 @@ class TreatmentRepository
 {
     public function getAllTreatments(User $user){
 
-        if($user->hasRole(usr\Role::USER))
-        {
-            $treatments = Treatment::where('user_id', $user->id)->get();
-            return $treatments;
+      if ($user->hasRole(usr\Role::PATIENT)) {
+        $appointment = Appointment::where('patient_profile_id', $user->patientProfile->id)->first();
+
+        if ($appointment) {
+            $treatment = Treatment::where('appointment_id', $appointment->id)->first();
+            return $treatment;
         }
+
+        return null; // no appointment found
+    }
         if($user->hasRole(usr\Role::RECEPTIONIST)){
             $treatments = Treatment::all();
             return $treatments;
         }
         if ($user->hasRole(usr\Role::DOCTOR)) {
-        return Treatment::whereHas('appointment', function ($query) use ($user) {
-            $query->where('doctor_profile_id', $user->id);
-        })->get();
+         $appointment = Appointment::where('doctor_profile_id', $user->doctorProfile->id)->first();
+
+        if ($appointment) {
+            $treatment = Treatment::where('appointment_id', $appointment->id)->first();
+            return $treatment;
         }
 
+        return null; // no appointment found
+        }
     }
 
 
