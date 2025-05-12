@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Invoice;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
-use App\Traits\HttpResponse;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Traits\HttpResponse;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreInvoiceRequest extends FormRequest
 {
@@ -26,7 +26,7 @@ class StoreInvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'appointment_id' => 'required',
+            'appointment_id' => 'exists:appointments,id',
             'amount' => 'required|numeric',
             'status' => 'required|in:paid,unpaid',
             'payment_method' => 'required|string|max:30',
