@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('doctor_schedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('doctor_profile_id');
+            $table->foreignUuid('doctor_profile_id')->constrained('doctor_profiles')->cascadeOnDelete();
             $table->enum('weekday',['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']);
             $table->time('start_time');
             $table->time('end_time');

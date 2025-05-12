@@ -21,6 +21,25 @@ class InvoiceMedicineController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/invoices/{invoice}/medicines",
+     *     summary="Get all medicines for a given invoice",
+     *     tags={"Invoice Medicines"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="invoice_id",
+     *         in="path",
+     *         required=true,
+     *         description="Invoice ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="List of medicines for the invoice"),
+     *     @OA\Response(response=404, description="Invoice not found")
+     * )
+     */
+
     public function index(Invoice $invoice)
     {
         try {
@@ -35,6 +54,35 @@ class InvoiceMedicineController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/invoices/{invoice}/medicines/sync",
+     *     summary="Attach medicines to an invoice",
+     *     tags={"Invoice Medicines"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"invoice_id", "medicines"},
+     *             @OA\Property(property="invoice_id", type="integer", example=1),
+     *             @OA\Property(
+     *                 property="medicines",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     required={"id", "quantity"},
+     *                     @OA\Property(property="id", type="integer", example=5),
+     *                     @OA\Property(property="quantity", type="integer", example=2)
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Medicines attached to invoice"),
+     *     @OA\Response(response=400, description="Bad request")
+     * )
+     */
+
     public function store(InvoiceMedicineRequest $request, Invoice $invoice)
     {
         try {
