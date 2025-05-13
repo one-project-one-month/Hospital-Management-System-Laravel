@@ -178,7 +178,7 @@ class MedicineController extends Controller
      * @OA\Delete(
      *     path="/api/v1/medicines/{id}",
      *     summary="Delete a medicine by ID",
-     *     tags={"Medicines"},
+     *     tags={"medicines"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
