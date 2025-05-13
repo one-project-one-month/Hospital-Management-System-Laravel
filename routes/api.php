@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\LabResultController;
 use App\Http\Controllers\Api\MedicineController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\TreatmentController;
@@ -40,6 +41,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
+
+    Route::apiResource('lab-results', LabResultController::class);
 
     // Partient Route
     require __DIR__.'/partientProfile/api.php';

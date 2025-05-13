@@ -37,4 +37,9 @@ class Appointment extends Model
     {
         return $this->hasOne(Treatment::class);
     }
+
+    public function labResults()
+    {
+        return $this->hasMany(LabResult::class);
+    }
 }
