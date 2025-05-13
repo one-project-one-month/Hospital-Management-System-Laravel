@@ -599,7 +599,7 @@
             },
             "delete": {
                 "tags": [
-                    "Medicines"
+                    "medicines"
                 ],
                 "summary": "Delete a medicine by ID",
                 "operationId": "4ddcdc52bc314a436ea41fe95385db8a",
@@ -1097,6 +1097,184 @@
                 ]
             }
         },
+        "/api/v1/appointments/{appointment}/treatments": {
+            "get": {
+                "tags": [
+                    "Treatments"
+                ],
+                "summary": "List treatments for an appointment",
+                "operationId": "9d04e412ea7996a494a2a369de06fd35",
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "description": "Appointment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "404": {
+                        "description": "Appointment not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Treatments"
+                ],
+                "summary": "Create a new treatment",
+                "operationId": "b4fbf0113ae90edca55456b8a64d7962",
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "description": "Appointment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "start_date"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "maxLength": 225,
+                                        "example": "Back pain therapy"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "This treatment includes massage and exercise."
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-05-13"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-05-20",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/{appointment}/treatments/{treatment}": {
+            "get": {
+                "tags": [
+                    "Treatments"
+                ],
+                "summary": "Show treatment detail",
+                "operationId": "130ae98d3530b27425b700587ef1734a",
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "treatment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Treatments"
+                ],
+                "summary": "Update a treatment",
+                "operationId": "3c8b05bca9a5ac0ff71e596e37785c40",
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "treatment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "end_date"
+                                ],
+                                "properties": {
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
         "/api/v1/invoices/{invoice}/medicines": {
             "get": {
                 "tags": [
@@ -1223,16 +1401,16 @@
             "description": "medicines"
         },
         {
-            "name": "Medicines",
-            "description": "Medicines"
-        },
-        {
             "name": "Patients",
             "description": "Patients"
         },
         {
             "name": "Record Types",
             "description": "Record Types"
+        },
+        {
+            "name": "Treatments",
+            "description": "Treatments"
         },
         {
             "name": "Invoice Medicines",

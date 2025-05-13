@@ -9,32 +9,9 @@ use App\Models\User;
 
 class TreatmentRepository
 {
-    public function getAllTreatments(User $user){
-
-      if ($user->hasRole(usr\Role::PATIENT)) {
-        $appointment = Appointment::where('patient_profile_id', $user->patientProfile->id)->first();
-
-        if ($appointment) {
-            $treatment = Treatment::where('appointment_id', $appointment->id)->first();
-            return $treatment;
-        }
-
-        return null; // no appointment found
-    }
-        if($user->hasRole(usr\Role::RECEPTIONIST)){
-            $treatments = Treatment::all();
-            return $treatments;
-        }
-        if ($user->hasRole(usr\Role::DOCTOR)) {
-         $appointment = Appointment::where('doctor_profile_id', $user->doctorProfile->id)->first();
-
-        if ($appointment) {
-            $treatment = Treatment::where('appointment_id', $appointment->id)->first();
-            return $treatment;
-        }
-
-        return null; // no appointment found
-        }
+    public function getAllTreatments(){
+        $treatments = Treatment::all();
+        return $treatments;
     }
 
 
@@ -44,21 +21,15 @@ class TreatmentRepository
         return $treatment;
     }
 
-    public function findById($id){
-        $treatment = Treatment::findOrFail($id);
+    public function findById(Appointment $appointment, Treatment $treatment){
+        $treatment = Treatment::where('appointment_id',$appointment->id)->first();
         return $treatment;
     }
 
-    public function updateTreatment($data,$id){
-        // dd($data);
-        $treatment = Treatment::findOrFail($id);
-        $treatment->update($data);
-        return $treatment;
-    }
-
-    public function destroyTreatment($id){
-        $treatment = Treatment::find($id);
-        $treatment->delete();
+    public function updateTreatment($data,$treatment){
+        $treatment->update([
+            'end_date'=>$data['end_date']
+        ]);
         return $treatment;
     }
 
