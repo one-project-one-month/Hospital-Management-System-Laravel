@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('patient_profile_id');
-            $table->unsignedBigInteger('doctor_profile_id');
+            $table->foreignUuid('patient_profile_id')->constrained('patient_profiles')->cascadeOnDelete();
+            $table->foreignUuid('doctor_profile_id')->constrained('doctor_profiles')->cascadeOnDelete();
             $table->date('appointment_date');
             $table->time('appointment_time');
             $table->enum('status',['pending','confirmed','cancelled'])->default('pending');

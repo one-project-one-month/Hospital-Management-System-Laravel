@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doctor_profiles', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->json('specialty')->nullable();
             $table->string('license_number');
             $table->text('education')->nullable();

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Treatment extends Model
 {
+    
     protected $fillable = [
         'appointment_id',
         'title',
@@ -13,4 +14,10 @@ class Treatment extends Model
         'start_date',
         'end_date'
     ];
+
+
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class);
+    }
 }

@@ -20,7 +20,8 @@ class InvoiceResource extends JsonResource
             'amount' => $this->amount,
             'status' => $this->status,
             'payment_method' => $this->payment_method,
-            'due_date' => $this->due_date
+            'due_date' => $this->due_date,
+            'appointment' => AppointmentResource::make($this->appointment)
         ];
     }
 }

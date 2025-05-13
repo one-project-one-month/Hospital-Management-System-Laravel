@@ -10,9 +10,20 @@ use App\Repository\MedicineRepository;
 use App\Http\Resources\MedicineResource;
 use App\Http\Requests\Medicine\StoreMedicineRequest;
 use App\Http\Requests\Medicine\UpdateMedicineRequest;
+use OpenApi\Annotations as OA;
 
+
+/**
+ * @OA\Info(
+ *     title="My API",
+ *     version="1.0.0"
+ * )
+ */
 class MedicineController extends Controller
 {
+
+
+
 
     use HttpResponse;
 
@@ -24,6 +35,18 @@ class MedicineController extends Controller
 
     /**
      * Display a listing of the resource.
+     */
+
+     /**
+     * @OA\Get(
+     *     path="/api/v1/medicines",
+     *     summary="List all medicines",
+     *     tags={"medicine"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response"
+     *     )
+     * )
      */
     public function index(Request $request)
     {
@@ -39,6 +62,26 @@ class MedicineController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/medicines",
+     *     summary="Create a new medication",
+     *     tags={"medicines"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "stock", "expired"},
+     *             @OA\Property(property="name", type="string", example="Paracetamol"),
+     *             @OA\Property(property="stock", type="integer", example=100),
+     *             @OA\Property(property="expired", type="string", format="date", example="2025-12-31")
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Medication created"),
+     *     @OA\Response(response=400, description="Bad request")
+     * )
+     */
+
     public function store(StoreMedicineRequest $request)
     {
         try
@@ -57,6 +100,23 @@ class MedicineController extends Controller
     /**
      * Display the specified resource.
      */
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/medicines/{id}",
+     *     summary="Get a specific medication",
+     *     tags={"medicines"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Medication found"),
+     *     @OA\Response(response=404, description="Medication not found")
+     * )
+     */
+
     public function show(Medicine $medicine)
     {
         try {
@@ -71,6 +131,33 @@ class MedicineController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+    /**
+     * @OA\Put(
+     *     path="/api/v1/medicines/{id}",
+     *     summary="Update a medication",
+     *     tags={"medicines"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "stock", "expired"},
+     *             @OA\Property(property="name", type="string", example="Ibuprofen"),
+     *             @OA\Property(property="stock", type="integer", example=50),
+     *             @OA\Property(property="expired", type="string", format="date", example="2026-01-01")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Medication updated"),
+     *     @OA\Response(response=404, description="Medication not found"),
+     *     @OA\Response(response=400, description="Invalid input")
+     * )
+     */
+
     public function update(UpdateMedicineRequest $request, Medicine $medicine)
     {
         try {
@@ -86,6 +173,25 @@ class MedicineController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/medicines/{id}",
+     *     summary="Delete a medicine by ID",
+     *     tags={"medicines"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the medicine to delete",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=204, description="Medicine deleted successfully"),
+     *     @OA\Response(response=404, description="Medicine not found")
+     * )
+     */
+
     public function destroy( Medicine $medicine)
     {
         try {
