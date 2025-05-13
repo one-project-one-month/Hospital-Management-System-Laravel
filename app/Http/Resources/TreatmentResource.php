@@ -19,7 +19,8 @@ class TreatmentResource extends JsonResource
             'appointment_id' => $this->appointment_id,
             'title' => $this->title,
             'description' => $this->description,
-            'start_date' => $this->start_date
+            'start_date' => $this->start_date,
+            'appointment' => AppointmentResource::make($this->appointment)
         ];
     }
 }

@@ -2,14 +2,41 @@
 
 namespace App\Repository;
 
+use App\Enums\User as usr;
+use App\Models\Appointment;
 use App\Models\Treatment;
+use App\Models\User;
 
 class TreatmentRepository
 {
-    public function getAllTreatments(){
-        $treatments = Treatment::all();
-        return $treatments;
+    public function getAllTreatments(User $user){
+
+      if ($user->hasRole(usr\Role::PATIENT)) {
+        $appointment = Appointment::where('patient_profile_id', $user->patientProfile->id)->first();
+
+        if ($appointment) {
+            $treatment = Treatment::where('appointment_id', $appointment->id)->first();
+            return $treatment;
+        }
+
+        return null; // no appointment found
     }
+        if($user->hasRole(usr\Role::RECEPTIONIST)){
+            $treatments = Treatment::all();
+            return $treatments;
+        }
+        if ($user->hasRole(usr\Role::DOCTOR)) {
+         $appointment = Appointment::where('doctor_profile_id', $user->doctorProfile->id)->first();
+
+        if ($appointment) {
+            $treatment = Treatment::where('appointment_id', $appointment->id)->first();
+            return $treatment;
+        }
+
+        return null; // no appointment found
+        }
+    }
+
 
     public function createTreatment($data){
         // dd($data);

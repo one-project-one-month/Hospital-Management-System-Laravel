@@ -15,6 +15,13 @@ use App\Enums\User as usr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
+/**
+ * @OA\Tag(
+ *     name="Treatments",
+ *     description="API Endpoints for Managing Treatments"
+ * )
+ */
 class TreatmentController extends Controller
 {
 
@@ -26,28 +33,67 @@ class TreatmentController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/treatments",
+     *     summary="Get treatments for current user",
+     *     tags={"Treatments"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Treatments Retrieved Successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TreatmentResource")
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server Error"
+     *     )
+     * )
      */
-    public function index(Treatment $treatment)
+    public function index()
     {
-
-        if($this->user->hasRole(usr\Role::USER,)){
         try
             {
-                $treatments = $this->treatmentRepository->getAllTreatments($treatment->id);
+               $treatments = $this->treatmentRepository->getAllTreatments($this->user);
+
+                if($this->user->hasRole([usr\Role::PATIENT, usr\Role::DOCTOR])){
+                    return $this->success('success',['treatments'=>TreatmentResource::make($treatments)],'Treatments Retrieved Successfully',200);
+                }
+
                 return $this->success('success',['treatments'=>TreatmentResource::collection($treatments)],'Treatments Retrieved Successfully',200);
+
             }
         catch (\Exception $e)
             {
                 return $this->fail('fail',null,$e->getMessage(),500);
             }
-        }
-
-
     }
 
-    /**
-     * Store a newly created resource in storage.
+        /**
+     * @OA\Post(
+     *     path="/api/appointments/{appointment}/treatments",
+     *     summary="Create a treatment for an appointment",
+     *     tags={"Treatments"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="appointment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/StoredTreatementRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Treatment Created Successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TreatmentResource")
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server Error"
+     *     )
+     * )
      */
     public function store(StoredTreatementRequest $request, Appointment $appointment)
     {
@@ -63,21 +109,69 @@ class TreatmentController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
+        /**
+     * @OA\Get(
+     *     path="/api/appointments/{appointment}/treatments/{treatment}",
+     *     summary="Get a specific treatment by ID",
+     *     tags={"Treatments"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="appointment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="treatment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Treatment Displayed Successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TreatmentResource")
+     *     )
+     * )
      */
-    public function show($id)
+    public function show(Appointment $appointment, Treatment $treatment)
     {
         try {
-            $treatment = $this->treatmentRepository->findById($id);
-           return $this->success('success',['treatment'=>TreatmentResource::make($treatment)],'Treatment Displayed Successfully',200);
+            $showTreatment = $this->treatmentRepository->findById($treatment->id);
+           return $this->success('success',['treatment'=>TreatmentResource::make($showTreatment)],'Treatment Displayed Successfully',200);
         } catch (\Exception $e) {
             return $this->fail('fail',null,$e->getMessage(),500);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
+        /**
+     * @OA\Put(
+     *     path="/api/appointments/{appointment}/treatments/{treatment}",
+     *     summary="Update a specific treatment",
+     *     tags={"Treatments"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="appointment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="treatment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateTreatmentRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Treatment Updated Successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TreatmentResource")
+     *     )
+     * )
      */
     public function update(UpdateTreatmentRequest $request, Appointment $appointment, Treatment $treatment)
     {
@@ -93,8 +187,31 @@ class TreatmentController extends Controller
         }
     }
 
+
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/appointments/{appointment}/treatments/{treatment}",
+     *     summary="Delete a treatment",
+     *     tags={"Treatments"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="appointment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="treatment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Treatment Deleted Successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TreatmentResource")
+     *     )
+     * )
      */
     public function destroy(Appointment $appointment, Treatment $treatment)
     {
