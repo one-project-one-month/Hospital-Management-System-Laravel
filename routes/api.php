@@ -39,7 +39,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::post('/invoices/{invoice}/medicines/sync',[InvoiceMedicineController::class,'store']);
     Route::get('/invoices/{invoice}/medicines',[InvoiceMedicineController::class,'index']);
 
-    Route::apiResource('invoic/{appointment}/invoice/', InvoiceController::class);
+    Route::apiResource('invoice/{appointment}/invoice/', InvoiceController::class);
 
     Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
