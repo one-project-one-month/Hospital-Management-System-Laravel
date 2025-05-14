@@ -23,10 +23,30 @@ class AuthController extends Controller
     }
 
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/auth/register",
+     *     summary="User registration",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "email", "password"},
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="User registered successfully"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=409, description="User already exists")
+     * )
+     */
+
     public function register(RegisterRequest $request){
         $validatedData=$request->validated();
         $user=$this->userRepository->createUser($validatedData);
-        $user->assignRole(Role::findByName('user', 'api'));
+        $user->assignRole(Role::findByName('patient', 'api'));
 
         $token=$user->createToken('auth_token')->plainTextToken;
 
@@ -37,10 +57,33 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/auth/login",
+     *     summary="User login",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="User logged in successfully"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=401, description="Unauthorized")
+     * )
+     */
+
+
     public function login (LoginRequest $request){
         $validatedData=$request->validated();
         $user=$this->userRepository->loginUser($validatedData);
-        $user->assignRole(Role::findByName('user', 'api'));
+
+        if (!$user) {
+            return $this->fail('fail', null, 'Invalid credentials', 401);
+        }
 
         $token=$user->createToken('auth_token')->plainTextToken;
 
@@ -51,12 +94,48 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/auth/user",
+     *     summary="Get current authenticated user",
+     *     tags={"Authentication"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Authenticated user data",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="name", type="string", example="Mg Mg"),
+     *             @OA\Property(property="email", type="string", example="mgmg@gmail.com"),
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated")
+     * )
+     */
     public function user(){
         $user=auth()->user();
         return $this->success('success',[
             'user'=>UserResource::make($user)
         ],'User retrieved successfully',200);
     }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/auth/logout",
+     *     summary="Logout the current authenticated user",
+     *     tags={"Authentication"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="User logged out successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     )
+     * )
+     */
 
     public function logout(Request $request)
     {

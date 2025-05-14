@@ -26,6 +26,8 @@ class StorePatientProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name'=>'required|string|max:255',
+            'age'=>'required|integer',
             'date_of_birth'=>'required|date',
             'gender'=>'required|in:male,female',
             'phone'=>'nullable|string|max:13',

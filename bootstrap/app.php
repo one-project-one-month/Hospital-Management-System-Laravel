@@ -35,9 +35,9 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
-        $exceptions->render(function (\Exception $e, Request $request) {
-            if ($request->is('api/*')) {
-                return HttpResponse::fail('fail', null, 'Something went wrong.', 500);
-            }
-        });
+//        $exceptions->render(function (\Exception $e, Request $request) {
+//            if ($request->is('api/*')) {
+//                return HttpResponse::fail('fail', null, 'Something went wrong.', 500);
+//            }
+//        });
     })->create();
