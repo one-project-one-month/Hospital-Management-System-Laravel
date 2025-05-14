@@ -41,6 +41,9 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
 
+    Route::get('/appointments/{role}', [AppointmentController::class, 'appointmentReadPatient']);
+    Route::get('/appointments/all', [AppointmentController::class, 'index']);
+
     // Partient Route
     require __DIR__.'/partientProfile/api.php';
 

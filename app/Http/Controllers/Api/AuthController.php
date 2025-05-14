@@ -22,7 +22,6 @@ class AuthController extends Controller
         $this->userRepository = $userRepository;
     }
 
-
     public function register(RegisterRequest $request){
         $validatedData=$request->validated();
         $user=$this->userRepository->createUser($validatedData);

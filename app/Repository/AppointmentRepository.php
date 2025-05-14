@@ -4,11 +4,13 @@ namespace App\Repository;
 
 use App\Models\Appointment;
 
-class AppointmentRepository{
+class AppointmentRepository
+{
 
 
-    public function getAllAppointments(){
-        $appointments=Appointment::with('')->get();
+    public function getAllAppointments()
+    {
+        $appointments = Appointment::with(['PatientProfile.user', 'DoctorProfile.user'])->get();
         return $appointments;
     }
 
@@ -28,6 +30,20 @@ class AppointmentRepository{
     public function bookAsReceptionist($data)
     {
         return $this->createAppointment($data);
+    }
+
+    // Appointments for Patients
+    public function appointmentForPatient($id)
+    {
+        $patientAppointment = Appointment::with(['PatientProfile.user', 'DoctorProfile.user'])->whereIn('patient_profile_id', $id)->get();
+        return $patientAppointment;
+    }
+
+    // Appointments for Doctors
+    public function appointmentForDoctor($id)
+    {
+        $patientAppointment = Appointment::with(['PatientProfile', 'DoctorProfile'])->where('doctor_profile_id', $id)->get();
+        return $patientAppointment;
     }
 
 }
