@@ -14,6 +14,7 @@ class AppointmentRepository{
 
     private function createAppointment($data)
     {
+        dd($data);
         $appointment = Appointment::create($data);
         return $appointment;
     }
