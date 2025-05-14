@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\InvoiceMedicineController;
 use App\Http\Controllers\Api\InvoiceController;
+use App\Models\InvoiceMedicine;
+
 
 
 Route::get('/user', function (Request $request) {
@@ -46,11 +48,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
-
     Route::get('admin/doctors', [DoctorProfileController::class, 'index']);
-
     Route::apiResource('lab-results', LabResultController::class);
-
     // Partient Route
     require __DIR__.'/partientProfile/api.php';
 
