@@ -11,6 +11,7 @@ use App\Http\Resources\PatientProfileResource;
 use App\Http\Requests\PatientProfile\StorePatientProfileRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use OpenApi\Annotations as OA;
 
 class PatientProfileController extends Controller
 {
@@ -240,5 +241,46 @@ class PatientProfileController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+     /**
+     * @OA\Get(
+     *     path="/api/v1/getMyPatientAccounts",
+     *     summary="Get all patient accounts for the authenticated user",
+     *     tags={"Patient"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer"),
+     *                   @OA\Property(property="user_id", type="integer"),
+     *                 @OA\Property(property="name", type="string"),
+     *                 @OA\Property(property="age", type="integer"),
+     *
+     *   @OA\Property(property="date_of_birth", type="date"),
+     *                   @OA\Property(property="gender", type="integer"),
+     *                 @OA\Property(property="phone", type="integer"),
+     *                 @OA\Property(property="address", type="string"),
+     *   @OA\Property(property="relation", type="string"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     * )
+     */
+    public function getMyPatientAccounts(){
+        try {
+           $patientProfiles= $this->patientProfileRepository->getMyPatientAccounts();
+            return $this->success('success', [PatientProfileResource::collection($patientProfiles)], 'PatientProfiles fetched successfully', 200);
+
+        } catch (\Exception $e) {
+            return $this->fail('fail', null, $e->getMessage(), 500);
+
+        }
     }
 }
