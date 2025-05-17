@@ -47,21 +47,16 @@ class AuthController extends Controller
 
 
 
-        try {
-            $validatedData=$request->validated();
-            $user=$this->userRepository->createUser($validatedData);
-            $user->assignRole(Role::findByName('patient', 'api'));
+        $validatedData=$request->validated();
+        $user=$this->userRepository->createUser($validatedData);
+        $user->assignRole(Role::findByName('patient', 'api'));
 
-            $token=$user->createToken('auth_token')->plainTextToken;
+        $token=$user->createToken('auth_token')->plainTextToken;
 
-            return $this->success('success',[
-                'user'=>UserResource::make($user),
-                'token'=>$token
-            ],'User registered successfully',201);
-           } catch (\Exception $e) {
-            return $this->fail('fail',null,$e->getMessage(),500);
-
-           }
+        return $this->success('success',[
+            'user'=>UserResource::make($user),
+            'token'=>$token
+        ],'User registered successfully',201);
 
     }
 
@@ -86,24 +81,19 @@ class AuthController extends Controller
 
 
     public function login (LoginRequest $request){
-        try {
-            $validatedData=$request->validated();
-            $user=$this->userRepository->loginUser($validatedData);
+        $validatedData=$request->validated();
+        $user=$this->userRepository->loginUser($validatedData);
 
-            if (!$user) {
-                return $this->fail('fail', null, 'Invalid credentials', 401);
-            }
+        if (!$user) {
+            return $this->fail('fail', null, 'Invalid credentials', 401);
+        }
 
-            $token=$user->createToken('auth_token')->plainTextToken;
+        $token=$user->createToken('auth_token')->plainTextToken;
 
-            return $this->success('success',[
-                'user'=>UserResource::make($user),
-                'token'=>$token
-            ],'User login successfully',200);
-           } catch (\Exception $e) {
-            return $this->fail('fail',null,$e->getMessage(),500);
-
-           }
+        return $this->success('success',[
+            'user'=>UserResource::make($user),
+            'token'=>$token
+        ],'User login successfully',200);
 
 
 
@@ -128,15 +118,10 @@ class AuthController extends Controller
      * )
      */
     public function user(){
-        try {
-            $user=auth()->user();
-            return $this->success('success',[
-                'user'=>UserResource::make($user)
-            ],'User retrieved successfully',200);
-           } catch (\Exception $e) {
-            return $this->fail('fail',null,$e->getMessage(),500);
-
-           }
+        $user=auth()->user();
+        return $this->success('success',[
+            'user'=>UserResource::make($user)
+        ],'User retrieved successfully',200);
 
 
     }
