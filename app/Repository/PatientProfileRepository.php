@@ -28,4 +28,10 @@ class PatientProfileRepository
         $patientProfile=PatientProfile::create($data);
         return $patientProfile;
     }
+
+    public function getMyPatientAccounts(){
+        $user=auth()->user();
+        $patientProfiles=PatientProfile::where('user_id',$user->id)->get();
+        return $patientProfiles;
+    }
 }
