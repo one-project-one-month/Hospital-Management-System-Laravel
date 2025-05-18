@@ -15,6 +15,7 @@ class MedicalRecord extends Model
         'title',
         'description',
         'recorded_at',
+        'medicine_price'
     ];
 
     public function casts(): array

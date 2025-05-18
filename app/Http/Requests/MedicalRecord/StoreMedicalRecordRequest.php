@@ -29,10 +29,11 @@ class StoreMedicalRecordRequest extends FormRequest
         return [
             'appointment_id' => 'required|exists:appointments,id',
             'record_type_id' => 'required|exists:record_types,id',
-            'title' => 'required|string|max:100',
-            'description' => 'required|string|max:500',
-            'medicines' => 'nullable|array',
-            'medicines.*.id' => 'required|exists:medicines,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'recorded_at' => 'required|date',
+            'medicines' => 'required|array',
+            'medicines.*.medicine_id' => 'required|exists:medicines,id',
             'medicines.*.quantity' => 'required|integer|min:1',
         ];
     }
