@@ -11,7 +11,7 @@ class Medicine extends Model
 {
     use HasFactory;
 
-    protected $guarded=[''];
+    protected $fillable=['name','stock','price','expired_at'];
 
     public function medicalRecords(): BelongsToMany
     {

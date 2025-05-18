@@ -13,6 +13,34 @@ class MedicineSeeder extends Seeder
      */
     public function run(): void
     {
-        Medicine::factory()->count(50)->create();
+        Medicine::create([
+            'name'=>'medicine1',
+            'stock'=>30,
+            'price'=>3000
+        ]);
+
+        Medicine::create([
+            'name'=>'medicine5',
+            'stock'=>30,
+            'price'=>3000
+        ]);
+
+        Medicine::create([
+            'name'=>'medicine4',
+            'stock'=>30,
+            'price'=>3000
+        ]);
+
+        Medicine::create([
+            'name'=>'medicine3',
+            'stock'=>30,
+            'price'=>3000
+        ]);
+
+        Medicine::create([
+            'name'=>'medicine2',
+            'stock'=>30,
+            'price'=>3000
+        ]);
     }
 }
