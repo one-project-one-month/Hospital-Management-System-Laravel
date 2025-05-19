@@ -10,7 +10,13 @@ class AppointmentRepository
 
     public function getAllAppointments()
     {
-        $appointments = Appointment::with(['PatientProfile.user', 'DoctorProfile.user'])->get();
+        $appointments = Appointment::with(['patientProfile', 'patientProfile'])->get();
+        return $appointments;
+    }
+
+    public function getAppointmentsByDoctorAndDate($doctor_id, $appointment_date)
+    {
+        $appointments = Appointment::with(['patientProfile', 'doctorProfile'])->where('doctor_profile_id', $doctor_id)->where('appointment_date', $appointment_date)->get();
         return $appointments;
     }
 

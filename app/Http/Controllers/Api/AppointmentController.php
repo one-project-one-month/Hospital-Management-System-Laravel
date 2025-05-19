@@ -36,11 +36,16 @@ class AppointmentController extends Controller
 
     public function index(){
         try {
-            $query=request()->query();
+            if(request()->filled('doctor_id', 'appointment_date')){
+                $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate(request()->doctor_id, request()->appointment_date);
+
+                return $this->success('success', ['appointment' => AppointmentResource::collection($appointments)], 'Appointments', 200);
+            }
+
             $appointments = $this->appointmentRepo->getAllAppointments();
-            return $this->success('success', ['appointment' => AppointmentResource::collection($appointments)], 'Get all appointments', 201);
+            return $this->success('success', ['appointment' => AppointmentResource::collection($appointments)], 'Appointments', 200);
         } catch (\Exception $e) {
-            return $this->fail('fail', $e->getMessage(), 'No appointments found', 404);
+            return $this->fail('fail', null, $e->getMessage(), 500);
         }
     }
 
@@ -79,7 +84,7 @@ class AppointmentController extends Controller
      * )
      */
 
-    public function createAppointmentFromPatient(StoreAppointmentRequest $request){
+    public function createAppointmentFromReceptionist(StoreAppointmentRequest $request){
         try {
             $validatedData = $request->validated();
             $appointment = $this->appointmentRepo->bookAsReceptionist($validatedData);

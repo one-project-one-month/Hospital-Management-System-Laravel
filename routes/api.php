@@ -38,7 +38,7 @@ Route::get('/error', function () {
 Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::apiResource('medicines',MedicineController::class);
     Route::apiResource('appointments/{appointment}/treatments',TreatmentController::class);
-    // Route::get('users',[PatientProfileController::class,'getUsers']);
+    Route::get('users',[PatientProfileController::class,'getUsers']);
     Route::get('getMyPatientAccounts',[PatientProfileController::class,'getMyPatientAccounts']);
 
     Route::post('/invoices/{invoice}/medicines/sync',[InvoiceMedicineController::class,'store']);
@@ -53,7 +53,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
 
     Route::get('/appointments/{role}', [AppointmentController::class, 'appointmentReadPatient']);
-    Route::get('/appointments/all', [AppointmentController::class, 'index']);
+    Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('admin/doctors', [DoctorProfileController::class, 'index']);
     Route::apiResource('lab-results', LabResultController::class);
     // Partient Route

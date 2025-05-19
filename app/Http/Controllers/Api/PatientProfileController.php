@@ -285,14 +285,16 @@ class PatientProfileController extends Controller
         }
     }
 
-    // public function getUsers(){
-    //     try {
-    //         $users=$this->patientProfileRepository->getUsers();
-    //         return $this->success('success', UserResource::collection($users), 'Users fetched successfully', 200);
+    public function getUsers(){
+        try {
+            if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+                $users=$this->patientProfileRepository->getUsers();
+                return $this->success('success', UserResource::collection($users), 'Users fetched successfully', 200);
+            }
+            return $this->fail('fail', null, 'User is not authorized to access this resource', 401);
+        } catch (\Exception $e) {
+            return $this->fail('fail', null, $e->getMessage(), 500);
 
-    //     } catch (\Exception $e) {
-    //         return $this->fail('fail', null, $e->getMessage(), 500);
-
-    //     }
-    // }
+        }
+    }
 }

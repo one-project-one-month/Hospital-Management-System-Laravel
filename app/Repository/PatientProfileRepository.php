@@ -37,7 +37,10 @@ class PatientProfileRepository
     }
 
     public function getUsers(){
-        $patients = User::role('patient')->with('patientProfile')->get();
+        // $patients = User::role('patient')->with('patientProfile')->get();
+        $patients = User::with('patientProfiles')->whereHas('roles', function($query){
+            $query->where('name', 'patient');
+        })->get();
         return $patients;
     }
 }

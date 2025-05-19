@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'roles' => $this->getRoleNames(),
+            'patientProfile' => $this->patientProfiles ? PatientProfileResource::collection($this->patientProfiles) : null,
             // 'patients'=>PatientProfileResource($this->patientProfile)
         ];
     }
