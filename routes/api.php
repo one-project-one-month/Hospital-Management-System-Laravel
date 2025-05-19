@@ -50,6 +50,10 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
+
+
+    Route::get('/appointments/{role}', [AppointmentController::class, 'appointmentReadPatient']);
+    Route::get('/appointments/all', [AppointmentController::class, 'index']);
     Route::get('admin/doctors', [DoctorProfileController::class, 'index']);
     Route::apiResource('lab-results', LabResultController::class);
     // Partient Route
