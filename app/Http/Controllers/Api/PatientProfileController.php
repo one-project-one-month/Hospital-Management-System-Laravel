@@ -276,7 +276,7 @@ class PatientProfileController extends Controller
     public function getMyPatientAccounts(){
         try {
            $patientProfiles= $this->patientProfileRepository->getMyPatientAccounts();
-            return $this->success('success', [PatientProfileResource::collection($patientProfiles)], 'PatientProfiles fetched successfully', 200);
+            return $this->success('success', PatientProfileResource::collection($patientProfiles), 'PatientProfiles fetched successfully', 200);
 
         } catch (\Exception $e) {
             return $this->fail('fail', null, $e->getMessage(), 500);
