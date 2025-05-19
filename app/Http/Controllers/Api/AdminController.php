@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\DoctorProfileResource;
 use App\Models\User;
 use App\Enums\User as usr;
 use App\Traits\HttpResponse;
@@ -14,6 +15,7 @@ use App\Http\Resources\DoctorResource;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
+use App\Models\DoctorProfile;
 use OpenApi\Annotations as OA;
 
 
@@ -108,10 +110,10 @@ class AdminController extends Controller
     public function createDoctor(StoreDoctorRequest $request){
         if ($this->user->hasRole([usr\Role::ADMIN])) {
             try {
-                $validatedData = $request->validated();
+                $validatedData = $request->toArray();
                 $doctor = $this->adminRepo->createDoctor($validatedData);
-
-                return $this->success('success',['doctor'=>DoctorResource::make($doctor)],'Doctor Created Successfully',201);
+                $createdDoctor=DoctorProfile::where('id',$doctor->id)->first();
+                return $this->success('success',['doctor'=>DoctorProfileResource::make($createdDoctor)],'Doctor Created Successfully',201);
 
             } catch (\Exception $e) {
                 return $this->fail('fail',null,$e->getMessage(),500);

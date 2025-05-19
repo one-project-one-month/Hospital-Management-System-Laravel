@@ -73,6 +73,11 @@ class DatabaseSeeder extends Seeder
             'license_number' => 'MD123456',
             'education' => 'M.D. from Harvard Medical School',
             'experience_years' => 15,
+            'availability'=> [
+                'Mon' => ['14:00', '16:00'],
+                'Wed' => ['10:00', '11:00', '15:00'],
+                'Fri' => ['09:00', '13:00'],
+            ],
             'biography' => 'Board certified cardiologist with 15 years of experience in treating cardiovascular diseases.',
             'phone' => '9876543210',
             'address' => '456 Medical Center Drive, Suite 100'
