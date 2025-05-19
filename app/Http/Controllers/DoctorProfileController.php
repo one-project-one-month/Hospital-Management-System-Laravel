@@ -18,6 +18,36 @@ class DoctorProfileController extends Controller
         $this->doctorProfileRepository = $doctorProfileRepository;
     }
 
+     /**
+     * @OA\Get(
+     *     path="/api/v1/admin/doctors",
+     *     summary="Get all doctors accounts ",
+     *     tags={"Doctors"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer"),
+     *                   @OA\Property(property="user_id", type="integer"),
+     *                 @OA\Property(property="name", type="string"),
+     *                 @OA\Property(property="age", type="integer"),
+     *
+     *   @OA\Property(property="date_of_birth", type="date"),
+     *                   @OA\Property(property="gender", type="integer"),
+     *                 @OA\Property(property="phone", type="integer"),
+     *                 @OA\Property(property="address", type="string"),
+     *   @OA\Property(property="relation", type="string"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     * )
+     */
+
     public function index()
     {
         try {
