@@ -34,7 +34,7 @@ class StoreDoctorRequest extends FormRequest
             'experience_years'=>'required',
             'biography'=>'nullable',
             'phone'=>'nullable|numeric',
-            'address'=>'nullable|numeric'
+            'address'=>'nullable|string'
         ];
     }
 
