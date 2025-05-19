@@ -31,6 +31,7 @@ class AdminRepository{
             'license_number' => $data['license_number'],
             'education' => $data['education'],
             'experience_years' => $data['experience_years'],
+            'availability'=>$data['availability'],
             'biography' => $data['biography'] ?? null,
             'phone' => $data['phone'] ?? null,
             'address' => $data['address'] ?? null,

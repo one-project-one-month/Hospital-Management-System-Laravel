@@ -9,6 +9,7 @@ use App\Traits\HttpResponse;
 use App\Repository\PatientProfileRepository;
 use App\Http\Resources\PatientProfileResource;
 use App\Http\Requests\PatientProfile\StorePatientProfileRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use OpenApi\Annotations as OA;
@@ -283,4 +284,15 @@ class PatientProfileController extends Controller
 
         }
     }
+
+    // public function getUsers(){
+    //     try {
+    //         $users=$this->patientProfileRepository->getUsers();
+    //         return $this->success('success', UserResource::collection($users), 'Users fetched successfully', 200);
+
+    //     } catch (\Exception $e) {
+    //         return $this->fail('fail', null, $e->getMessage(), 500);
+
+    //     }
+    // }
 }
