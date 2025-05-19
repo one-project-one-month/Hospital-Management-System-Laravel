@@ -897,13 +897,13 @@
                 ]
             }
         },
-        "/api/getMyPatientAccounts": {
+        "/api/v1/getMyPatientAccounts": {
             "get": {
                 "tags": [
                     "Patient"
                 ],
                 "summary": "Get all patient accounts for the authenticated user",
-                "operationId": "b7d3f9e76ce75961d0946d721ad5f387",
+                "operationId": "828df918659efddd02396cbb6ce9c184",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -1337,6 +1337,68 @@
                 }
             }
         },
+        "/api/v1/admin/doctors": {
+            "get": {
+                "tags": [
+                    "Doctors"
+                ],
+                "summary": "Get all doctors accounts ",
+                "operationId": "fdc7fa0d6c6b0fcc5ef72ef5fa315f70",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "user_id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "age": {
+                                                "type": "integer"
+                                            },
+                                            "date_of_birth": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "gender": {
+                                                "type": "integer"
+                                            },
+                                            "phone": {
+                                                "type": "integer"
+                                            },
+                                            "address": {
+                                                "type": "string"
+                                            },
+                                            "relation": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/invoices/{invoice}/medicines": {
             "get": {
                 "tags": [
@@ -1477,6 +1539,10 @@
         {
             "name": "Treatments",
             "description": "Treatments"
+        },
+        {
+            "name": "Doctors",
+            "description": "Doctors"
         },
         {
             "name": "Invoice Medicines",
