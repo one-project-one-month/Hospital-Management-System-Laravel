@@ -26,7 +26,7 @@ class DoctorProfile extends Model
     protected function casts(): array
     {
         return [
-            'specialty' => 'array',
+            'speciality' => 'array',
         ];
     }
 
