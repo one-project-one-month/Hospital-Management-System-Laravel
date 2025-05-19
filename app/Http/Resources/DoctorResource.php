@@ -21,6 +21,7 @@ class DoctorResource extends JsonResource
             'license_number'=>$this->license_number,
             'specialty' => json_decode($this->specialty),
             'education'=>$this->education,
+            'availability'=>json_decode($this->availability),
             'experience_years'=>$this->experience_years,
             'biography'=>$this->biography,
             'phone'=>$this->phone,

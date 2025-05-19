@@ -38,7 +38,7 @@ Route::get('/error', function () {
 Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::apiResource('medicines',MedicineController::class);
     Route::apiResource('appointments/{appointment}/treatments',TreatmentController::class);
-
+    // Route::get('users',[PatientProfileController::class,'getUsers']);
     Route::get('getMyPatientAccounts',[PatientProfileController::class,'getMyPatientAccounts']);
 
     Route::post('/invoices/{invoice}/medicines/sync',[InvoiceMedicineController::class,'store']);
@@ -48,7 +48,6 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
     Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
-
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
 

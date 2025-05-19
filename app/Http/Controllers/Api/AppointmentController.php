@@ -36,6 +36,7 @@ class AppointmentController extends Controller
 
     public function index(){
         try {
+            $query=request()->query();
             $appointments = $this->appointmentRepo->getAllAppointments();
             return $this->success('success', ['appointment' => AppointmentResource::collection($appointments)], 'Get all appointments', 201);
         } catch (\Exception $e) {

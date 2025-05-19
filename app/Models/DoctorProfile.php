@@ -21,14 +21,13 @@ class DoctorProfile extends Model
         'biography',
         'phone',
         'address',
+        'availability'
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'speciality' => 'array',
-        ];
-    }
+    protected $casts = [
+        'specialty' => 'array',
+        'availability' => 'array',
+    ];
 
     public function user(): BelongsTo
     {
