@@ -43,7 +43,7 @@ class PatientProfileController extends Controller
     {
 
 
-        if ($this->user->hasRole([usr\Role::ADMIN, usr\Role::DOCTOR])) {
+        if ($this->user->hasRole([usr\Role::ADMIN, usr\Role::DOCTOR, usr\Role::RECEPTIONIST])) {
             try {
                 $allPatients = $this->patientProfileRepository->getAllPatients();
                 return $this->success(
