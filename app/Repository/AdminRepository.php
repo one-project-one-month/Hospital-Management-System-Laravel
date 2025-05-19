@@ -27,7 +27,7 @@ class AdminRepository{
 
       $doctor=  DoctorProfile::create([
             'user_id' => $user->id,
-            'speciality' => $data['speciality'] ?? null,
+            'specialty' => $data['specialty'] ?? null,
             'license_number' => $data['license_number'],
             'education' => $data['education'],
             'experience_years' => $data['experience_years'],

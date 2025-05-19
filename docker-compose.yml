@@ -40,6 +40,20 @@ services:
     networks:
       - hospital_management_network
 
+  db_management: 
+    image: phpmyadmin:latest
+    container_name: hospital_management_db_management
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    networks:
+      - hospital_management_network
+    depends_on:
+      - db
+
   node:
     image: node:22
     container_name: hospital_management_node

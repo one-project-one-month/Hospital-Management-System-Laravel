@@ -13,7 +13,7 @@ class PatientProfileRepository
 
     public function getCurrentUserPatientProfile($user_id)
     {
-        $patientProfile=PatientProfile::where('user_id',$user_id)->first();
+        $patientProfile=PatientProfile::where('user_id',$user_id)->get();
         return $patientProfile;
     }
 
@@ -27,5 +27,11 @@ class PatientProfileRepository
     {
         $patientProfile=PatientProfile::create($data);
         return $patientProfile;
+    }
+
+    public function getMyPatientAccounts(){
+        $user=auth()->user();
+        $patientProfiles=PatientProfile::where('user_id',$user->id)->get();
+        return $patientProfiles;
     }
 }

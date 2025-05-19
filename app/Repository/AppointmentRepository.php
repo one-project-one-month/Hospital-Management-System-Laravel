@@ -16,6 +16,7 @@ class AppointmentRepository
 
     private function createAppointment($data)
     {
+        dd($data);
         $appointment = Appointment::create($data);
         return $appointment;
     }
@@ -32,6 +33,7 @@ class AppointmentRepository
         return $this->createAppointment($data);
     }
 
+
     // Appointments for Patients
     public function appointmentForPatient($id)
     {
@@ -45,5 +47,4 @@ class AppointmentRepository
         $patientAppointment = Appointment::with(['PatientProfile', 'DoctorProfile'])->where('doctor_profile_id', $id)->get();
         return $patientAppointment;
     }
-
 }

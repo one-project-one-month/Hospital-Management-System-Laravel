@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Models\Treatment;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DoctorProfile extends Model
 {
@@ -25,12 +26,24 @@ class DoctorProfile extends Model
     protected function casts(): array
     {
         return [
-            'specialty' => 'array',
+            'speciality' => 'array',
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function treatments()
+    {
+        return $this->hasManyThrough(
+            Treatment::class,
+            Appointment::class,
+            'doctor_profile_id', // Foreign key on appointments
+            'appointment_id',    // Foreign key on treatments
+            'id',                // Local key on doctor_profiles
+            'id'                 // Local key on appointments
+        );
     }
 }

@@ -3,11 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Treatment;
 use App\Models\Appointment;
 use App\Models\DoctorProfile;
 use App\Models\DoctorSchedule;
 use App\Models\PatientProfile;
+use App\Models\Treatment;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -25,6 +26,15 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'receptionist','guard_name'=>'api']);
 
         $this->call(MedicineSeeder::class);
+
+        $admin= User::create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('password'),
+        ]);
+
+
+        $admin->assignRole(Role::findByName('admin', 'api'));
         // User::factory(10)->create();
        $user= User::create([
             'name' => 'Patient User',
@@ -68,6 +78,14 @@ class DatabaseSeeder extends Seeder
             'address' => '456 Medical Center Drive, Suite 100'
         ]);
 
+      $receptionistUser = User::create([
+          'name' => 'Receptionist',
+          'email' => 'reception@example.com',
+          'password' => bcrypt('password'),
+      ]);
+
+      $receptionistUser->assignRole(Role::findByName('receptionist','api'));
+
         // Create doctor schedules for Dr. John Smith
         $weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         foreach ($weekdays as $weekday) {
@@ -81,7 +99,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create sample appointments
-        Appointment::create([
+        $appointment = Appointment::create([
             'patient_profile_id' => $patient->id,
             'doctor_profile_id' => $doctor->id,
             'appointment_date' => now()->subDays(5)->toDateString(),
@@ -90,7 +108,17 @@ class DatabaseSeeder extends Seeder
             'notes' => 'Initial consultation completed',
             'created_at' => now()->subDays(5),
             'updated_at' => now()->subDays(5)
+            ]);
+
+        Treatment::create([
+        'appointment_id' => $appointment->id,
+        'title' => 'Blood Pressure Management',
+        'description' => 'Prescribed medication to manage high blood pressure and advised lifestyle changes.',
+        'start_date' => now()->subDays(5)->toDateString(),
+        'end_date' => now()->addDays(10)->toDateString(),
         ]);
+
+
 
 
 
