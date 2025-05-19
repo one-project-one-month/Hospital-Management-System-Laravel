@@ -29,6 +29,7 @@ class StoreDoctorRequest extends FormRequest
             'email'=>'required|email|unique:users,email',
             'password'=>'required|min:6',
             'speciality'=>'json',
+            'speciality.*' => 'string',
             'license_number'=>'required|string|max:255',
             'education'=>'required|string|max:255',
             'experience_years'=>'required',
