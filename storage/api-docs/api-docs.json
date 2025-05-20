@@ -140,27 +140,141 @@
                 }
             }
         },
-        "api/v1/appointments/patient": {
+        "/appointments": {
             "get": {
                 "tags": [
-                    "medicine"
+                    "Appointments"
                 ],
-                "summary": "List all medicines",
-                "operationId": "846707268d24faaf61726ddfb76888e5",
+                "summary": "Get a list of all appointments",
+                "operationId": "b8c7b364f8969997096bb5cc471278c2",
                 "responses": {
                     "200": {
-                        "description": "Successful response"
+                        "description": "List of appointments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "doctor_profile_id": {
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "appointment_date": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-06-15"
+                                            },
+                                            "appointment_time": {
+                                                "type": "string",
+                                                "example": "10:00"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "confirmed"
+                                            },
+                                            "notes": {
+                                                "type": "string",
+                                                "example": "Follow-up visit for test results."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
         },
-        "/api/v1/appointments/patient": {
+        "/appointments/patient": {
+            "post": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Create a new appointment from the patient",
+                "operationId": "31921b0235fb1b41037dc33054b94579",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "patient_profile_id",
+                                    "doctor_profile_id",
+                                    "appointment_date",
+                                    "appointment_time",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "patient_profile_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "doctor_profile_id": {
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "appointment_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-06-10"
+                                    },
+                                    "appointment_time": {
+                                        "type": "string",
+                                        "example": "09:30"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "pending"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "First-time consultation."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Appointment created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Appointment created successfully"
+                                        },
+                                        "appointment_id": {
+                                            "type": "integer",
+                                            "example": 123
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/receptionist": {
             "post": {
                 "tags": [
                     "Appointments-Patients"
                 ],
                 "summary": "Create a appointment from patient",
-                "operationId": "a7a281c0e2ef07e0de29ec5b47b56814",
+                "operationId": "067cff370f59fee337ddc0176afda220",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -212,6 +326,119 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/doctor": {
+            "get": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get all appointments for the doctor",
+                "operationId": "bc94fe761376e660a33720a804c3bd30",
+                "responses": {
+                    "200": {
+                        "description": "List of doctor appointments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "patient_profile_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "doctor_profile_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "appointment_date": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-06-01"
+                                            },
+                                            "appointment_time": {
+                                                "type": "string",
+                                                "example": "14:00"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "pending"
+                                            },
+                                            "notes": {
+                                                "type": "string",
+                                                "example": "Patient has a history of allergies."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/patients/appointments": {
+            "get": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get all appointments for a specific patient",
+                "operationId": "0378a21252b533ed173747c8823cb61e",
+                "parameters": [
+                    {
+                        "name": "patient",
+                        "in": "path",
+                        "description": "Patient profile ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of patient appointments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "doctor_profile_id": {
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "appointment_date": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-06-10"
+                                            },
+                                            "appointment_time": {
+                                                "type": "string",
+                                                "example": "14:00"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "pending"
+                                            },
+                                            "notes": {
+                                                "type": "string",
+                                                "example": "Check blood pressure follow-up."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Patient not found or no appointments"
                     }
                 }
             }
@@ -959,6 +1186,78 @@
                 ]
             }
         },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all patient users with their profile data",
+                "operationId": "d7644414152592dc0b0696e77030e4be",
+                "responses": {
+                    "200": {
+                        "description": "List of users with patient profiles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "user_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "John Doe"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "example": "john@example.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "hashed_password_here"
+                                            },
+                                            "age": {
+                                                "type": "integer",
+                                                "example": 30
+                                            },
+                                            "date_of_birth": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "1995-05-10"
+                                            },
+                                            "gender": {
+                                                "type": "string",
+                                                "example": "male"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "09123456789"
+                                            },
+                                            "address": {
+                                                "type": "string",
+                                                "example": "123 Main Street, Yangon"
+                                            },
+                                            "relation": {
+                                                "type": "string",
+                                                "example": "self"
+                                            },
+                                            "blood_type": {
+                                                "type": "string",
+                                                "example": "O+"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/record-types": {
             "get": {
                 "tags": [
@@ -1399,6 +1698,147 @@
                 ]
             }
         },
+        "/doctor/me": {
+            "get": {
+                "tags": [
+                    "Doctor"
+                ],
+                "summary": "Get the authenticated doctor's profile",
+                "operationId": "aa1a7eb83498a35c8083ca3bd77d4a03",
+                "responses": {
+                    "200": {
+                        "description": "Doctor profile retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 7
+                                        },
+                                        "specialty": {
+                                            "type": "string",
+                                            "example": "Cardiology"
+                                        },
+                                        "license_number": {
+                                            "type": "string",
+                                            "example": "DOC-123456"
+                                        },
+                                        "education": {
+                                            "type": "string",
+                                            "example": "MBBS, MD - Cardiology"
+                                        },
+                                        "experience_years": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "biography": {
+                                            "type": "string",
+                                            "example": "Experienced cardiologist specializing in heart disease."
+                                        },
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "09876543210"
+                                        },
+                                        "address": {
+                                            "type": "string",
+                                            "example": "Yangon General Hospital"
+                                        },
+                                        "availability": {
+                                            "type": "string",
+                                            "example": "Monday to Friday, 9 AM - 5 PM"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/doctors/{id}": {
+            "get": {
+                "tags": [
+                    "Doctor"
+                ],
+                "summary": "Get a doctor profile by ID",
+                "operationId": "f609f2197e836f25698045c0f10c3942",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Doctor ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Doctor profile retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 12
+                                        },
+                                        "specialty": {
+                                            "type": "string",
+                                            "example": "Dermatology"
+                                        },
+                                        "license_number": {
+                                            "type": "string",
+                                            "example": "DR-2023001"
+                                        },
+                                        "education": {
+                                            "type": "string",
+                                            "example": "MBBS, M.D."
+                                        },
+                                        "experience_years": {
+                                            "type": "integer",
+                                            "example": 8
+                                        },
+                                        "biography": {
+                                            "type": "string",
+                                            "example": "Specialist in skin treatments."
+                                        },
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "09112233445"
+                                        },
+                                        "address": {
+                                            "type": "string",
+                                            "example": "Mandalay Hospital, Myanmar"
+                                        },
+                                        "availability": {
+                                            "type": "string",
+                                            "example": "Mon-Fri: 9AM - 1PM"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Doctor not found"
+                    }
+                }
+            }
+        },
         "/api/v1/invoices/{invoice}/medicines": {
             "get": {
                 "tags": [
@@ -1505,8 +1945,8 @@
             "description": "Admin - Doctors"
         },
         {
-            "name": "medicine",
-            "description": "medicine"
+            "name": "Appointments",
+            "description": "Appointments"
         },
         {
             "name": "Appointments-Patients",
@@ -1521,6 +1961,10 @@
             "description": "Medical Records"
         },
         {
+            "name": "medicine",
+            "description": "medicine"
+        },
+        {
             "name": "medicines",
             "description": "medicines"
         },
@@ -1533,6 +1977,10 @@
             "description": "Patient"
         },
         {
+            "name": "Users",
+            "description": "Users"
+        },
+        {
             "name": "Record Types",
             "description": "Record Types"
         },
@@ -1543,6 +1991,10 @@
         {
             "name": "Doctors",
             "description": "Doctors"
+        },
+        {
+            "name": "Doctor",
+            "description": "Doctor"
         },
         {
             "name": "Invoice Medicines",

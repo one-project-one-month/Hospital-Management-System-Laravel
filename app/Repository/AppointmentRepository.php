@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\Appointment;
+use App\Models\PatientProfile;
 
 class AppointmentRepository
 {
@@ -65,6 +66,13 @@ class AppointmentRepository
     {
         $patientAppointment = Appointment::with(['PatientProfile', 'DoctorProfile'])->where('doctor_profile_id', $id)->get();
         return $patientAppointment;
+    }
+
+    public function getPatientFormAppointment(){
+        $user=auth()->user();
+        $patientProfile = PatientProfile::where('user_id', $user->id)->first();
+        $appointment=Appointment::where('patient_profile_id',$patientProfile->id)->get();
+        return $appointment;
     }
 
 }

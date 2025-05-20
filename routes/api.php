@@ -41,9 +41,6 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::get('users',[PatientProfileController::class,'getUsers']);
     Route::get('getMyPatientAccounts',[PatientProfileController::class,'getMyPatientAccounts']);
 
-    Route::post('/invoices/{invoice}/medicines/sync',[InvoiceMedicineController::class,'store']);
-    Route::get('/invoices/{invoice}/medicines',[InvoiceMedicineController::class,'index']);
-
     Route::apiResource('invoice/{appointment}/invoice/', InvoiceController::class);
 
     Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
@@ -56,6 +53,9 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::get('/appointments/{role}', [AppointmentController::class, 'appointmentReadPatient']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('admin/doctors', [DoctorProfileController::class, 'index']);
+    Route::get('doctor/me',[DoctorProfileController::class,'getMyDoctor']);
+    Route::get('doctors/{id}',[DoctorProfileController::class,'show']);
+    Route::get('patients/appointments',[AppointmentController::class,'getPatientFormAppointment']);
     Route::apiResource('lab-results', LabResultController::class);
     // Partient Route
     require __DIR__.'/partientProfile/api.php';
