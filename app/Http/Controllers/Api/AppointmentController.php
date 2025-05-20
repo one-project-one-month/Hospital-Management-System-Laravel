@@ -14,10 +14,10 @@ class AppointmentController extends Controller
 {
     use HttpResponse;
 
-    protected $appointmentRepo;
 
-    public function __construct(AppointmentRepository $appointmentRepo){
+    public function __construct(protected AppointmentRepository $appointmentRepo , protected User $user){
         $this->appointmentRepo=$appointmentRepo;
+        $this->user = Auth::user();
     }
 
     /**
@@ -83,6 +83,15 @@ class AppointmentController extends Controller
             return $this->success('success',['appointment'=>AppointmentResource::make($appointmentCreated)],'Appointment Created Successfully',201);
         } catch (\Exception $e) {
             return $this->fail('fail',null,$e->getMessage(),500);
+        }
+    }
+
+     public function updateReceptionistBookAppointment(UpdateAppointmentRequest $request, Appointment $appointment){
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            $validatedData = $request->validated();
+            $appointment = $this->appointmentRepo->updateAppointment($validatedData,$appointment->id);
+            $updateAppointment = $this->appointmentRepo->findById($appointment);
+            return $this->success('success',AppointmentResource::make($updateAppointment),'Status Updated Successfully',201);
         }
     }
 }

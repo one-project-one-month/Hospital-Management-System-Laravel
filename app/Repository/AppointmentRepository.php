@@ -31,4 +31,15 @@ class AppointmentRepository{
         return $this->createAppointment($data);
     }
 
+    //update appointment
+    public function updateAppointment($data,$id){
+        $appointment = Appointment::findOrFail($id);
+        $appointment->update($data);
+        return $appointment;
+    }
+
+    public function findById(Appointment $appointment){
+        return $appointment;
+    }
+
 }
