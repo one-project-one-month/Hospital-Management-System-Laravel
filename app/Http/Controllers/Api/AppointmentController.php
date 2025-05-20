@@ -16,8 +16,6 @@ class AppointmentController extends Controller
 {
     use HttpResponse;
 
-    protected $appointmentRepo;
-
     public function __construct(AppointmentRepository $appointmentRepo)
     {
         $this->appointmentRepo = $appointmentRepo;
@@ -147,5 +145,14 @@ class AppointmentController extends Controller
         return $this->success('success', [
             'appointments' => AppointmentResource::collection($appointment)
         ], 'Appointments retrieved successfully', 200);
+    }
+
+     public function updateReceptionistBookAppointment(UpdateAppointmentRequest $request, Appointment $appointment){
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            $validatedData = $request->validated();
+            $appointment = $this->appointmentRepo->updateAppointment($validatedData,$appointment->id);
+            $updateAppointment = $this->appointmentRepo->findById($appointment);
+            return $this->success('success',AppointmentResource::make($updateAppointment),'Status Updated Successfully',201);
+        }
     }
 }

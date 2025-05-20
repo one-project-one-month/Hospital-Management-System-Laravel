@@ -40,6 +40,19 @@ class AppointmentRepository
     }
 
 
+    //update appointment
+    public function updateAppointment($data,$id){
+        $appointment = Appointment::findOrFail($id);
+        $appointment->update($data);
+        return $appointment;
+    }
+
+    public function findById(Appointment $appointment){
+        return $appointment;
+    }
+
+
+
     // Appointments for Patients
     public function appointmentForPatient($id)
     {
@@ -53,4 +66,5 @@ class AppointmentRepository
         $patientAppointment = Appointment::with(['PatientProfile', 'DoctorProfile'])->where('doctor_profile_id', $id)->get();
         return $patientAppointment;
     }
+
 }
