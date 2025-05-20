@@ -29,12 +29,19 @@ class StoreDoctorRequest extends FormRequest
             'email'=>'required|email|unique:users,email',
             'password'=>'required|min:6',
             'speciality'=>'json',
+            'speciality.*' => 'string',
             'license_number'=>'required|string|max:255',
             'education'=>'required|string|max:255',
             'experience_years'=>'required',
             'biography'=>'nullable',
             'phone'=>'nullable|numeric',
-            'address'=>'nullable|string'
+            'address'=>'nullable|string',
+            'availability' => 'array',
+            'availability.Mon' => 'array',
+            'availability.Wed' => 'array',
+            'availability.Fri' => 'array',
+            'availability.*.*' => 'string|regex:/^\d{2}:\d{2}$/', // optional: validate time format
+
         ];
     }
 

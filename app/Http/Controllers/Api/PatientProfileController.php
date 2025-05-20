@@ -9,6 +9,7 @@ use App\Traits\HttpResponse;
 use App\Repository\PatientProfileRepository;
 use App\Http\Resources\PatientProfileResource;
 use App\Http\Requests\PatientProfile\StorePatientProfileRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use OpenApi\Annotations as OA;
@@ -43,7 +44,7 @@ class PatientProfileController extends Controller
     {
 
 
-        if ($this->user->hasRole([usr\Role::ADMIN, usr\Role::DOCTOR])) {
+        if ($this->user->hasRole([usr\Role::ADMIN, usr\Role::DOCTOR, usr\Role::RECEPTIONIST])) {
             try {
                 $allPatients = $this->patientProfileRepository->getAllPatients();
                 return $this->success(
@@ -278,6 +279,19 @@ class PatientProfileController extends Controller
            $patientProfiles= $this->patientProfileRepository->getMyPatientAccounts();
             return $this->success('success', PatientProfileResource::collection($patientProfiles), 'PatientProfiles fetched successfully', 200);
 
+        } catch (\Exception $e) {
+            return $this->fail('fail', null, $e->getMessage(), 500);
+
+        }
+    }
+
+    public function getUsers(){
+        try {
+            if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+                $users=$this->patientProfileRepository->getUsers();
+                return $this->success('success', UserResource::collection($users), 'Users fetched successfully', 200);
+            }
+            return $this->fail('fail', null, 'User is not authorized to access this resource', 401);
         } catch (\Exception $e) {
             return $this->fail('fail', null, $e->getMessage(), 500);
 
