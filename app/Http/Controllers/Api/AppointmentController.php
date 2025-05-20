@@ -135,4 +135,17 @@ class AppointmentController extends Controller
             return $this->fail('fail', null, $e->getMessage(), 500);
         }
     }
+
+    public function getDoctorAppointments()
+    {
+        $user=auth()->user();
+        $doctorId=$user->doctorProfile->id;
+        $appointment = $this->appointmentRepo->appointmentForDoctor($doctorId);
+        if ($appointment->isEmpty()) {
+            return $this->fail('fail', null, 'No appointments found for this doctor', 404);
+        }
+        return $this->success('success', [
+            'appointments' => AppointmentResource::collection($appointment)
+        ], 'Appointments retrieved successfully', 200);
+    }
 }

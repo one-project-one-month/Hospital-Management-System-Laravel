@@ -47,6 +47,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::apiResource('invoice/{appointment}/invoice/', InvoiceController::class);
 
     Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
+    Route::get('/appointments/doctor', [AppointmentController::class, 'getDoctorAppointments']);
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
