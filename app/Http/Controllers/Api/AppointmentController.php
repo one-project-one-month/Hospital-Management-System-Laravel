@@ -9,15 +9,18 @@ use App\Http\Requests\Appointment\StoreAppointmentRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Repository\AppointmentRepository;
+use App\Enums\User as usr;
+use App\Http\Requests\Appointment\UpdateAppointmentRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
     use HttpResponse;
 
-    protected $appointmentRepo;
 
-    public function __construct(AppointmentRepository $appointmentRepo){
-        $this->appointmentRepo=$appointmentRepo;
+    public function __construct(protected AppointmentRepository $appointmentRepo, protected User $user){
+        $this->user = Auth::user() ;
     }
 
     /**
@@ -35,8 +38,9 @@ class AppointmentController extends Controller
     public function index(){
         try {
            $appointments= $this->appointmentRepo->getAllAppointments();
+           return $this->success('success',['appointment' => AppointmentResource::collection($appointments)],'Appointment Retrieved Successfully',201);
         } catch (\Exception $e) {
-
+            return $this->fail('fail',null,$e->getMessage(),500);
         }
     }
 
@@ -85,4 +89,13 @@ class AppointmentController extends Controller
             return $this->fail('fail',null,$e->getMessage(),500);
         }
     }
+
+    // public function updateReceptionistBookAppointment(UpdateAppointmentRequest $request, Appointment $appointment){
+    //     if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+    //         $validatedData = $request->validated();
+    //         $appointment = $this->appointmentRepo->updateAppointment($validatedData,$appointment->id);
+    //         $updateAppointment = $this->appointmentRepo->findById($appointment);
+    //         return $this->success('success',AppointmentResource::make($updateAppointment), "Status Updated Successfully.", 200);
+    //     }
+    // }
 }

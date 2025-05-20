@@ -10,12 +10,13 @@ use App\Traits\HttpResponse;
 use App\Enums\User as usr;
 use App\Models\MedicalRecord;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class MedicalRecordController extends Controller
 {
     use HttpResponse;
     public function __construct(protected MedicalRecordRepository $medicalRecordRepository, protected User $user){
-        $this->user = \Auth::user();
+        $this->user = Auth::user();
     }
 
     /**

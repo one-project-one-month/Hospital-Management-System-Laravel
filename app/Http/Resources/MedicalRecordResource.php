@@ -19,8 +19,10 @@ class MedicalRecordResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'recorded_at' => $this->recorded_at,
+            'medicine_price' => $this->medicine_price,
             'appointment' => AppointmentResource::make($this->appointment),
             'medicines' => MedicineResource::collection($this->medicines)
+
         ];
     }
 }

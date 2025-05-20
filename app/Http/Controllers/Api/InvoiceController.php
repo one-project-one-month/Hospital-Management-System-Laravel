@@ -9,6 +9,7 @@ use App\Repository\InvoiceRepository;
 use App\Models\Appointment;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Requests\Invoice\StoreInvoiceRequest;
+use App\Models\Invoice;
 
 class InvoiceController extends Controller
 {
@@ -36,12 +37,9 @@ class InvoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreInvoiceRequest $request, Appointment $appointment)
+    public function store(StoreInvoiceRequest $request)
     {
         try{
-            $request->merge([
-                'appointment_id' => $appointment->id
-            ]);
             $invoice = $request->toArray();
             $createInvoice = $this->invoiceRepo->create($invoice);
             return $this->success('success', ['invoice' => InvoiceResource::make($createInvoice)], 'Invoice Created Successfull!', 201);

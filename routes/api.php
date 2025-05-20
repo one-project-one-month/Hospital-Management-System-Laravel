@@ -48,6 +48,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
     Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
+    // Route::get('/appointments/get/receptionist', [AppointmentController::class, 'index']);
+    // Route::put('/appointments/{appointment}/receptionist', [AppointmentController::class, 'updateReceptionistBookAppointment']);
 
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
