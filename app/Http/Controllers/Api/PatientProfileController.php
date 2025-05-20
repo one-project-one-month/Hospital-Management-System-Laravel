@@ -285,6 +285,36 @@ class PatientProfileController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/users",
+     *     summary="Get all patient users with their profile data",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of users with patient profiles",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="user_id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                 @OA\Property(property="password", type="string", example="hashed_password_here"),
+     *
+     *                 @OA\Property(property="age", type="integer", example=30),
+     *                 @OA\Property(property="date_of_birth", type="string", format="date", example="1995-05-10"),
+     *                 @OA\Property(property="gender", type="string", example="male"),
+     *                 @OA\Property(property="phone", type="string", example="09123456789"),
+     *                 @OA\Property(property="address", type="string", example="123 Main Street, Yangon"),
+     *                 @OA\Property(property="relation", type="string", example="self"),
+     *                 @OA\Property(property="blood_type", type="string", example="O+")
+     *             )
+     *         )
+     *     )
+     * )
+     */
+
     public function getUsers(){
         try {
             if($this->user->hasRole(usr\Role::RECEPTIONIST)){

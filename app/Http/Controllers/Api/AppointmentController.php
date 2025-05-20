@@ -16,18 +16,36 @@ class AppointmentController extends Controller
 {
     use HttpResponse;
 
+    protected $appointmentRepo;
+
     public function __construct(AppointmentRepository $appointmentRepo)
     {
         $this->appointmentRepo = $appointmentRepo;
     }
+
     /**
      * @OA\Get(
-     *     path="api/v1/appointments/patient",
-     *     summary="List all medicines",
-     *     tags={"medicine"},
+     *     path="/appointments",
+     *     summary="Get a list of all appointments",
+     *     tags={"Appointments"},
      *     @OA\Response(
      *         response=200,
-     *         description="Successful response"
+     *         description="List of appointments",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="doctor_profile_id", type="integer", example=5),
+     *                 @OA\Property(property="appointment_date", type="string", format="date", example="2025-06-15"),
+     *                 @OA\Property(property="appointment_time", type="string", example="10:00"),
+     *                 @OA\Property(property="status", type="string", example="confirmed"),
+     *                 @OA\Property(property="notes", type="string", example="Follow-up visit for test results.")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
      *     )
      * )
      */
@@ -47,6 +65,38 @@ class AppointmentController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/appointments/patient",
+     *     summary="Create a new appointment from the patient",
+     *     tags={"Appointments"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"patient_profile_id", "doctor_profile_id", "appointment_date", "appointment_time", "status"},
+     *             @OA\Property(property="patient_profile_id", type="integer", example=1),
+     *             @OA\Property(property="doctor_profile_id", type="integer", example=5),
+     *             @OA\Property(property="appointment_date", type="string", format="date", example="2025-06-10"),
+     *             @OA\Property(property="appointment_time", type="string", example="09:30"),
+     *             @OA\Property(property="status", type="string", example="pending"),
+     *             @OA\Property(property="notes", type="string", example="First-time consultation.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Appointment created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Appointment created successfully"),
+     *             @OA\Property(property="appointment_id", type="integer", example=123)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request"
+     *     )
+     * )
+     */
+
     public function createAppointmentFromPatient(StoreAppointmentRequest $request)
     {
         try {
@@ -61,7 +111,7 @@ class AppointmentController extends Controller
 
      /**
      * @OA\Post(
-     *     path="/api/v1/appointments/patient",
+     *     path="/api/v1/appointments/receptionist",
      *     summary="Create a appointment from patient",
      *     tags={"Appointments-Patients"},
      *     @OA\RequestBody(
@@ -82,7 +132,7 @@ class AppointmentController extends Controller
      * )
      */
 
-    public function createAppointmentFromReceptionist(StoreAppointmentRequest $request){
+    public function receptionistBookAppointment(StoreAppointmentRequest $request){
         try {
             $validatedData = $request->validated();
             $appointment = $this->appointmentRepo->bookAsReceptionist($validatedData);
@@ -134,6 +184,31 @@ class AppointmentController extends Controller
         }
     }
 
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/appointments/doctor",
+     *     summary="Get all appointments for the doctor",
+     *     tags={"Appointments"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of doctor appointments",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="patient_profile_id", type="integer", example=1),
+     *                 @OA\Property(property="doctor_profile_id", type="integer", example=2),
+     *                 @OA\Property(property="appointment_date", type="string", format="date", example="2025-06-01"),
+     *                 @OA\Property(property="appointment_time", type="string", example="14:00"),
+     *                 @OA\Property(property="status", type="string", example="pending"),
+     *                 @OA\Property(property="notes", type="string", example="Patient has a history of allergies.")
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function getDoctorAppointments()
     {
         $user=auth()->user();
@@ -153,6 +228,50 @@ class AppointmentController extends Controller
             $appointment = $this->appointmentRepo->updateAppointment($validatedData,$appointment->id);
             $updateAppointment = $this->appointmentRepo->findById($appointment);
             return $this->success('success',AppointmentResource::make($updateAppointment),'Status Updated Successfully',201);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="api/v1/patients/appointments",
+     *     summary="Get all appointments for a specific patient",
+     *     tags={"Appointments"},
+     *     @OA\Parameter(
+     *         name="patient",
+     *         in="path",
+     *         description="Patient profile ID",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of patient appointments",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 @OA\Property(property="doctor_profile_id", type="integer", example=5),
+     *                 @OA\Property(property="appointment_date", type="string", format="date", example="2025-06-10"),
+     *                 @OA\Property(property="appointment_time", type="string", example="14:00"),
+     *                 @OA\Property(property="status", type="string", example="pending"),
+     *                 @OA\Property(property="notes", type="string", example="Check blood pressure follow-up.")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Patient not found or no appointments"
+     *     )
+     * )
+     */
+
+    public function getPatientFormAppointment(){
+        try {
+           $patient= $this->appointmentRepo->getPatientFormAppointment();
+           return $this->success('success',AppointmentResource::collection($patient),'showed  Successfully',200);
+
+        } catch (\Exception $e) {
+            return $this->fail('fail', null, $e->getMessage(), 500);
+
         }
     }
 }

@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Requests\Appointment;
-
+use App\Traits\HttpResponse;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateAppointmentRequest extends FormRequest
 {
