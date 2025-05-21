@@ -37,7 +37,6 @@ Route::get('/error', function () {
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::get('users',[PatientProfileController::class,'getUsers']);
-
     Route::apiResource('medicines',MedicineController::class);
 
     //receptionist

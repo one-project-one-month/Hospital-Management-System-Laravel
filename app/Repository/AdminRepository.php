@@ -15,19 +15,20 @@ class AdminRepository{
         return $user;
     }
 
-    public function createDoctor($data){
+    public function createUser($data){
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        return $user;
+    }
 
-        // Assign doctor role
-        $user->assignRole(Role::findByName('doctor', 'api'));
+    public function createDoctor($data){
 
       $doctor=  DoctorProfile::create([
-            'user_id' => $user->id,
-            'specialty' => $data['specialty'] ?? null,
+            'user_id' => $data['user_id'],
+            'specialty' => $data['specialty'],
             'license_number' => $data['license_number'],
             'education' => $data['education'],
             'experience_years' => $data['experience_years'],
