@@ -25,7 +25,6 @@ class StoreLabResultRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'appointment_id' => 'required|integer|exists:appointments,id',
             'test_name' => 'required|string|max:255',
             'result_summary' => 'nullable|string',
             'detailed_result' => 'nullable|string',

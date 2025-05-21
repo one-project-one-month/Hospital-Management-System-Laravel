@@ -6,13 +6,9 @@ use App\Models\LabResult;
 
 class LabResultRepository
 {
-    public function getByPatientId($patientId)
+    public function getByAppointmentId($appointmentId)
     {
-        $labResults = LabResult::whereHas('appointment', function ($query) use ($patientId) {
-            $query->where('patient_profile_id', $patientId);
-        })->get();
-
-        return $labResults;
+        return LabResult::where('appointment_id', $appointmentId)->get();
     }
 
     public function createLabResult(array $data)
@@ -20,19 +16,19 @@ class LabResultRepository
         return LabResult::create($data);
     }
 
-    public function getLabResultById($id)
+    public function getLabResultById($id, $appointmentId)
     {
-        return LabResult::findOrFail($id);
+        $labResult = LabResult::where('id', $id)->where('appointment_id', $appointmentId)->first();
+        if (!$labResult) {
+            return null;
+        }
+
+        return $labResult;
     }
 
     public function updateLabResult(array $data, $id)
     {
         $labResult=LabResult::findOrFail($id);
-        if (!$labResult) {
-            return response()->json([
-                'message' => 'Lab result not found.'
-            ], 404);
-        }
 
         $labResult->update($data);
         return $labResult;
