@@ -32,7 +32,7 @@ class LabResultController extends Controller
      * @OA\Get(
      *     path="/api/v1/appointments/{appointmentId}/lab-results",
      *     summary="List lab results for a specific appointment",
-     *     tags={"lab-results"},
+     *     tags={"Lab Results"},
      *     security={{ "bearerAuth": {} }},
      *     @OA\Parameter(
      *         name="appointmentId",
@@ -88,7 +88,7 @@ class LabResultController extends Controller
      * @OA\Post(
      *     path="/api/v1/appointments/{appointmentId}/lab-results",
      *     summary="Create a new lab result for a specific appointment",
-     *     tags={"lab-results"},
+     *     tags={"Lab Results"},
      *     security={{ "bearerAuth": {} }},
      *     @OA\Parameter(
      *         name="appointmentId",
@@ -115,7 +115,7 @@ class LabResultController extends Controller
      *             @OA\Property(property="test_name", type="string", example="Complete Blood Count"),
      *             @OA\Property(property="result_summary", type="string", example="Normal ranges"),
      *             @OA\Property(property="detailed_result", type="string", example="Hemoglobin: 14 g/dL; WBC: 6,000 /µL"),
-     *             @OA\Property(property="performed_at", type="string", format="date-time", example="2024-05-20T14:30:00Z")
+     *             @OA\Property(property="performed_at", type="string", format="date-time", example="2024-05-20T14:30:00Z"),
      *             @OA\Property(property="created_at", type="string", format="date-time", example="2025-05-20T14:30:00Z"),
  *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-05-20T14:30:00Z")
      *         )
@@ -147,7 +147,7 @@ class LabResultController extends Controller
      * @OA\Get(
      *     path="/api/v1/appointments/{appointmentId}/lab-results/{id}",
      *     summary="Get a specific lab result by ID for an appointment",
-     *     tags={"lab-results"},
+     *     tags={"Lab Results"},
      *     security={{ "bearerAuth": {} }},
      *     @OA\Parameter(
      *         name="appointmentId",
@@ -205,7 +205,7 @@ class LabResultController extends Controller
      * @OA\Put(
      *     path="/api/v1/appointments/{appointmentId}/lab-results/{id}",
      *     summary="Update a specific lab result for an appointment",
-     *     tags={"lab-results"},
+     *     tags={"Lab Results"},
      *     security={{ "bearerAuth": {} }},
      *     @OA\Parameter(
      *         name="appointmentId",
