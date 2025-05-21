@@ -56,7 +56,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::get('doctor/me',[DoctorProfileController::class,'getMyDoctor']);
     Route::get('doctors/{id}',[DoctorProfileController::class,'show']);
     Route::get('patients/appointments',[AppointmentController::class,'getPatientFormAppointment']);
-    Route::apiResource('lab-results', LabResultController::class);
+    Route::apiResource('appointments/{appointmentId}/lab-results', LabResultController::class)->whereNumber('appointmentId');
     // Partient Route
     require __DIR__.'/partientProfile/api.php';
 
