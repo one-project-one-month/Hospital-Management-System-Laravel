@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Appointment;
 use App\Traits\HttpResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Appointment\StoreAppointmentRequest;
-use App\Http\Resources\AppointmentResource;
-use App\Models\Appointment;
-use App\Repository\AppointmentRepository;
-use App\Http\Requests\PatientProfile\StorePatientProfileRequest;
+use App\Models\DoctorProfile;
 use App\Models\PatientProfile;
+use App\Http\Controllers\Controller;
+use App\Repository\AppointmentRepository;
+use App\Http\Resources\AppointmentResource;
+use App\Http\Resources\DoctorProfileResource;
+use App\Http\Requests\Appointment\StoreAppointmentRequest;
+use App\Http\Requests\PatientProfile\StorePatientProfileRequest;
 
 class AppointmentController extends Controller
 {
@@ -54,8 +56,8 @@ class AppointmentController extends Controller
         try {
             if(request()->filled('doctor_id', 'appointment_date')){
                 $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate(request()->doctor_id, request()->appointment_date);
-
-                return $this->success('success', ['appointment' => AppointmentResource::collection($appointments)], 'Appointments', 200);
+                $doctor = DoctorProfile::where('id', request()->doctor_id)->first();
+                return $this->success('success', ['appointment' => AppointmentResource::collection($appointments),'doctor'=>DoctorProfileResource::make($doctor)], 'Appointments', 200);
             }
 
             $appointments = $this->appointmentRepo->getAllAppointments();
@@ -67,7 +69,7 @@ class AppointmentController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/appointments/patient",
+     *     path="api/v1/appointments/patient",
      *     summary="Create a new appointment from the patient",
      *     tags={"Appointments"},
      *     @OA\RequestBody(
@@ -96,7 +98,37 @@ class AppointmentController extends Controller
      *     )
      * )
      */
-
+    /**
+     * @OA\Post(
+     *     path="api/v1/appointments/patient",
+     *     summary="Create a new appointment from the patient",
+     *     tags={"Appointments"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"patient_profile_id", "doctor_profile_id", "appointment_date", "appointment_time", "status"},
+     *             @OA\Property(property="patient_profile_id", type="integer", example=1),
+     *             @OA\Property(property="doctor_profile_id", type="integer", example=5),
+     *             @OA\Property(property="appointment_date", type="string", format="date", example="2025-06-10"),
+     *             @OA\Property(property="appointment_time", type="string", example="09:30"),
+     *             @OA\Property(property="status", type="string", example="pending"),
+     *             @OA\Property(property="notes", type="string", example="First-time consultation.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Appointment created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Appointment created successfully"),
+     *             @OA\Property(property="appointment_id", type="integer", example=123)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request"
+     *     )
+     * )
+     */
     public function createAppointmentFromPatient(StoreAppointmentRequest $request)
     {
         try {
@@ -113,7 +145,7 @@ class AppointmentController extends Controller
      * @OA\Post(
      *     path="/api/v1/appointments/receptionist",
      *     summary="Create a appointment from patient",
-     *     tags={"Appointments-Patients"},
+     *     tags={"Appointments"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -131,7 +163,6 @@ class AppointmentController extends Controller
      *     @OA\Response(response=400, description="Bad request")
      * )
      */
-
     public function receptionistBookAppointment(StoreAppointmentRequest $request){
         try {
             $validatedData = $request->validated();

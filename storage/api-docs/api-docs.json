@@ -190,13 +190,13 @@
                 }
             }
         },
-        "/appointments/patient": {
+        "api/v1/appointments/patient": {
             "post": {
                 "tags": [
                     "Appointments"
                 ],
                 "summary": "Create a new appointment from the patient",
-                "operationId": "31921b0235fb1b41037dc33054b94579",
+                "operationId": "3b60b01eeff9d8f188a49c1195bc69d2",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -271,7 +271,7 @@
         "/api/v1/appointments/receptionist": {
             "post": {
                 "tags": [
-                    "Appointments-Patients"
+                    "Appointments"
                 ],
                 "summary": "Create a appointment from patient",
                 "operationId": "067cff370f59fee337ddc0176afda220",
@@ -1947,10 +1947,6 @@
         {
             "name": "Appointments",
             "description": "Appointments"
-        },
-        {
-            "name": "Appointments-Patients",
-            "description": "Appointments-Patients"
         },
         {
             "name": "Authentication",
