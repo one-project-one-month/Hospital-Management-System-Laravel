@@ -15,7 +15,7 @@ class DoctorProfileRepository
 
     public function getMyDoctorProfile(){
         $user=auth()->user();
-        $doctor=DoctorProfile::where('id',$user->id)->first();
+        $doctor=DoctorProfile::where('user_id',$user->id)->first();
        return $doctor;
     }
 
