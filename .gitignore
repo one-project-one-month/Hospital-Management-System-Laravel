@@ -22,4 +22,5 @@ yarn-error.log
 /.vscode
 /.zed
 echo "storage/api-docs/api-docs.json" >> .gitignore
+storage/api-docs/api-docs.json
 
