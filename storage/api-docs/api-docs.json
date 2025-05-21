@@ -1,0 +1,2000 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/admin/createReceptionist": {
+            "post": {
+                "tags": [
+                    "Admin - Receptionists"
+                ],
+                "summary": "Create a receptionist form admin",
+                "operationId": "88f172264a3d925bcefee89dc66fb321",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Mg Mg"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "mgmg@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Receptionist account created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/createDoctor": {
+            "post": {
+                "tags": [
+                    "Admin - Doctors"
+                ],
+                "summary": "Create a doctor account from admin",
+                "operationId": "734fc6b8ed2977b905505279e8f055fc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "specialty",
+                                    "license_number",
+                                    "education",
+                                    "experience_years",
+                                    "biography",
+                                    "phone",
+                                    "address"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Mg Mg"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "mgmg@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    },
+                                    "specialty": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "Cardiology",
+                                            "Internal Medicine"
+                                        ]
+                                    },
+                                    "license_number": {
+                                        "type": "string",
+                                        "example": "MTL7448"
+                                    },
+                                    "education": {
+                                        "type": "string",
+                                        "example": "M.D. from Harvard Medical School"
+                                    },
+                                    "experience_years": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "biography": {
+                                        "type": "string",
+                                        "example": "A brief biography of the doctor."
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "09123456789"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Yangon"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Doctor account created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/appointments": {
+            "get": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get a list of all appointments",
+                "operationId": "b8c7b364f8969997096bb5cc471278c2",
+                "responses": {
+                    "200": {
+                        "description": "List of appointments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "doctor_profile_id": {
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "appointment_date": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-06-15"
+                                            },
+                                            "appointment_time": {
+                                                "type": "string",
+                                                "example": "10:00"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "confirmed"
+                                            },
+                                            "notes": {
+                                                "type": "string",
+                                                "example": "Follow-up visit for test results."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "api/v1/appointments/patient": {
+            "post": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Create a new appointment from the patient",
+                "operationId": "3b60b01eeff9d8f188a49c1195bc69d2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "patient_profile_id",
+                                    "doctor_profile_id",
+                                    "appointment_date",
+                                    "appointment_time",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "patient_profile_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "doctor_profile_id": {
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "appointment_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-06-10"
+                                    },
+                                    "appointment_time": {
+                                        "type": "string",
+                                        "example": "09:30"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "pending"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "First-time consultation."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Appointment created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Appointment created successfully"
+                                        },
+                                        "appointment_id": {
+                                            "type": "integer",
+                                            "example": 123
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/receptionist": {
+            "post": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Create a appointment from patient",
+                "operationId": "067cff370f59fee337ddc0176afda220",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "patient_profile_id",
+                                    "doctor_profile_id",
+                                    "appointment_date",
+                                    "appointment_time",
+                                    "status",
+                                    "notes"
+                                ],
+                                "properties": {
+                                    "patient_profile_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "e7d4a5ed-b4b2-43b1-b7b9-128aa07539b2"
+                                    },
+                                    "doctor_profile_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "e7d4a5ed-b4b2-43b1-b7b9-128aa07539b2"
+                                    },
+                                    "appointment_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-31"
+                                    },
+                                    "appointment_time": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "14:30:00"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "This is a note for the appointment."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Medication created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/doctor": {
+            "get": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get all appointments for the doctor",
+                "operationId": "bc94fe761376e660a33720a804c3bd30",
+                "responses": {
+                    "200": {
+                        "description": "List of doctor appointments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "patient_profile_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "doctor_profile_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "appointment_date": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-06-01"
+                                            },
+                                            "appointment_time": {
+                                                "type": "string",
+                                                "example": "14:00"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "pending"
+                                            },
+                                            "notes": {
+                                                "type": "string",
+                                                "example": "Patient has a history of allergies."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/patients/appointments": {
+            "get": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get all appointments for a specific patient",
+                "operationId": "0378a21252b533ed173747c8823cb61e",
+                "parameters": [
+                    {
+                        "name": "patient",
+                        "in": "path",
+                        "description": "Patient profile ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of patient appointments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "doctor_profile_id": {
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "appointment_date": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-06-10"
+                                            },
+                                            "appointment_time": {
+                                                "type": "string",
+                                                "example": "14:00"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "pending"
+                                            },
+                                            "notes": {
+                                                "type": "string",
+                                                "example": "Check blood pressure follow-up."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Patient not found or no appointments"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User registration",
+                "operationId": "fb835c97347e657e2a627790c4c5817a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "409": {
+                        "description": "User already exists"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User login",
+                "operationId": "fb66b153966d9fac2e999136ef0ade67",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/user": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get current authenticated user",
+                "operationId": "1c8b77bc47c64df608cad828ecc4c69f",
+                "responses": {
+                    "200": {
+                        "description": "Authenticated user data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Mg Mg"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "mgmg@gmail.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout the current authenticated user",
+                "operationId": "307ed0512855922b2280792376bb2095",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/medical-record": {
+            "post": {
+                "tags": [
+                    "Medical Records"
+                ],
+                "summary": "Store a new medical record",
+                "operationId": "c4aa670a6292789c08936da08b57e063",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "appointment_id",
+                                    "record_type_id",
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "appointment_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "record_type_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "a12b3c4d-5e6f-7a8b-9c0d-ef1234567890"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "General Checkup"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "The patient reported headaches and fatigue."
+                                    },
+                                    "medicines": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "quantity": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Medical record created successfully"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/medicines": {
+            "get": {
+                "tags": [
+                    "medicine"
+                ],
+                "summary": "List all medicines",
+                "operationId": "13ef13c46153ca8087e5211cd933d6b9",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "medicines"
+                ],
+                "summary": "Create a new medication",
+                "operationId": "a6b538b971b6f67ed22b30500444e2a2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "stock",
+                                    "expired"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Paracetamol"
+                                    },
+                                    "stock": {
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "expired": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Medication created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/api/v1/medicines/{id}": {
+            "get": {
+                "tags": [
+                    "medicines"
+                ],
+                "summary": "Get a specific medication",
+                "operationId": "46ad8266a837f61f31a58d44ca280c6c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medication found"
+                    },
+                    "404": {
+                        "description": "Medication not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "medicines"
+                ],
+                "summary": "Update a medication",
+                "operationId": "bcd2c3876faa238a4af8c3160e6e4ddb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "stock",
+                                    "expired"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Ibuprofen"
+                                    },
+                                    "stock": {
+                                        "type": "integer",
+                                        "example": 50
+                                    },
+                                    "expired": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-01-01"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Medication updated"
+                    },
+                    "404": {
+                        "description": "Medication not found"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "medicines"
+                ],
+                "summary": "Delete a medicine by ID",
+                "operationId": "4ddcdc52bc314a436ea41fe95385db8a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the medicine to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Medicine deleted successfully"
+                    },
+                    "404": {
+                        "description": "Medicine not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/patients": {
+            "get": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Get list of patients",
+                "operationId": "d09f904c4afecd745feae86ee03deb91",
+                "responses": {
+                    "200": {
+                        "description": "List of patients"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/patient-profile": {
+            "post": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Create a patient profile",
+                "operationId": "cbecf62fa5f7fba558243d25f6d2e2d3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "age",
+                                    "date_of_birth",
+                                    "gender",
+                                    "address",
+                                    "relation",
+                                    "blood_type"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "age": {
+                                        "type": "integer",
+                                        "example": 35
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-05-12"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female",
+                                            "other"
+                                        ],
+                                        "example": "male"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "09123456789"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Yangon"
+                                    },
+                                    "relation": {
+                                        "type": "string",
+                                        "example": "Father"
+                                    },
+                                    "blood_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "A+",
+                                            "A-",
+                                            "B+",
+                                            "B-",
+                                            "AB+",
+                                            "AB-",
+                                            "O+",
+                                            "O-"
+                                        ],
+                                        "example": "O+"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Patient profile created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/patient-profile/{id}": {
+            "get": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Get a specific patient profile",
+                "operationId": "5a52b3a4b79a862637d82be063cfc284",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Patient ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Patient found"
+                    },
+                    "404": {
+                        "description": "Patient not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Update a patient profile",
+                "operationId": "925bab67ee18f2d8c0cb8de6bc31a9af",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Patient ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "age": {
+                                        "type": "integer",
+                                        "example": 36
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1989-05-12"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female",
+                                            "other"
+                                        ],
+                                        "example": "male"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "09876543210"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Mandalay"
+                                    },
+                                    "relation": {
+                                        "type": "string",
+                                        "example": "Brother"
+                                    },
+                                    "blood_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "A+",
+                                            "A-",
+                                            "B+",
+                                            "B-",
+                                            "AB+",
+                                            "AB-",
+                                            "O+",
+                                            "O-"
+                                        ],
+                                        "example": "B+"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Patient profile updated"
+                    },
+                    "404": {
+                        "description": "Patient not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Delete a patient profile",
+                "operationId": "052a694c2c5f8f22998531fae7ea6101",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Patient ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Patient deleted"
+                    },
+                    "404": {
+                        "description": "Patient not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/getMyPatientAccounts": {
+            "get": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Get all patient accounts for the authenticated user",
+                "operationId": "828df918659efddd02396cbb6ce9c184",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "user_id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "age": {
+                                                "type": "integer"
+                                            },
+                                            "date_of_birth": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "gender": {
+                                                "type": "integer"
+                                            },
+                                            "phone": {
+                                                "type": "integer"
+                                            },
+                                            "address": {
+                                                "type": "string"
+                                            },
+                                            "relation": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all patient users with their profile data",
+                "operationId": "d7644414152592dc0b0696e77030e4be",
+                "responses": {
+                    "200": {
+                        "description": "List of users with patient profiles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "user_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "John Doe"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "example": "john@example.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "hashed_password_here"
+                                            },
+                                            "age": {
+                                                "type": "integer",
+                                                "example": 30
+                                            },
+                                            "date_of_birth": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "1995-05-10"
+                                            },
+                                            "gender": {
+                                                "type": "string",
+                                                "example": "male"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "09123456789"
+                                            },
+                                            "address": {
+                                                "type": "string",
+                                                "example": "123 Main Street, Yangon"
+                                            },
+                                            "relation": {
+                                                "type": "string",
+                                                "example": "self"
+                                            },
+                                            "blood_type": {
+                                                "type": "string",
+                                                "example": "O+"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/record-types": {
+            "get": {
+                "tags": [
+                    "Record Types"
+                ],
+                "summary": "Get all record types",
+                "operationId": "454c0526aac72784227715c86db17b92",
+                "responses": {
+                    "200": {
+                        "description": "List of record types"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Record Types"
+                ],
+                "summary": "Create a new record type",
+                "operationId": "4058a838013a2744cb25f76eb657dd0a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "enum": [
+                                            "symptom",
+                                            "diagnosis",
+                                            "allergy",
+                                            "family_history",
+                                            "lifestyle"
+                                        ],
+                                        "example": "diagnosis"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Describes a medical diagnosis provided by a doctor"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Record type created successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/record-types/{id}": {
+            "get": {
+                "tags": [
+                    "Record Types"
+                ],
+                "summary": "Get a single record type",
+                "operationId": "018854ec87ccbf840fe72f8bb61bbd91",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Record Type ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Record type data"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Record Types"
+                ],
+                "summary": "Update a record type",
+                "operationId": "1987629f1940b2c5d296e5b9309ca41b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Record Type ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "enum": [
+                                            "symptom",
+                                            "diagnosis",
+                                            "allergy",
+                                            "family_history",
+                                            "lifestyle"
+                                        ],
+                                        "example": "allergy"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Updated description"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Record type updated"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1//record-types/{id}": {
+            "delete": {
+                "tags": [
+                    "Record Types"
+                ],
+                "summary": "Delete a record type",
+                "operationId": "69184c4a5c5c6443f9fa0d16664b62a1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Record Type ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/appointments/{appointment}/treatments": {
+            "get": {
+                "tags": [
+                    "Treatments"
+                ],
+                "summary": "List treatments for an appointment",
+                "operationId": "9d04e412ea7996a494a2a369de06fd35",
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "description": "Appointment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "404": {
+                        "description": "Appointment not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Treatments"
+                ],
+                "summary": "Create a new treatment",
+                "operationId": "b4fbf0113ae90edca55456b8a64d7962",
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "description": "Appointment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "start_date"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "maxLength": 225,
+                                        "example": "Back pain therapy"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "This treatment includes massage and exercise."
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-05-13"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-05-20",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/{appointment}/treatments/{treatment}": {
+            "get": {
+                "tags": [
+                    "Treatments"
+                ],
+                "summary": "Show treatment detail",
+                "operationId": "130ae98d3530b27425b700587ef1734a",
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "treatment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Treatments"
+                ],
+                "summary": "Update a treatment",
+                "operationId": "3c8b05bca9a5ac0ff71e596e37785c40",
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "treatment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "end_date"
+                                ],
+                                "properties": {
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/doctors": {
+            "get": {
+                "tags": [
+                    "Doctors"
+                ],
+                "summary": "Get all doctors accounts ",
+                "operationId": "fdc7fa0d6c6b0fcc5ef72ef5fa315f70",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "user_id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "age": {
+                                                "type": "integer"
+                                            },
+                                            "date_of_birth": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "gender": {
+                                                "type": "integer"
+                                            },
+                                            "phone": {
+                                                "type": "integer"
+                                            },
+                                            "address": {
+                                                "type": "string"
+                                            },
+                                            "relation": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/doctor/me": {
+            "get": {
+                "tags": [
+                    "Doctor"
+                ],
+                "summary": "Get the authenticated doctor's profile",
+                "operationId": "aa1a7eb83498a35c8083ca3bd77d4a03",
+                "responses": {
+                    "200": {
+                        "description": "Doctor profile retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 7
+                                        },
+                                        "specialty": {
+                                            "type": "string",
+                                            "example": "Cardiology"
+                                        },
+                                        "license_number": {
+                                            "type": "string",
+                                            "example": "DOC-123456"
+                                        },
+                                        "education": {
+                                            "type": "string",
+                                            "example": "MBBS, MD - Cardiology"
+                                        },
+                                        "experience_years": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "biography": {
+                                            "type": "string",
+                                            "example": "Experienced cardiologist specializing in heart disease."
+                                        },
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "09876543210"
+                                        },
+                                        "address": {
+                                            "type": "string",
+                                            "example": "Yangon General Hospital"
+                                        },
+                                        "availability": {
+                                            "type": "string",
+                                            "example": "Monday to Friday, 9 AM - 5 PM"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/doctors/{id}": {
+            "get": {
+                "tags": [
+                    "Doctor"
+                ],
+                "summary": "Get a doctor profile by ID",
+                "operationId": "f609f2197e836f25698045c0f10c3942",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Doctor ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Doctor profile retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 12
+                                        },
+                                        "specialty": {
+                                            "type": "string",
+                                            "example": "Dermatology"
+                                        },
+                                        "license_number": {
+                                            "type": "string",
+                                            "example": "DR-2023001"
+                                        },
+                                        "education": {
+                                            "type": "string",
+                                            "example": "MBBS, M.D."
+                                        },
+                                        "experience_years": {
+                                            "type": "integer",
+                                            "example": 8
+                                        },
+                                        "biography": {
+                                            "type": "string",
+                                            "example": "Specialist in skin treatments."
+                                        },
+                                        "phone": {
+                                            "type": "string",
+                                            "example": "09112233445"
+                                        },
+                                        "address": {
+                                            "type": "string",
+                                            "example": "Mandalay Hospital, Myanmar"
+                                        },
+                                        "availability": {
+                                            "type": "string",
+                                            "example": "Mon-Fri: 9AM - 1PM"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Doctor not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/invoices/{invoice}/medicines": {
+            "get": {
+                "tags": [
+                    "Invoice Medicines"
+                ],
+                "summary": "Get all medicines for a given invoice",
+                "operationId": "b0daeca8c65e6a837e51f6c80862a180",
+                "parameters": [
+                    {
+                        "name": "invoice_id",
+                        "in": "path",
+                        "description": "Invoice ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of medicines for the invoice"
+                    },
+                    "404": {
+                        "description": "Invoice not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/invoices/{invoice}/medicines/sync": {
+            "post": {
+                "tags": [
+                    "Invoice Medicines"
+                ],
+                "summary": "Attach medicines to an invoice",
+                "operationId": "84a9a1480064c0fb70d4cd48b8bb47ae",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "invoice_id",
+                                    "medicines"
+                                ],
+                                "properties": {
+                                    "invoice_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "medicines": {
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "id",
+                                                "quantity"
+                                            ],
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "quantity": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Medicines attached to invoice"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Admin - Receptionists",
+            "description": "Admin - Receptionists"
+        },
+        {
+            "name": "Admin - Doctors",
+            "description": "Admin - Doctors"
+        },
+        {
+            "name": "Appointments",
+            "description": "Appointments"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Medical Records",
+            "description": "Medical Records"
+        },
+        {
+            "name": "medicine",
+            "description": "medicine"
+        },
+        {
+            "name": "medicines",
+            "description": "medicines"
+        },
+        {
+            "name": "Patients",
+            "description": "Patients"
+        },
+        {
+            "name": "Patient",
+            "description": "Patient"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        },
+        {
+            "name": "Record Types",
+            "description": "Record Types"
+        },
+        {
+            "name": "Treatments",
+            "description": "Treatments"
+        },
+        {
+            "name": "Doctors",
+            "description": "Doctors"
+        },
+        {
+            "name": "Doctor",
+            "description": "Doctor"
+        },
+        {
+            "name": "Invoice Medicines",
+            "description": "Invoice Medicines"
+        }
+    ]
+}
