@@ -46,8 +46,8 @@ class TreatmentController extends Controller
     {
         try
             {
-               $treatments = $this->treatmentRepository->getAllTreatments();
-                return $this->success('success',['treatments'=>TreatmentResource::collection($treatments)],'Treatments Retrieved Successfully',200);
+               $treatments = $this->treatmentRepository->getAllTreatments($appointment);
+                return $this->success('success',['treatments'=>TreatmentResource::make($treatments)],'Treatments Retrieved Successfully',200);
 
             }
         catch (\Exception $e)

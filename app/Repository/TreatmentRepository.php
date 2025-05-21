@@ -9,8 +9,8 @@ use App\Models\User;
 
 class TreatmentRepository
 {
-    public function getAllTreatments(){
-        $treatments = Treatment::all();
+    public function getAllTreatments($appointment){
+        $treatments = Treatment::where('appointment_id',$appointment->id)->first();
         return $treatments;
     }
 
