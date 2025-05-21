@@ -19,6 +19,7 @@ class DoctorProfileResource extends JsonResource
             'name' => $this->user->name,
             'email' => $this->user->email,
             'specialty' => json_decode($this->specialty),
+            'availability'=>$this->availability,
             'license_number' => $this->license_number,
             'education' => $this->education,
             'experience_years' => $this->experience_years,
