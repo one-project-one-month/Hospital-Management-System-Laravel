@@ -17,6 +17,7 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
 use App\Models\DoctorProfile;
 use OpenApi\Annotations as OA;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -109,13 +110,38 @@ class AdminController extends Controller
 
     public function createDoctor(StoreDoctorRequest $request){
         if ($this->user->hasRole([usr\Role::ADMIN])) {
+            DB::beginTransaction();
             try {
                 $validatedData = $request->toArray();
-                $doctor = $this->adminRepo->createDoctor($validatedData);
-                $createdDoctor=DoctorProfile::where('id',$doctor->id)->first();
+
+                // Create user first
+                $user = $this->adminRepo->createUser(data: $validatedData); // custom function to create user
+                if (!$user) {
+                    throw new \Exception("User creation failed.");
+                }
+
+                // Add user_id into doctor data if needed
+                $validatedData['user_id'] = $user->id;
+                $user->assignRole(Role::findByName('doctor', 'api'));
+
+                // Create doctor profile
+                $doctor = $this->adminRepo->createDoctor($validatedData); // custom function to create doctor
+                if (!$doctor) {
+                    throw new \Exception("Doctor profile creation failed.");
+                }
+
+                DB::commit();
+
+                return $this->success(
+                    'success',
+                    ['doctor' => DoctorProfileResource::make($doctor)],
+                    'Doctor Created Successfully',
+                    201
+                );
                 return $this->success('success',['doctor'=>DoctorProfileResource::make($createdDoctor)],'Doctor Created Successfully',201);
 
             } catch (\Exception $e) {
+                DB::rollBack();
                 return $this->fail('fail',null,$e->getMessage(),500);
             }
         }
