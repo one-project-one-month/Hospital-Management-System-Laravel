@@ -3,7 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\TreatmentResource;
 use App\Http\Resources\DoctorProfileResource;
+use App\Http\Resources\MedicalRecordResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppointmentResource extends JsonResource
@@ -24,6 +27,7 @@ class AppointmentResource extends JsonResource
             'status'=>$this->status,
             'notes'=>$this->notes,
             'doctor'=>DoctorProfileResource::make($this->doctorProfile),
+
         ];
     }
 }

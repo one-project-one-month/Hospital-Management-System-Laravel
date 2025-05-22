@@ -20,6 +20,7 @@ class TreatmentResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'start_date' => $this->start_date,
+            'end_date'=>$this->end_date,
             'appointment' => AppointmentResource::make($this->appointment)
         ];
     }
