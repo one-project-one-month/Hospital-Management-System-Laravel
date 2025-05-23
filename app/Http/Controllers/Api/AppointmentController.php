@@ -135,7 +135,7 @@ class AppointmentController extends Controller
     public function showAppointment($id){
         try {
             $appointment = $this->appointmentRepo->getAppointmentById($id);
-            return $this->success('success', $appointment, 'Appointment filtered by Id', 200);
+            return $this->success('success', AppointmentResource::make($appointment), 'Appointment filtered by Id', 200);
         } catch (\Exception $e) {
             return $this->fail('fail', null, $e->getMessage(), 404);
         }
@@ -143,9 +143,12 @@ class AppointmentController extends Controller
 
     public function updateAppointment($id){
         try {
+            $appointment = $this->appointmentRepo->updateAppointmentStatus($id);
+            $updatedAppointment = $this->appointmentRepo->getAppointmentById($appointment->id);
 
-        } catch (\Throwable $th) {
-            //throw $th;
+            return $this->success('success', AppointmentResource::make($updatedAppointment), 'Appointment Updated', 200);
+        } catch (\Exception $e) {
+            return $this->fail('fail', $e->getMessage(), 'Fail to Update Appointment', 404);
         }
     }
 }

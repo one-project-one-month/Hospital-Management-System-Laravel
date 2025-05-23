@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Http\Controllers\Api\AppointmentController;
 use App\Models\Appointment;
 
 class AppointmentRepository
@@ -49,6 +50,21 @@ class AppointmentRepository
 
     public function getAppointmentById($id) {
         $appointment = Appointment::findOrFail($id);
+        return $appointment;
+    }
+
+    public function updateAppointmentStatus($id){
+        $appointment = Appointment::findOrFail($id);
+
+        if(!$appointment){
+            return response()->json([
+                'message' => 'Appointment Not Found',
+            ], 404);
+        }
+
+        $appointment->update([
+            'status' => 'confirmed'
+        ]);
         return $appointment;
     }
 
