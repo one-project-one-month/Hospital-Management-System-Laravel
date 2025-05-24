@@ -15,6 +15,7 @@ use App\Http\Resources\DoctorResource;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
+use App\Http\Requests\Doctor\UpdateDoctorRequest;
 use App\Models\DoctorProfile;
 use OpenApi\Annotations as OA;
 use Illuminate\Support\Facades\DB;
@@ -82,12 +83,12 @@ class AdminController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"name", "email", "password", "specialty", "license_number", "education", "experience_years", "biography", "phone", "address"},
+     *             required={"name", "email", "password", "speciality", "license_number", "education", "experience_years", "biography", "phone", "address"},
      *             @OA\Property(property="name", type="string", example="Mg Mg"),
      *             @OA\Property(property="email", type="string", format="email", example="mgmg@gmail.com"),
      *             @OA\Property(property="password", type="string", example="password"),
      *             @OA\Property(
-     *                 property="specialty",
+     *                 property="speciality",
      *                 type="array",
      *                 @OA\Items(
      *                     type="string"
@@ -138,7 +139,6 @@ class AdminController extends Controller
                     'Doctor Created Successfully',
                     201
                 );
-                return $this->success('success',['doctor'=>DoctorProfileResource::make($createdDoctor)],'Doctor Created Successfully',201);
 
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -146,4 +146,33 @@ class AdminController extends Controller
             }
         }
     }
+
+    public function updateDoctor(UpdateDoctorRequest $request, string $id){
+        if ($this->user->hasRole([usr\Role::ADMIN])) {
+            try {
+                $validatedData = $request->validated();
+                $doctor = $this->adminRepo->updateDoctor($validatedData,$id);
+
+                return $this->success('success',['doctor'=>DoctorResource::make($doctor)], 'Doctor Updated Successfully', 200);
+            } catch (\Exception $e) {
+
+                return $this->fail('fail', null, $e->getMessage(), 500);
+            }
+
+            }
+    }
+
+    public function deleteDoctor(string $id){
+        if ($this->user->hasRole([usr\Role::ADMIN])) {
+            try {
+
+                $this->adminRepo->deleteDoctor($id);
+
+                return $this->success('success',null,'Doctor Deleted Successfully',200);
+            } catch (\Exception $e) {
+                return $this->fail('fail', null, $e->getMessage(), 500);
+            }
+        }
+    }
+
 }

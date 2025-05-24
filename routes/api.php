@@ -54,6 +54,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
+    Route::put('admin/updateDoctor/{id}', [AdminController::class, 'updateDoctor']);
+    Route::delete('admin/deleteDoctor/{id}', [AdminController::class, 'deleteDoctor']);
     Route::get('admin/doctors', [DoctorProfileController::class, 'index']);
 
     //doctor
