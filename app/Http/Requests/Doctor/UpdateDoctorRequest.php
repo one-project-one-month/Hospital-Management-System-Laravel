@@ -6,9 +6,9 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Traits\HttpResponse;
+use Illuminate\Validation\Rule;
 
-
-class StoreDoctorRequest extends FormRequest
+class UpdateDoctorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,7 @@ class StoreDoctorRequest extends FormRequest
     {
         return [
             'name'=>'required|string|max:255',
-            'email'=>'required|email|unique:users,email',
+            'email'=>'required|email',
             'password'=>'required|min:6',
             'speciality'=>'json',
             'license_number'=>'required|string|max:255',

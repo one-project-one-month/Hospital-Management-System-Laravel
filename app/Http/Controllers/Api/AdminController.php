@@ -14,6 +14,7 @@ use App\Http\Resources\DoctorResource;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
+use App\Http\Requests\Doctor\UpdateDoctorRequest;
 use OpenApi\Annotations as OA;
 
 
@@ -118,4 +119,33 @@ class AdminController extends Controller
             }
         }
     }
+
+    public function updateDoctor(UpdateDoctorRequest $request, string $id){
+        if ($this->user->hasRole([usr\Role::ADMIN])) {
+            try {
+                $validatedData = $request->validated();
+                $doctor = $this->adminRepo->updateDoctor($validatedData,$id);
+
+                return $this->success('success',['doctor'=>DoctorResource::make($doctor)], 'Doctor Updated Successfully', 200);
+            } catch (\Exception $e) {
+
+                return $this->fail('fail', null, $e->getMessage(), 500);
+            }
+
+            }
+    }
+
+    public function deleteDoctor(string $id){
+        if ($this->user->hasRole([usr\Role::ADMIN])) {
+            try {
+
+                $this->adminRepo->deleteDoctor($id);
+
+                return $this->success('success',null,'Doctor Deleted Successfully',200);
+            } catch (\Exception $e) {
+                return $this->fail('fail', null, $e->getMessage(), 500);
+            }
+        }
+    }
+
 }

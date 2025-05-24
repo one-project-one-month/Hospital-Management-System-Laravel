@@ -39,4 +39,36 @@ class AdminRepository{
         return $doctor;
     }
 
+    public function updateDoctor($data, $id){
+        $doctor = DoctorProfile::find($id);
+
+        $user = User::find($doctor->user_id);
+        $user->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        $doctor->update([
+            'speciality' => $data['speciality'] ?? null,
+            'license_number' => $data['license_number'],
+            'education' => $data['education'],
+            'experience_years' => $data['experience_years'],
+            'biography' => $data['biography'] ?? null,
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+        ]);
+
+        return $doctor;
+    }
+
+    public function deleteDoctor($id){
+        $doctor = DoctorProfile::find($id);
+
+        $user = User::find($doctor->user_id);
+        $user->delete();
+        // $doctor->delete();
+        return $doctor;
+    }
+
 }
