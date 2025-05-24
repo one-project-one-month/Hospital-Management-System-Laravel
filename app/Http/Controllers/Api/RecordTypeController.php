@@ -22,6 +22,17 @@ class RecordTypeController extends Controller
         $this->recordTypeRepository = $recordTypeRepository;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/record-types",
+     *     summary="Get all record types",
+     *     tags={"Record Types"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="List of record types"),
+     *     @OA\Response(response=401, description="Unauthorized")
+     * )
+     */
+
     public function index(Request $request)
     {
         try {
@@ -36,6 +47,34 @@ class RecordTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    /**
+     * @OA\Post(
+     *     path="/api/v1/record-types",
+     *     summary="Create a new record type",
+     *     tags={"Record Types"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "description"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 enum={"symptom", "diagnosis", "allergy", "family_history", "lifestyle"},
+     *                 example="diagnosis"
+     *             ),
+     *             @OA\Property(
+     *                 property="description",
+     *                 type="string",
+     *                 example="Describes a medical diagnosis provided by a doctor"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Record type created successfully"),
+     *     @OA\Response(response=400, description="Bad request")
+     * )
+     */
+
     public function store(StoreRecordTypeRequest $request)
     {
         try {
@@ -51,6 +90,25 @@ class RecordTypeController extends Controller
     /**
      * Display the specified resource.
      */
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/record-types/{id}",
+     *     summary="Get a single record type",
+     *     tags={"Record Types"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Record Type ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Record type data"),
+     *     @OA\Response(response=404, description="Not found")
+     * )
+     */
+
     public function show(RecordType $recordType)
     {
         try {
@@ -66,6 +124,42 @@ class RecordTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+    /**
+     * @OA\Put(
+     *     path="/api/v1/record-types/{id}",
+     *     summary="Update a record type",
+     *     tags={"Record Types"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Record Type ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 enum={"symptom", "diagnosis", "allergy", "family_history", "lifestyle"},
+     *                 example="allergy"
+     *             ),
+     *             @OA\Property(
+     *                 property="description",
+     *                 type="string",
+     *                 example="Updated description"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Record type updated"),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="Not found")
+     * )
+     */
+
     public function update(UpdateRecordTypeRequest $request, RecordType $recordType)
     {
         try {
@@ -82,6 +176,25 @@ class RecordTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    /**
+     * @OA\Delete(
+     *     path="/api/v1//record-types/{id}",
+     *     summary="Delete a record type",
+     *     tags={"Record Types"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Record Type ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=204, description="Deleted successfully"),
+     *     @OA\Response(response=404, description="Not found")
+     * )
+     */
+
     public function destroy(RecordType $recordType)
     {
         try {

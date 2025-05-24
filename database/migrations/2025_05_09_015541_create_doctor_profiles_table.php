@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('doctor_profiles', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->json('specialty')->nullable();
+            $table->json('specialty');
             $table->string('license_number');
             $table->text('education')->nullable();
+            $table->json('availability')->json();
             $table->year('experience_years')->nullable();
             $table->text('biography')->nullable();
             $table->string('phone')->nullable();

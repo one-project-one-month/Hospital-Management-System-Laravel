@@ -21,3 +21,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+echo "storage/api-docs/api-docs.json" >> .gitignore
+storage/api-docs/api-docs.json
+

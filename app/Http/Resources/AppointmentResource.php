@@ -3,6 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\TreatmentResource;
+use App\Http\Resources\DoctorProfileResource;
+use App\Http\Resources\MedicalRecordResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppointmentResource extends JsonResource
@@ -17,13 +21,13 @@ class AppointmentResource extends JsonResource
         return [
             'id'=>$this->id,
             'patient_profile_id'=>$this->patient_profile_id,
-            'patient_profile_name'=>$this->patientProfiles,
-            'doctor_profile_id'=>$this->doctor_profile_id,
-            'doctor_profile_name'=>$this->doctorProfile->user->name,
+            'patient_profile_name'=>$this->patientProfile->name,
             'appointment_date'=>$this->appointment_date,
             'appointment_time'=>$this->appointment_time,
             'status'=>$this->status,
             'notes'=>$this->notes,
+            'doctor'=>DoctorProfileResource::make($this->doctorProfile),
+
         ];
     }
 }

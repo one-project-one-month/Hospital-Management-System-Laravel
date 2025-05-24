@@ -50,7 +50,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function patientProfiles()
+    //fix many to one if necessary
+    public function patientProfiles(): HasMany
     {
         return $this->hasMany(PatientProfile::class);
     }

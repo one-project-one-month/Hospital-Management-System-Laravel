@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Medicine;
 
+use App\Traits\HttpResponse;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateMedicineRequest extends FormRequest
 {
@@ -25,6 +28,11 @@ class UpdateMedicineRequest extends FormRequest
             'name'=>'required|unique:medicines,name,'.$this->medicine->id,
             'stock'=>'required|numeric'
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(HttpResponse::fail('fail', $validator->errors(), 'Validation Error', 422));
     }
 
 
