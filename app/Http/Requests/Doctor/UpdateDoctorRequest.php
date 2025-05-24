@@ -27,15 +27,21 @@ class UpdateDoctorRequest extends FormRequest
     {
         return [
             'name'=>'required|string|max:255',
-            'email'=>'required|email',
+            'email'=>'required|email|'.Rule::unique('users', 'email')->ignore($this->route('id')),
             'password'=>'required|min:6',
-            'speciality'=>'json',
+            'specialty'=>'json',
+            'specialty.*' => 'string',
             'license_number'=>'required|string|max:255',
             'education'=>'required|string|max:255',
             'experience_years'=>'required',
             'biography'=>'nullable',
             'phone'=>'nullable|string|max:255',
-            'address'=>'nullable|string'
+            'address'=>'nullable|string',
+            'availability' => 'array',
+            'availability.Mon' => 'array',
+            'availability.Wed' => 'array',
+            'availability.Fri' => 'array',
+            'availability.*.*' => 'string|regex:/^\d{2}:\d{2}$/',
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\DoctorProfileResource;
 use App\Models\User;
 use App\Enums\User as usr;
 use App\Traits\HttpResponse;
@@ -15,7 +16,9 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
 use App\Http\Requests\Doctor\UpdateDoctorRequest;
+use App\Models\DoctorProfile;
 use OpenApi\Annotations as OA;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -80,12 +83,12 @@ class AdminController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"name", "email", "password", "specialty", "license_number", "education", "experience_years", "biography", "phone", "address"},
+     *             required={"name", "email", "password", "speciality", "license_number", "education", "experience_years", "biography", "phone", "address"},
      *             @OA\Property(property="name", type="string", example="Mg Mg"),
      *             @OA\Property(property="email", type="string", format="email", example="mgmg@gmail.com"),
      *             @OA\Property(property="password", type="string", example="password"),
      *             @OA\Property(
-     *                 property="specialty",
+     *                 property="speciality",
      *                 type="array",
      *                 @OA\Items(
      *                     type="string"
@@ -108,13 +111,37 @@ class AdminController extends Controller
 
     public function createDoctor(StoreDoctorRequest $request){
         if ($this->user->hasRole([usr\Role::ADMIN])) {
+            DB::beginTransaction();
             try {
-                $validatedData = $request->validated();
-                $doctor = $this->adminRepo->createDoctor($validatedData);
+                $validatedData = $request->toArray();
 
-                return $this->success('success',['doctor'=>DoctorResource::make($doctor)],'Doctor Created Successfully',201);
+                // Create user first
+                $user = $this->adminRepo->createUser(data: $validatedData); // custom function to create user
+                if (!$user) {
+                    throw new \Exception("User creation failed.");
+                }
+
+                // Add user_id into doctor data if needed
+                $validatedData['user_id'] = $user->id;
+                $user->assignRole(Role::findByName('doctor', 'api'));
+
+                // Create doctor profile
+                $doctor = $this->adminRepo->createDoctor($validatedData); // custom function to create doctor
+                if (!$doctor) {
+                    throw new \Exception("Doctor profile creation failed.");
+                }
+
+                DB::commit();
+
+                return $this->success(
+                    'success',
+                    ['doctor' => DoctorProfileResource::make($doctor)],
+                    'Doctor Created Successfully',
+                    201
+                );
 
             } catch (\Exception $e) {
+                DB::rollBack();
                 return $this->fail('fail',null,$e->getMessage(),500);
             }
         }

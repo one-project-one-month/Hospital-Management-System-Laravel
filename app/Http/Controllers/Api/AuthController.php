@@ -22,7 +22,6 @@ class AuthController extends Controller
         $this->userRepository = $userRepository;
     }
 
-
     /**
      * @OA\Post(
      *     path="/api/v1/auth/register",
@@ -42,7 +41,6 @@ class AuthController extends Controller
      *     @OA\Response(response=409, description="User already exists")
      * )
      */
-
     public function register(RegisterRequest $request){
 
 

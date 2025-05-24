@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Requests\LabResult;
-
+namespace App\Http\Requests\Appointment;
 use App\Traits\HttpResponse;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreLabResultRequest extends FormRequest
+class UpdateAppointmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +24,7 @@ class StoreLabResultRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'test_name' => 'required|string|max:255',
-            'result_summary' => 'nullable|string',
-            'detailed_result' => 'nullable|string',
-            'performed_at' => 'required|date',
+            'status' => 'required'
         ];
     }
 
