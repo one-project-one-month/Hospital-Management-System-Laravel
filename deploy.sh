@@ -5,7 +5,7 @@ cd /var/www/html/Hospital-Management-System-Laravel
 echo "Pulling latest code..."
 git reset --hard
 git clean -df
-git pull origin main
+git pull origin dev
 
 echo "Rebuilding containers..."
 docker-compose down
