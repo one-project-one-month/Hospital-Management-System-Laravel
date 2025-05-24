@@ -23,4 +23,5 @@ yarn-error.log
 /.zed
 echo "storage/api-docs/api-docs.json" >> .gitignore
 storage/api-docs/api-docs.json
+deploy.sh
 
