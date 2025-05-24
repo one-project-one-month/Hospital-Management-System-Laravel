@@ -3,6 +3,16 @@
         "id": "api-update",
         "execute-command": "/var/www/html/Hospital-Management-System-Laravel/deploy.sh",
         "command-working-directory": "/var/www/html/Hospital-Management-System-Laravel",
-        "response-message": "Laravel deploy script executed."
+        "response-message": "Laravel deploy script executed.",
+        "trigger-rule": {
+            "match": {
+                "type": "payload-hash-sha1",
+                "secret": "hms",
+                "parameter": {
+                    "source": "header",
+                    "name": "X-Hub-Signature"
+                }
+            }
+        }
     }
 ]
