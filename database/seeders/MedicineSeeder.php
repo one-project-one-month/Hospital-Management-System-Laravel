@@ -16,24 +16,28 @@ class MedicineSeeder extends Seeder
         Medicine::create([
             'name'=>'medicine1',
             'stock'=>30,
+            'expired_at'=>'2024-2-2',
             'price'=>3000
         ]);
 
         Medicine::create([
             'name'=>'medicine5',
             'stock'=>30,
+            'expired_at'=>'2024-2-2',
             'price'=>3000
         ]);
 
         Medicine::create([
             'name'=>'medicine4',
             'stock'=>30,
+            'expired_at'=>'2024-2-2',
             'price'=>3000
         ]);
 
         Medicine::create([
             'name'=>'medicine3',
             'stock'=>30,
+            'expired_at'=>'2024-2-2',
             'price'=>3000
         ]);
 

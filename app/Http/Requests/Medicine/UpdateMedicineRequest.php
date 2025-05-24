@@ -26,7 +26,9 @@ class UpdateMedicineRequest extends FormRequest
     {
         return [
             'name'=>'required|unique:medicines,name,'.$this->medicine->id,
-            'stock'=>'required|numeric'
+            'stock'=>'required|numeric|',
+            'expired_at'=>'required|date',
+            'price'=>'required|numeric'
         ];
     }
 

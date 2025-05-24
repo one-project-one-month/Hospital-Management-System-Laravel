@@ -18,6 +18,7 @@ class MedicineResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'stock' => $this->stock,
+            'price'=>$this->price,
             'expired_at' => $this->expired_at
         ];
     }
