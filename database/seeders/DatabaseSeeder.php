@@ -20,14 +20,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        Role::create(['name' => 'admin','guard_name'=>'api']);
-        Role::create(['name' => 'patient','guard_name'=>'api']);
-        Role::create(['name' => 'doctor','guard_name'=>'api']);
-        Role::create(['name' => 'receptionist','guard_name'=>'api']);
+        Role::create(['name' => 'admin', 'guard_name' => 'api']);
+        Role::create(['name' => 'patient', 'guard_name' => 'api']);
+        Role::create(['name' => 'doctor', 'guard_name' => 'api']);
+        Role::create(['name' => 'receptionist', 'guard_name' => 'api']);
 
         $this->call(MedicineSeeder::class);
 
-        $admin= User::create([
+        $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
 
         $admin->assignRole(Role::findByName('admin', 'api'));
         // User::factory(10)->create();
-       $user= User::create([
+        $user = User::create([
             'name' => 'Patient User',
             'email' => 'patient@gmail.com',
             'password' => bcrypt('password'),
@@ -45,10 +45,10 @@ class DatabaseSeeder extends Seeder
 
         $user->assignRole(Role::findByName('patient', 'api'));
 
-        $patient=PatientProfile::create([
+        $patient = PatientProfile::create([
             'user_id' => $user->id,
-            'name'=>'Mg Mg',
-            'age'=>50,
+            'name' => 'Mg Mg',
+            'age' => 50,
             'date_of_birth' => '1990-01-01',
             'gender' => 'male',
             'phone' => '1234567890',
@@ -64,16 +64,16 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        $doctorUser->assignRole(Role::findByName('doctor','api'));
+        $doctorUser->assignRole(Role::findByName('doctor', 'api'));
 
 
-      $doctor= DoctorProfile::create([
+        $doctor = DoctorProfile::create([
             'user_id' => $doctorUser->id,
             'specialty' => json_encode(['Cardiology', 'Internal Medicine']),
             'license_number' => 'MD123456',
             'education' => 'M.D. from Harvard Medical School',
             'experience_years' => 15,
-            'availability'=> [
+            'availability' => [
                 'Mon' => ['14:00', '16:00'],
                 'Wed' => ['10:00', '11:00', '15:00'],
                 'Fri' => ['09:00', '13:00'],
@@ -83,13 +83,13 @@ class DatabaseSeeder extends Seeder
             'address' => '456 Medical Center Drive, Suite 100'
         ]);
 
-      $receptionistUser = User::create([
-          'name' => 'Receptionist',
-          'email' => 'reception@example.com',
-          'password' => bcrypt('password'),
-      ]);
+        $receptionistUser = User::create([
+            'name' => 'Receptionist',
+            'email' => 'reception@example.com',
+            'password' => bcrypt('password'),
+        ]);
 
-      $receptionistUser->assignRole(Role::findByName('receptionist','api'));
+        $receptionistUser->assignRole(Role::findByName('receptionist', 'api'));
 
         // Create doctor schedules for Dr. John Smith
         $weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -113,14 +113,14 @@ class DatabaseSeeder extends Seeder
             'notes' => 'Initial consultation completed',
             'created_at' => now()->subDays(5),
             'updated_at' => now()->subDays(5)
-            ]);
+        ]);
 
         Treatment::create([
-        'appointment_id' => $appointment->id,
-        'title' => 'Blood Pressure Management',
-        'description' => 'Prescribed medication to manage high blood pressure and advised lifestyle changes.',
-        'start_date' => now()->subDays(5)->toDateString(),
-        'end_date' => now()->addDays(10)->toDateString(),
+            'appointment_id' => $appointment->id,
+            'title' => 'Blood Pressure Management',
+            'description' => 'Prescribed medication to manage high blood pressure and advised lifestyle changes.',
+            'start_date' => now()->subDays(5)->toDateString(),
+            'end_date' => now()->addDays(10)->toDateString(),
         ]);
 
 

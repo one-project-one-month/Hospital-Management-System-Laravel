@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Http\Controllers\Api\AppointmentController;
 use App\Models\Appointment;
 use App\Models\PatientProfile;
+use function PHPUnit\Framework\isEmpty;
 
 class AppointmentRepository
 {
@@ -23,6 +25,7 @@ class AppointmentRepository
 
     private function createAppointment($data)
     {
+        dd($data);
         $appointment = Appointment::create($data);
         return $appointment;
     }
@@ -71,6 +74,31 @@ class AppointmentRepository
         $user=auth()->user();
         $patientProfile = PatientProfile::where('user_id', $user->id)->first();
         $appointment=Appointment::where('patient_profile_id',$patientProfile->id)->get();
+        return $appointment;
+    }
+
+    public function getAppointmentById($id){
+        $appointment = Appointment::findOrFail($id);
+        return $appointment;
+    }
+
+    public function updateAppointmentStatus($data, $id){
+        $appointment = Appointment::findOrFail($id);
+
+        if($appointment){
+            $appointment->update($data);
+        }
+
+        return $appointment;
+    }
+
+    public function deleteAppointmentStatus($data, $id){
+        $appointment = Appointment::findOrFail($id);
+
+        if($appointment){
+            $appointment->update($data);
+        }
+
         return $appointment;
     }
 
