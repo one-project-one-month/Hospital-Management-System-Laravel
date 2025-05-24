@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignUuid('record_type_id')->constrained('record_types')->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
+            $table->integer('medicine_price')->nullable();
             $table->dateTime('recorded_at')->useCurrent();;
             $table->timestamps();
         });

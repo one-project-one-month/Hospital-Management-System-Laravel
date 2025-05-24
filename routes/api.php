@@ -5,14 +5,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\LabResultController;
+use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\MedicineController;
+use App\Http\Controllers\Api\LabResultController;
+use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\Api\AppointmentController;
-use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\InvoiceMedicineController;
-use App\Http\Controllers\Api\InvoiceController;
-use App\Models\InvoiceMedicine;
+use App\Http\Controllers\Api\PatientProfileController;
 
 
 
@@ -35,26 +35,41 @@ Route::get('/error', function () {
 })->name('login');
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
+    Route::get('users',[PatientProfileController::class,'getUsers']);
     Route::apiResource('medicines',MedicineController::class);
+
+    //receptionist
     Route::apiResource('appointments/{appointment}/treatments',TreatmentController::class);
-
-    Route::post('/invoices/{invoice}/medicines/sync',[InvoiceMedicineController::class,'store']);
-    Route::get('/invoices/{invoice}/medicines',[InvoiceMedicineController::class,'index']);
-
     Route::apiResource('invoice/{appointment}/invoice/', InvoiceController::class);
-
-    Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
 
+     //lab result
+     Route::apiResource('appointments/{appointmentId}/lab-results', LabResultController::class)->whereNumber('appointmentId');
+
+    //patient
+    Route::get('getMyPatientAccounts',[PatientProfileController::class,'getMyPatientAccounts']);
+
+
+    //admin
+    Route::post('/appointments/patient', [AppointmentController::class, 'createAppointmentFromPatient']);
     Route::post('admin/createReceptionist',[AdminController::class,'createReceptionist']);
     Route::post('admin/createDoctor',[AdminController::class,'createDoctor']);
-
-    Route::get('/appointments/{role}', [AppointmentController::class, 'appointmentReadPatient']);
-    Route::get('/appointments/all', [AppointmentController::class, 'index']);
-    Route::get('/appointments/{appointmentId}', [AppointmentController::class, 'showAppointment']);
-
     Route::get('admin/doctors', [DoctorProfileController::class, 'index']);
-    Route::apiResource('lab-results', LabResultController::class);
+
+    //doctor
+    Route::get('/appointments/doctor', [AppointmentController::class, 'getDoctorAppointments']);
+    Route::get('doctor/me',[DoctorProfileController::class,'getMyDoctor']);
+    Route::get('doctors/{id}',[DoctorProfileController::class,'show']);
+
+    //appointment
+    Route::get('/appointments/{role}', [AppointmentController::class, 'appointmentReadPatient']);
+    Route::get('/appointments', [AppointmentController::class, 'index']);
+    Route::get('/appointments/{appointment_id}', [AppointmentController::class, 'showAppointment']);
+
+    Route::get('patients/appointments',[AppointmentController::class,'getPatientFormAppointment']);
+
+
+
     // Partient Route
     require __DIR__.'/partientProfile/api.php';
 

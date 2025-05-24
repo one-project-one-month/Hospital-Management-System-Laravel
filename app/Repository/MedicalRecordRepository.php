@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\MedicalRecord;
+use App\Models\Medicine;
 
 class MedicalRecordRepository
 {
@@ -10,15 +11,24 @@ class MedicalRecordRepository
     {
         $record = MedicalRecord::create($data);
 
-        if (!empty($data['medicines'])) {
-            $medicineData = [];
-            foreach ($data['medicines'] as $medicine) {
-                $medicineData[$medicine['id']] = ['quantity' => $medicine['quantity']];
-            }
+        $totalMedicinePrice=0;
+        $attachData=[];
 
-            $record->medicines()->attach($medicineData);
-        }
+       foreach ($data['medicines'] as $item) {
+        $medicine=Medicine::findOrFail($item['medicine_id']);
+        $quantity=$item['quantity'];
+        $total=$medicine->price * $quantity;
 
-        return $record;
+        $totalMedicinePrice+=$total;
+        $attachData[$medicine->id]=['quantity'=>$quantity];
+       }
+
+       $record->medicines()->attach($attachData);
+
+       $record->update([
+        'medicine_price'=>$totalMedicinePrice
+       ]);
+
+       return $record;
     }
 }

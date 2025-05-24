@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Http\Controllers\Api\AppointmentController;
 use App\Models\Appointment;
+use App\Models\PatientProfile;
+use function PHPUnit\Framework\isEmpty;
 
 class AppointmentRepository
 {
@@ -11,7 +13,13 @@ class AppointmentRepository
 
     public function getAllAppointments()
     {
-        $appointments = Appointment::with(['PatientProfile.user', 'DoctorProfile.user'])->get();
+        $appointments = Appointment::with(['patientProfile', 'patientProfile'])->get();
+        return $appointments;
+    }
+
+    public function getAppointmentsByDoctorAndDate($doctor_id, $appointment_date)
+    {
+        $appointments = Appointment::with(['patientProfile', 'doctorProfile'])->where('doctor_profile_id', $doctor_id)->where('appointment_date', $appointment_date)->get();
         return $appointments;
     }
 
@@ -34,6 +42,20 @@ class AppointmentRepository
         return $this->createAppointment($data);
     }
 
+
+    //update appointment
+    public function updateAppointment($data,$id){
+        $appointment = Appointment::findOrFail($id);
+        $appointment->update($data);
+        return $appointment;
+    }
+
+    public function findById(Appointment $appointment){
+        return $appointment;
+    }
+
+
+
     // Appointments for Patients
     public function appointmentForPatient($id)
     {
@@ -48,23 +70,25 @@ class AppointmentRepository
         return $patientAppointment;
     }
 
-    public function getAppointmentById($id) {
+    public function getPatientFormAppointment(){
+        $user=auth()->user();
+        $patientProfile = PatientProfile::where('user_id', $user->id)->first();
+        $appointment=Appointment::where('patient_profile_id',$patientProfile->id)->get();
+        return $appointment;
+    }
+
+    public function getAppointmentById($id){
         $appointment = Appointment::findOrFail($id);
         return $appointment;
     }
 
-    public function updateAppointmentStatus($id){
+    public function updateAppointmentStatus($data, $id){
         $appointment = Appointment::findOrFail($id);
 
-        if(!$appointment){
-            return response()->json([
-                'message' => 'Appointment Not Found',
-            ], 404);
+        if(!$appointment->isEmpty()){
+            $appointment->update($data);
         }
 
-        $appointment->update([
-            'status' => 'confirmed'
-        ]);
         return $appointment;
     }
 

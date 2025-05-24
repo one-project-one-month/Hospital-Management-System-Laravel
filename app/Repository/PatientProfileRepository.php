@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\PatientProfile;
+use App\Models\User;
 
 class PatientProfileRepository
 {
@@ -27,5 +28,19 @@ class PatientProfileRepository
     {
         $patientProfile=PatientProfile::create($data);
         return $patientProfile;
+    }
+
+    public function getMyPatientAccounts(){
+        $user=auth()->user();
+        $patientProfiles=PatientProfile::where('user_id',$user->id)->get();
+        return $patientProfiles;
+    }
+
+    public function getUsers(){
+        // $patients = User::role('patient')->with('patientProfile')->get();
+        $patients = User::with('patientProfiles')->whereHas('roles', function($query){
+            $query->where('name', 'patient');
+        })->get();
+        return $patients;
     }
 }

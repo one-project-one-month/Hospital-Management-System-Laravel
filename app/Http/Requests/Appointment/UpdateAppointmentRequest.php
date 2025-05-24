@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Auth;
-
+namespace App\Http\Requests\Appointment;
+use App\Traits\HttpResponse;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterRequest extends FormRequest
+class UpdateAppointmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +24,12 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|min:6',
+            'status' => 'required'
         ];
     }
 
-    public function failedValidation(Validator $validator){
-        throw new HttpResponseException(response()->json([
-            'status' => 'error',
-            'status_code' => 422,
-            'message' => 'Validation Error',
-            'data' => $validator->errors()
-        ],422));
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(HttpResponse::fail('fail', $validator->errors(), 'Validation Error', 422));
     }
 }

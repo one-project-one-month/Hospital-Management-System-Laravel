@@ -22,7 +22,6 @@ class AuthController extends Controller
         $this->userRepository = $userRepository;
     }
 
-
     /**
      * @OA\Post(
      *     path="/api/v1/auth/register",
@@ -42,8 +41,10 @@ class AuthController extends Controller
      *     @OA\Response(response=409, description="User already exists")
      * )
      */
-
     public function register(RegisterRequest $request){
+
+
+
         $validatedData=$request->validated();
         $user=$this->userRepository->createUser($validatedData);
         $user->assignRole(Role::findByName('patient', 'api'));
@@ -92,6 +93,8 @@ class AuthController extends Controller
             'token'=>$token
         ],'User login successfully',200);
 
+
+
     }
 
     /**
@@ -117,6 +120,8 @@ class AuthController extends Controller
         return $this->success('success',[
             'user'=>UserResource::make($user)
         ],'User retrieved successfully',200);
+
+
     }
 
 
