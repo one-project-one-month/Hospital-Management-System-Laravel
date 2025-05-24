@@ -42,4 +42,14 @@ class Appointment extends Model
     {
         return $this->hasMany(LabResult::class);
     }
+
+    public function scopeFilterBy($query, array $filters)
+    {
+        return $query->when(isset($filters['doctor_id']), fn($q) => $q->where('doctor_profile_id', $filters['doctor_id']))
+                     ->when(isset($filters['appointment_date']), fn($q) => $q->where('appointment_date', $filters['appointment_date']))
+                     ->when(isset($filters['patient_profile_id']), fn($q) => $q->where('patient_profile_id', $filters['patient_profile_id']))
+                     ->when(isset($filters['status']), fn($q) => $q->where('status', $filters['status']));
+    }
+
+
 }

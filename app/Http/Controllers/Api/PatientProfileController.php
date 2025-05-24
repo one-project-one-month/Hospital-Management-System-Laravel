@@ -122,7 +122,7 @@ class PatientProfileController extends Controller
 
     public function store(StorePatientProfileRequest $request)
     {
-        if ($this->user->hasRole(usr\Role::PATIENT)) {
+        if ($this->user->hasRole([usr\Role::PATIENT,usr\Role::RECEPTIONIST])) {
             try {
                 $patientProfile = $request->validated();
                 $patientProfile['user_id'] = $this->user->id;
