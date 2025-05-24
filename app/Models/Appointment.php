@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\DoctorProfile;
 use App\Models\PatientProfile;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Appointment extends Model
@@ -33,9 +34,9 @@ class Appointment extends Model
         return $this->hasOne(MedicalRecord::class, 'appointment_id');
     }
 
-    public function treatment() : HasOne
+    public function treatment() : BelongsTo
     {
-        return $this->hasOne(Treatment::class);
+        return $this->belongsTo(Treatment::class);
     }
 
     public function labResults()
