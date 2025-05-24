@@ -41,7 +41,7 @@ class MedicineController extends Controller
      * @OA\Get(
      *     path="/api/v1/medicines",
      *     summary="List all medicines",
-     *     tags={"medicine"},
+     *     tags={"medicines"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful response"
