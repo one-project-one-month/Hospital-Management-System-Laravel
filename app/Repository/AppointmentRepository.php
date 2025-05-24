@@ -17,10 +17,10 @@ class AppointmentRepository
         return $appointments;
     }
 
-    public function getAppointmentsByDoctorAndDate($doctor_id, $appointment_date)
+    public function getAppointmentsByDoctorAndDate($filters)
     {
-        $appointments = Appointment::with(['patientProfile', 'doctorProfile'])->where('doctor_profile_id', $doctor_id)->where('appointment_date', $appointment_date)->get();
-        return $appointments;
+        $appointment=Appointment::with(['patientProfile','doctorProfile'])->filterBy($filters)->get();
+        return $appointment;
     }
 
     private function createAppointment($data)
