@@ -8,11 +8,11 @@ git clean -df
 git pull origin dev
 
 echo "Rebuilding containers..."
-docker-compose down
-docker-compose build
-docker-compose up -d
+docker compose down
+docker compose build
+docker compose up -d
 
 echo "Running Laravel commands..."
-docker exec laravel_app php artisan migrate --force
-docker exec laravel_app php artisan config:cache
-docker exec laravel_app php artisan route:cache
+docker exec hospital_management_app php artisan migrate --force
+docker exec hospital_management_app php artisan config:cache
+docker exec hospital_management_app php artisan route:cache
