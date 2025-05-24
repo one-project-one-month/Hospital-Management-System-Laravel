@@ -62,9 +62,12 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
     Route::get('doctors/{id}',[DoctorProfileController::class,'show']);
 
     //appointment
-    Route::get('/appointments/{role}', [AppointmentController::class, 'appointmentReadPatient']);
+    Route::get('/appointments/retrieve/{role}', [AppointmentController::class, 'appointmentReadPatient']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/appointments/{appointment_id}', [AppointmentController::class, 'showAppointment']);
+
+    Route::put('/appointments/{appointment_id}/confirmed', [AppointmentController::class, 'updateAppointment']);
+    Route::patch('/appointments/{appointment_id}/cancelled', [AppointmentController::class, 'deleteAppointment']);
 
     Route::get('patients/appointments',[AppointmentController::class,'getPatientFormAppointment']);
 

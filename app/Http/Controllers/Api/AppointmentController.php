@@ -55,19 +55,10 @@ class AppointmentController extends Controller
 
     public function index(){
         try {
-            // dd(request()->filled('patient_profile_id'));
-            // if(request()->filled('doctor_id', 'appointment_date','patient_profile_id','status')){
-            //     $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate(request()->doctor_id, request()->appointment_date,request()->patient_profile_id,request()->status);
-            //     $doctor = DoctorProfile::where('id', request()->doctor_id)->first();
-            //     return $this->success('success', ['appointment' => AppointmentResource::collection($appointments),'doctor'=>DoctorProfileResource::make($doctor)], 'Appointments', 200);
-            // }
-
-            $filters=request()->only(['doctor_id', 'appointment_date','patient_profile_id','status']);
-
-            if (!empty($filters)) {
-                $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate($filters);
-                $doctor =isset($filters['doctor_id']) ? DoctorProfile::find($filters['doctor_id']) : null ;
-                    return $this->success('success', ['appointment' => AppointmentResource::collection($appointments), 'doctor'=>$doctor? DoctorProfileResource::make($doctor):null], 'Appointments', 200);
+            if(request()->filled('doctor_id', 'appointment_date')){
+                $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate(request()->doctor_id, request()->appointment_date);
+                $doctor = DoctorProfile::where('id', request()->doctor_id)->first();
+                return $this->success('success', ['appointment' => AppointmentResource::collection($appointments),'doctor'=>DoctorProfileResource::make($doctor)], 'Appointments', 200);
             }
 
             $appointments = $this->appointmentRepo->getAllAppointments();
@@ -319,7 +310,7 @@ class AppointmentController extends Controller
     public function showAppointment($id){
         try {
             $appointment = $this->appointmentRepo->getAppointmentById($id);
-            return $this->success('success', ['appointment' => AppointmentResource::make($appointment)], 'Appointment Appointment By Id', 200);
+            return $this->success('success', ['appointment' => AppointmentResource::make($appointment)], 'Appointment By Id', 200);
         } catch (\Exception $e) {
             return $this->fail('fail', null, 'No Appointment Found', 200);
         }
@@ -330,5 +321,15 @@ class AppointmentController extends Controller
         $appointment = $this->appointmentRepo->updateAppointmentStatus($validated, $id);
         $updatedAppointment = $this->appointmentRepo->getAppointmentById($id);
         return $this->success('success', ['appointment' => AppointmentResource::make($updatedAppointment)], 'Appointment Updated', 200);
+    }
+
+    public function deleteAppointment(UpdateAppointmentRequest $request, $id){
+        $validated = $request->validated();
+        $appointment = $this->appointmentRepo->deleteAppointmentStatus($validated, $id);
+        if (!$appointment) {
+            return $this->fail('fail', null, 'Appointment not found', 404);
+        }
+        $deletedAppointment = $this->appointmentRepo->getAppointmentById( $id);
+        return $this->success('success', ['appointment' => AppointmentResource::make($deletedAppointment)], 'Appointment deleted successfully', 200);
     }
 }

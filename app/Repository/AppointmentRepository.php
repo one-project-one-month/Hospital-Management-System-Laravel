@@ -85,7 +85,17 @@ class AppointmentRepository
     public function updateAppointmentStatus($data, $id){
         $appointment = Appointment::findOrFail($id);
 
-        if(!$appointment->isEmpty()){
+        if($appointment){
+            $appointment->update($data);
+        }
+
+        return $appointment;
+    }
+
+    public function deleteAppointmentStatus($data, $id){
+        $appointment = Appointment::findOrFail($id);
+
+        if($appointment){
             $appointment->update($data);
         }
 
