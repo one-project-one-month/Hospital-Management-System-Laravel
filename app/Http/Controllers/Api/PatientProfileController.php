@@ -249,7 +249,7 @@ class PatientProfileController extends Controller
      * @OA\Get(
      *     path="/api/v1/getMyPatientAccounts",
      *     summary="Get all patient accounts for the authenticated user",
-     *     tags={"Patient"},
+     *     tags={"Patients"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
