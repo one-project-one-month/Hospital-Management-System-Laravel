@@ -9,7 +9,6 @@ git pull origin dev
 
 echo "Rebuilding containers..."
 docker compose down
-docker compose build
 docker compose up -d
 
 echo "Running Laravel commands..."
