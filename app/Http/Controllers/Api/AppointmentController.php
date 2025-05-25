@@ -316,11 +316,75 @@ class AppointmentController extends Controller
         }
     }
 
+
+    /**
+     * @OA\Put(
+     *     path="/appointments/{appointment_id}/confirmed",
+     *     summary="Confirm an appointment",
+     *     tags={"Appointments"},
+     *     @OA\Parameter(
+     *         name="appointment_id",
+     *         in="path",
+     *         description="ID of the appointment to confirm",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Appointment confirmed successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer"),
+     *             @OA\Property(property="status", type="string", example="confirmed"),
+     *             @OA\Property(property="created_at", type="string", format="date-time"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Appointment not found"
+     *     )
+     * )
+     */
     public function updateAppointment($id){
         $appointment = $this->appointmentRepo->updateAppointmentStatus($id);
         $updatedAppointment = $this->appointmentRepo->getAppointmentById($id);
         return $this->success('success', ['appointment' => AppointmentResource::make($updatedAppointment)], 'Appointment Updated', 200);
     }
+
+    /**
+     * @OA\Patch(
+     *     path="/appointments/{appointment_id}/cancelled",
+     *     summary="Cancel an appointment",
+     *     tags={"Appointments"},
+     *     @OA\Parameter(
+     *         name="appointment_id",
+     *         in="path",
+     *         description="ID of the appointment to cancel",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Appointment cancelled successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer"),
+     *             @OA\Property(property="status", type="string", example="cancelled"),
+     *             @OA\Property(property="created_at", type="string", format="date-time"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Appointment not found"
+     *     )
+     * )
+     */
 
     public function deleteAppointment($id){
         $appointment = $this->appointmentRepo->deleteAppointmentStatus($id);
