@@ -40,7 +40,7 @@ class AdminController extends Controller
      * @OA\Post(
      *     path="/api/v1/admin/createReceptionist",
      *     summary="Create a receptionist form admin",
-     *     tags={"Admin - Receptionists"},
+     *     tags={"Receptionists"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -78,7 +78,7 @@ class AdminController extends Controller
      * @OA\Post(
      *     path="/api/v1/admin/createDoctor",
      *     summary="Create a doctor account from admin",
-     *     tags={"Admin - Doctors"},
+     *     tags={"Doctors"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -146,6 +146,69 @@ class AdminController extends Controller
         }
     }
 
+    /**
+     * @OA\Put(
+     *     path="/doctors/{id}",
+     *     summary="Update a doctor's profile",
+     *     tags={"Doctors"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Doctor ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "email", "password", "license_number", "education", "experience_years"},
+     *             @OA\Property(property="name", type="string", example="Dr. John Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="johndoe@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="secret123"),
+     *             @OA\Property(property="specialty", type="array", @OA\Items(type="string"), example={"Cardiology", "Pediatrics"}),
+     *             @OA\Property(property="license_number", type="string", example="LIC123456"),
+     *             @OA\Property(property="education", type="string", example="Harvard Medical School"),
+     *             @OA\Property(property="experience_years", type="integer", example=10),
+     *             @OA\Property(property="biography", type="string", example="Experienced doctor with 10+ years in the field."),
+     *             @OA\Property(property="phone", type="string", example="123-456-7890"),
+     *             @OA\Property(property="address", type="string", example="123 Clinic Road, New York"),
+     *             @OA\Property(
+     *                 property="availability",
+     *                 type="object",
+     *                 @OA\Property(property="Mon", type="array", @OA\Items(type="string", example="09:00")),
+     *                 @OA\Property(property="Wed", type="array", @OA\Items(type="string", example="13:00")),
+     *                 @OA\Property(property="Fri", type="array", @OA\Items(type="string", example="16:00"))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Doctor updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer"),
+     *             @OA\Property(property="name", type="string"),
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="specialty", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="license_number", type="string"),
+     *             @OA\Property(property="education", type="string"),
+     *             @OA\Property(property="experience_years", type="integer"),
+     *             @OA\Property(property="biography", type="string"),
+     *             @OA\Property(property="phone", type="string"),
+     *             @OA\Property(property="address", type="string"),
+     *             @OA\Property(property="availability", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Doctor not found"
+     *     )
+     * )
+     */
+
     public function updateDoctor(UpdateDoctorRequest $request, string $id){
         if ($this->user->hasRole([usr\Role::DOCTOR])) {
             try {
@@ -160,6 +223,29 @@ class AdminController extends Controller
 
             }
     }
+
+    /**
+     * @OA\Delete(
+     *     path="/doctors/{id}",
+     *     summary="Delete a doctor",
+     *     tags={"Doctors"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Doctor ID to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Doctor deleted successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Doctor not found"
+     *     )
+     * )
+     */
 
     public function deleteDoctor(string $id){
         if ($this->user->hasRole([usr\Role::DOCTOR])) {
