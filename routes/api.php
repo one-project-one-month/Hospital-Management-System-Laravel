@@ -40,6 +40,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
     //receptionist
     Route::apiResource('appointments/{appointment}/treatments',TreatmentController::class);
+    Route::get('treatments',[TreatmentController::class,'getAllTreatments']);
     Route::apiResource('invoice/{appointment}/invoice/', InvoiceController::class);
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
 

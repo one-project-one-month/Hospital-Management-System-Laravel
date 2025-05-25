@@ -26,7 +26,7 @@ class MedicalRecordController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/medical-record",
+     *     path="/api/v1/appointment{appointment}/medical-record",
      *     summary="Store a new medical record",
      *     tags={"Medical Records"},
      *     security={{"bearerAuth":{}}},
@@ -42,7 +42,7 @@ class MedicalRecordController extends Controller
      *                 property="medicines",
      *                 type="array",
      *                 @OA\Items(
-     *                     @OA\Property(property="id", type="integer", example=5),
+     *                     @OA\Property(property="medicine_id", type="integer", example=5),
      *                     @OA\Property(property="quantity", type="integer", example=2)
      *                 )
      *             )
@@ -59,10 +59,10 @@ class MedicalRecordController extends Controller
      {
         if($this->user->hasRole(usr\Role::RECEPTIONIST)){
             try{
-                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();   
+                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();
             return $this->success('success', [ 'medicalRecords' => MedicalRecordResource::collection($medicalRecords)], 'medical records reterived successfully', 200 );
             }catch(\Exception $error){
-                return $this->fail('fail', null, $error->getMessage(), 500);    
+                return $this->fail('fail', null, $error->getMessage(), 500);
             }
         }
 
@@ -122,7 +122,7 @@ class MedicalRecordController extends Controller
             $validated_data['appointment_id'] = $appointment['id'];
             $medical_record = $this->medicalRecordRepository->updateMedicalRecord($validated_data, $appointment);
             return $this->success('success', ['medicalRecord' => new MedicalRecordResource($medical_record) ], 'medical record updated successfully', 200 );
-        }   
+        }
 
         return $this->fail('fail', null, 'user is not authorized to enter this resource', 403);
     }
