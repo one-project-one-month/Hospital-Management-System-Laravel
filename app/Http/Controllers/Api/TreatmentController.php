@@ -168,4 +168,13 @@ class TreatmentController extends Controller
             return $this->fail('fail',null,$e->getMessage(),500);
         }
     }
+
+    public function getAllTreatments(){
+        try {
+            $treatments = $this->treatmentRepository->getTreatments();
+            return $this->success('success',['treatment'=>TreatmentResource::collection($treatments)],'Treatment Updated Successfully',200);
+        } catch (\Exception $e) {
+            return $this->fail('fail',null,$e->getMessage(),500);
+        }
+    }
 }

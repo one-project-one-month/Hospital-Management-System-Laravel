@@ -70,7 +70,7 @@ class AdminRepository{
 
         $user = User::find($doctor->user_id);
         $user->delete();
-        // $doctor->delete();
+         $doctor->delete();
         return $doctor;
     }
 
