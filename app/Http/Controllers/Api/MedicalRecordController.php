@@ -8,8 +8,13 @@ use App\Http\Resources\MedicalRecordResource;
 use App\Repository\MedicalRecordRepository;
 use App\Traits\HttpResponse;
 use App\Enums\User as usr;
+use App\Enums\User\Role;
+use App\Http\Requests\MedicalRecord\UpdateMedicalRecord;
+use App\Http\Resources\MedicineResource;
 use App\Models\MedicalRecord;
 use App\Models\User;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Redis;
 
 class MedicalRecordController extends Controller
 {
@@ -48,6 +53,47 @@ class MedicalRecordController extends Controller
      * )
      */
 
+
+     public function index()
+     {
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            try{
+                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();
+            return $this->success('success', [ 'medicalRecords'  => MedicalRecordResource::collection($medicalRecords)], 'all medical records reterived successfully', 200 );
+            }catch(\Exception $error){
+                return $this->fail("fail", null, $error->getMessage(), 500);
+            }
+        }
+
+        return $this->fail("fail", null, 'user is not authorized to enter this resource', 403);
+     }
+
+     public function show(MedicalRecord $medicalRecord)
+     {
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            try{
+                $medicalRecord = $this->medicalRecordRepository->getMedicalRecord($medicalRecord);
+                return $this->success('success', [ 'medicalRecord' => new MedicalRecordResource($medicalRecord)], 'medical record reterived successfully', 200);
+            }catch(\Exception $error){
+                return $this->fail('fail', null, $error->getMessage(), 500);
+            }
+        }
+        
+        return $this->fail('fail', null, 'user is not authorized to enter this resource', 403);
+     }
+
+
+    public function destroy(MedicalRecord $medicalRecord)
+    {
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            $medicalRecord = $this->medicalRecordRepository->deleteMedicalRecord($medicalRecord);
+            return $this->success("success", null , 'medical record deleted successfully', 200 );
+        }
+
+        return $this->fail('fail', null, 'user is not authorized to enter this resource', 403 );
+    }
+
+
     public function store(StoreMedicalRecordRequest $request)
     {
         if ($this->user->hasRole(usr\Role::RECEPTIONIST)) {
@@ -61,7 +107,19 @@ class MedicalRecordController extends Controller
             }
         }
 
-        return $this->fail('fail', null, 'User is not authorized to access this resource', 401);
+        return $this->fail('fail', null, 'User is not authorized to access this resource', 403);
 
+    }
+
+
+    public function update(UpdateMedicalRecord $request, MedicalRecord $medicalRecord)
+    {
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            $validated_data = $request->validated();
+            $medical_record = $this->medicalRecordRepository->updateMedicalRecord($validated_data, $medicalRecord);
+            return $this->success('success', ['medicalRecord' => new MedicalRecordResource($medical_record) ], 'medical record updated successfully', 200 );
+        }   
+
+        return $this->fail('fail', null, 'user is not authorized to enter this resource', 403);
     }
 }

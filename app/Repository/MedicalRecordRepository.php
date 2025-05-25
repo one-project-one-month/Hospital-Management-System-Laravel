@@ -2,11 +2,34 @@
 
 namespace App\Repository;
 
+use App\Http\Resources\MedicalRecordResource;
 use App\Models\MedicalRecord;
 use App\Models\Medicine;
+use Psy\CodeCleaner\ReturnTypePass;
 
 class MedicalRecordRepository
 {
+
+    public function getAllMedicalRecords()
+    {
+        return MedicalRecordResource::collection(MedicalRecord::all());
+    }
+
+    public function getMedicalRecord(MedicalRecord $medicalRecord)
+    {
+        return $medicalRecord;
+    }
+
+    public function deleteMedicalRecord(MedicalRecord $medicalRecord){
+        return $medicalRecord->delete();
+    }
+
+    public function updateMedicalRecord( $validated_data, MedicalRecord $medicalRecord )
+    {   
+        $id = $medicalRecord->update($validated_data);
+        return MedicalRecord::findOrFail($id);
+    }
+
     public function store($data)
     {
         $record = MedicalRecord::create($data);

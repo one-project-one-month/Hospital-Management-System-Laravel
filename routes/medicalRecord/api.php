@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\MedicalRecordController;
+use App\Models\MedicalRecord;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('medical-record')->group(function(){
-    Route::post('/', [MedicalRecordController::class, 'store']);
-});
+
+Route::apiResource('medical-records', MedicalRecordController::class);
