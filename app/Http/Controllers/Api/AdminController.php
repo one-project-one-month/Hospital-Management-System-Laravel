@@ -11,7 +11,6 @@ use Spatie\Permission\Models\Role;
 use App\Repository\AdminRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\DoctorResource;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
@@ -59,7 +58,7 @@ class AdminController extends Controller
 
     public function createReceptionist(RegisterRequest $request){
 
-        if ($this->user->hasRole([usr\Role::ADMIN])) {
+        if ($this->user->hasRole([usr\Role::DOCTOR])) {
             try {
                 $validatedData=$request->validated();
                 $user=$this->adminRepo->createReceptionist($validatedData);
@@ -148,12 +147,12 @@ class AdminController extends Controller
     }
 
     public function updateDoctor(UpdateDoctorRequest $request, string $id){
-        if ($this->user->hasRole([usr\Role::ADMIN])) {
+        if ($this->user->hasRole([usr\Role::DOCTOR])) {
             try {
                 $validatedData = $request->validated();
                 $doctor = $this->adminRepo->updateDoctor($validatedData,$id);
 
-                return $this->success('success',['doctor'=>DoctorResource::make($doctor)], 'Doctor Updated Successfully', 200);
+                return $this->success('success',['doctor'=>DoctorProfileResource::make($doctor)], 'Doctor Updated Successfully', 200);
             } catch (\Exception $e) {
 
                 return $this->fail('fail', null, $e->getMessage(), 500);
@@ -163,7 +162,7 @@ class AdminController extends Controller
     }
 
     public function deleteDoctor(string $id){
-        if ($this->user->hasRole([usr\Role::ADMIN])) {
+        if ($this->user->hasRole([usr\Role::DOCTOR])) {
             try {
 
                 $this->adminRepo->deleteDoctor($id);
