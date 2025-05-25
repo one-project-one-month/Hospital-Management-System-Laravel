@@ -316,16 +316,14 @@ class AppointmentController extends Controller
         }
     }
 
-    public function updateAppointment(UpdateAppointmentRequest $request, $id){
-        $validated = $request->validated();
-        $appointment = $this->appointmentRepo->updateAppointmentStatus($validated, $id);
+    public function updateAppointment($id){
+        $appointment = $this->appointmentRepo->updateAppointmentStatus($id);
         $updatedAppointment = $this->appointmentRepo->getAppointmentById($id);
         return $this->success('success', ['appointment' => AppointmentResource::make($updatedAppointment)], 'Appointment Updated', 200);
     }
 
-    public function deleteAppointment(UpdateAppointmentRequest $request, $id){
-        $validated = $request->validated();
-        $appointment = $this->appointmentRepo->deleteAppointmentStatus($validated, $id);
+    public function deleteAppointment($id){
+        $appointment = $this->appointmentRepo->deleteAppointmentStatus($id);
         if (!$appointment) {
             return $this->fail('fail', null, 'Appointment not found', 404);
         }
