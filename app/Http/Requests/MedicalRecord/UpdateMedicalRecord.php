@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreMedicalRecordRequest extends FormRequest
+class UpdateMedicalRecord extends FormRequest
 {
 
     use HttpResponse;
@@ -39,6 +39,6 @@ class StoreMedicalRecordRequest extends FormRequest
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException($this->fail('fail', $validator->errors(), 'Validation Error', 422));
+        throw new HttpResponseException($this->fail('fail', $validator->errors(), 'validation error', 400));
     }
 }
