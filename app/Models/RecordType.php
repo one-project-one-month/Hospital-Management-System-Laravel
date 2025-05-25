@@ -13,4 +13,8 @@ class RecordType extends Model
         'name',
         'description',
     ];
+
+    public function medical_record(){
+        return $this->hasOne(MedicalRecord::class);
+    }
 }

@@ -27,7 +27,6 @@ class StoreMedicalRecordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'appointment_id' => 'required|exists:appointments,id',
             'record_type_id' => 'required|exists:record_types,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',

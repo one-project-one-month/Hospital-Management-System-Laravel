@@ -11,6 +11,7 @@ use App\Enums\User as usr;
 use App\Enums\User\Role;
 use App\Http\Requests\MedicalRecord\UpdateMedicalRecord;
 use App\Http\Resources\MedicineResource;
+use App\Models\Appointment;
 use App\Models\MedicalRecord;
 use App\Models\User;
 use GuzzleHttp\Psr7\Request;
@@ -58,35 +59,36 @@ class MedicalRecordController extends Controller
      {
         if($this->user->hasRole(usr\Role::RECEPTIONIST)){
             try{
-                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();
-            return $this->success('success', [ 'medicalRecords'  => MedicalRecordResource::collection($medicalRecords)], 'all medical records reterived successfully', 200 );
+                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();   
+            return $this->success('success', [ 'medicalRecords' => MedicalRecordResource::collection($medicalRecords)], 'medical records reterived successfully', 200 );
             }catch(\Exception $error){
-                return $this->fail("fail", null, $error->getMessage(), 500);
+                return $this->fail('fail', null, $error->getMessage(), 500);    
             }
         }
 
         return $this->fail("fail", null, 'user is not authorized to enter this resource', 403);
      }
 
-     public function show(MedicalRecord $medicalRecord)
+     public function show(Appointment $appointment)
      {
         if($this->user->hasRole(usr\Role::RECEPTIONIST)){
             try{
-                $medicalRecord = $this->medicalRecordRepository->getMedicalRecord($medicalRecord);
-                return $this->success('success', [ 'medicalRecord' => new MedicalRecordResource($medicalRecord)], 'medical record reterived successfully', 200);
+                $medicalRecord = $this->medicalRecordRepository->getMedicalRecord($appointment);
+                if( ! $medicalRecord){
+                    return $this->fail('fail', null, 'medical record not fount', 404 );
+                }
+            return $this->success('success', [ 'medicalRecord'  =>  new MedicalRecordResource($medicalRecord)], 'all medical records reterived successfully', 200 );
             }catch(\Exception $error){
-                return $this->fail('fail', null, $error->getMessage(), 500);
+                return $this->fail("fail", null, $error->getMessage(), 500);
             }
         }
-        
-        return $this->fail('fail', null, 'user is not authorized to enter this resource', 403);
      }
 
 
-    public function destroy(MedicalRecord $medicalRecord)
+    public function destroy(Appointment $appointment)
     {
         if($this->user->hasRole(usr\Role::RECEPTIONIST)){
-            $medicalRecord = $this->medicalRecordRepository->deleteMedicalRecord($medicalRecord);
+            $medicalRecord = $this->medicalRecordRepository->deleteMedicalRecord($appointment);
             return $this->success("success", null , 'medical record deleted successfully', 200 );
         }
 
@@ -94,12 +96,13 @@ class MedicalRecordController extends Controller
     }
 
 
-    public function store(StoreMedicalRecordRequest $request)
+    public function store(StoreMedicalRecordRequest $request,Appointment $appointment)
     {
         if ($this->user->hasRole(usr\Role::RECEPTIONIST)) {
             try {
-                $medicalRecord = $request->validated();
-                $record = $this->medicalRecordRepository->store($medicalRecord);
+                $validated_data = $request->validated();
+                $validated_data['appointment_id'] = $appointment['id'];
+                $record = $this->medicalRecordRepository->store($validated_data);
                 $createdMedicalRecord=MedicalRecord::where('id',$record->id)->first();
                 return $this->success('success',[MedicalRecordResource::make($createdMedicalRecord->load('medicines'))],'Medical Record added successfully',201 );
             } catch (\Exception $e) {
@@ -112,11 +115,12 @@ class MedicalRecordController extends Controller
     }
 
 
-    public function update(UpdateMedicalRecord $request, MedicalRecord $medicalRecord)
+    public function update(UpdateMedicalRecord $request, Appointment $appointment)
     {
         if($this->user->hasRole(usr\Role::RECEPTIONIST)){
             $validated_data = $request->validated();
-            $medical_record = $this->medicalRecordRepository->updateMedicalRecord($validated_data, $medicalRecord);
+            $validated_data['appointment_id'] = $appointment['id'];
+            $medical_record = $this->medicalRecordRepository->updateMedicalRecord($validated_data, $appointment);
             return $this->success('success', ['medicalRecord' => new MedicalRecordResource($medical_record) ], 'medical record updated successfully', 200 );
         }   
 

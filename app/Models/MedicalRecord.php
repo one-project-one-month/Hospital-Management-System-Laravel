@@ -37,6 +37,6 @@ class MedicalRecord extends Model
 
     public function medicines(): BelongsToMany
     {
-        return $this->belongsToMany(Medicine::class, 'medical_record_medicine', 'medical_record_id', 'medicine_id')->withPivot('quantity');
+        return $this->belongsToMany(Medicine::class, 'medical_record_medicines', 'medical_record_id', 'medicine_id')->withPivot('quantity');
     }
 }

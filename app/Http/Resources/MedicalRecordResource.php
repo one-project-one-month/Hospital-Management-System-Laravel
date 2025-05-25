@@ -21,7 +21,9 @@ class MedicalRecordResource extends JsonResource
             'appointment_id' => $this->appointment_id,
             'description' => $this->description,
             'recorded_at' => $this->recorded_at,
+            'medicine_price' => $this->medicine_price,
             'appointment' => AppointmentResource::make($this->appointment),
+            'record_type' => RecordTypeResource::make($this->record_type),
             'medicines' => MedicineResource::collection($this->medicines)
         ];
     }
