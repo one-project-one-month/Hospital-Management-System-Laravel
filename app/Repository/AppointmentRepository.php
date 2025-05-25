@@ -82,21 +82,27 @@ class AppointmentRepository
         return $appointment;
     }
 
-    public function updateAppointmentStatus($data, $id){
+    public function updateAppointmentStatus($id){
         $appointment = Appointment::findOrFail($id);
 
         if($appointment){
-            $appointment->update($data);
+            $appointment->update(
+                [
+                    'status' => 'confirmed'
+                ]
+            );
         }
 
         return $appointment;
     }
 
-    public function deleteAppointmentStatus($data, $id){
+    public function deleteAppointmentStatus($id){
         $appointment = Appointment::findOrFail($id);
 
         if($appointment){
-            $appointment->update($data);
+            $appointment->update([
+                'status' => 'cancelled'
+            ]);
         }
 
         return $appointment;
