@@ -29,7 +29,8 @@ class StoreMedicineRequest extends FormRequest
         return [
         'name'=>'required|string|max:255|unique:medicines,name',
         'stock'=>'required|numeric|',
-        'expired_at'=>'nullable|date'
+        'expired_at'=>'required|date',
+        'price'=>'required|numeric'
         ];
     }
 

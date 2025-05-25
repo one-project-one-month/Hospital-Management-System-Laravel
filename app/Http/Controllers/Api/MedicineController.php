@@ -41,7 +41,7 @@ class MedicineController extends Controller
      * @OA\Get(
      *     path="/api/v1/medicines",
      *     summary="List all medicines",
-     *     tags={"medicine"},
+     *     tags={"medicines"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful response"
@@ -74,6 +74,7 @@ class MedicineController extends Controller
      *             required={"name", "stock", "expired"},
      *             @OA\Property(property="name", type="string", example="Paracetamol"),
      *             @OA\Property(property="stock", type="integer", example=100),
+     *  @OA\Property(property="price", type="integer", example=100),
      *             @OA\Property(property="expired", type="string", format="date", example="2025-12-31")
      *         )
      *     ),
