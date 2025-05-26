@@ -59,8 +59,8 @@ class MedicalRecordController extends Controller
      {
         if($this->user->hasRole(usr\Role::RECEPTIONIST)){
             try{
-                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();
-            return $this->success('success', [ 'medicalRecords' => MedicalRecordResource::collection($medicalRecords)], 'medical records reterived successfully', 200 );
+                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();   
+                return $this->success('success', [ 'medicalRecords' => MedicalRecordResource::collection($medicalRecords)], 'medical records reterived successfully', 200 );
             }catch(\Exception $error){
                 return $this->fail('fail', null, $error->getMessage(), 500);
             }
@@ -103,6 +103,10 @@ class MedicalRecordController extends Controller
                 $validated_data = $request->validated();
                 $validated_data['appointment_id'] = $appointment['id'];
                 $record = $this->medicalRecordRepository->store($validated_data);
+                if(! $record){
+                    return $this->fail('fail', null, 'medical record already exists for this appointment', 400);
+                }
+
                 $createdMedicalRecord=MedicalRecord::where('id',$record->id)->first();
                 return $this->success('success',[MedicalRecordResource::make($createdMedicalRecord->load('medicines'))],'Medical Record added successfully',201 );
             } catch (\Exception $e) {
@@ -124,6 +128,6 @@ class MedicalRecordController extends Controller
             return $this->success('success', ['medicalRecord' => new MedicalRecordResource($medical_record) ], 'medical record updated successfully', 200 );
         }
 
-        return $this->fail('fail', null, 'user is not authorized to enter this resource', 403);
+        return $this->fail('fail', null, 'user is not authorized to enter this resource', 403 );
     }
 }
