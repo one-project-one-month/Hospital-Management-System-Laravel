@@ -38,10 +38,19 @@ class MedicalRecordRepository
             'recorded_at' => $validated_data['recorded_at'],
             'updated_at' => now(),
         ]);
-        $record = MedicalRecord::where('appointment_id', $appointment['id'])->first();
 
+        $medicalRecord = MedicalRecord::where('appointment_id', $appointment['id'])->first();
+        $medicalRecordMedicines = MedicalRecordMedicine::where('medical_record_id', $medicalRecord['id'])->get();
 
-        MedicalRecordMedicine::where('medical_record_id', $record->id)->delete();
+        foreach($medicalRecordMedicines as $medicalRecordMedicine) {
+            $medicine = Medicine::where('id', $medicalRecordMedicine['medicine_id'])->first();
+            $adding_stock = $medicine['stock'] + $medicalRecordMedicine['quantity'];
+            $medicine->update([
+                'stock' => $adding_stock,
+            ]);
+        }
+
+        MedicalRecordMedicine::where('medical_record_id', $medicalRecord->id)->delete();
 
         $totalMedicinePrice=0;
         $attachData=[];
@@ -49,23 +58,31 @@ class MedicalRecordRepository
        foreach ($validated_data['medicines'] as $item) {
         $medicine=Medicine::findOrFail($item['medicine_id']);
         $quantity=$item['quantity'];
+        $stock_left = $medicine['stock'] - $quantity;
+        Medicine::where('id', $medicine->id)->update(['stock' => $stock_left]); 
         $total=$medicine->price * $quantity;
 
         $totalMedicinePrice+=$total;
         $attachData[$medicine->id]=['quantity'=>$quantity];
        }
 
-       $record->medicines()->attach($attachData);
+       $medicalRecord->medicines()->attach($attachData);
 
-       $record->update([
+       $medicalRecord->update([
         'medicine_price'=>$totalMedicinePrice
        ]);
 
-       return $record;
+       return $medicalRecord;
     }
 
     public function store($data)
     {
+        $medicalRecord = MedicalRecord::where('appointment_id', $data['appointment_id'])->first();
+
+        if ($medicalRecord) {
+            return null;
+        }
+
         $record = MedicalRecord::create($data);
 
         $totalMedicinePrice=0;

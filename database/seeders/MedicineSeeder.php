@@ -44,7 +44,8 @@ class MedicineSeeder extends Seeder
         Medicine::create([
             'name'=>'medicine2',
             'stock'=>30,
-            'price'=>3000
+            'price'=>3000,
+            "expired_at"=>'2024-2-2'
         ]);
     }
 }
