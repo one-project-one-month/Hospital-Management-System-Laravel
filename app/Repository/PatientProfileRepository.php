@@ -43,4 +43,16 @@ class PatientProfileRepository
         })->get();
         return $patients;
     }
+
+    public function updateProfile($data,$id){
+        $patient=PatientProfile::where('id',$id)->first();
+        $patient->update($data);
+        return $patient;
+    }
+
+    public function deleteProfile($id   ){
+        $patient=PatientProfile::where('id',$id)->first();
+        $patient->delete();
+        return $patient;
+    }
 }

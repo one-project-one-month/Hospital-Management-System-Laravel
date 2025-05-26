@@ -30,7 +30,7 @@ class StorePatientProfileRequest extends FormRequest
             'age'=>'required|integer',
             'date_of_birth'=>'required|date',
             'gender'=>'required|in:male,female',
-            'phone'=>'nullable|string|max:13',
+            'phone'=>'nullable|integer|max:13',
             'address'=>'required|string|max:255',
             'relation'=>'required|string|max:20',
             'blood_type'=>'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
