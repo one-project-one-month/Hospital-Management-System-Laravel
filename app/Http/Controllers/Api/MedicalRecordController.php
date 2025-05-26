@@ -24,11 +24,91 @@ class MedicalRecordController extends Controller
         $this->user = \Auth::user();
     }
 
+
+
+     /**
+     * @OA\Get(
+     *     path="/api/v1/medical-records",
+     *     tags={"MedicalRecord"},
+     *     summary="Get all medical records",
+     *     @OA\Response(response=200, description="List of medical records")
+     * )
+     */
+     public function index()
+     {
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            try{
+                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();
+                return $this->success('success', [ 'medicalRecords' => MedicalRecordResource::collection($medicalRecords)], 'medical records reterived successfully', 200 );
+            }catch(\Exception $error){
+                return $this->fail('fail', null, $error->getMessage(), 500);
+            }
+        }
+
+        return $this->fail("fail", null, 'user is not authorized to enter this resource', 403);
+     }
+
+     /**
+     * @OA\Get(
+     *     path="/api/v1/appointments/{appointment}/medical-record",
+     *     tags={"MedicalRecord"},
+     *     summary="Get a single medical record by appointment ID",
+     *     @OA\Parameter(
+     *         name="appointment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Medical record found"),
+     *     @OA\Response(response=404, description="Not found")
+     * )
+     */
+
+     public function show(Appointment $appointment)
+     {
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            try{
+                $medicalRecord = $this->medicalRecordRepository->getMedicalRecord($appointment);
+                if( ! $medicalRecord){
+                    return $this->fail('fail', null, 'medical record not fount', 404 );
+                }
+            return $this->success('success', [ 'medicalRecord'  =>  new MedicalRecordResource($medicalRecord)], 'all medical records reterived successfully', 200 );
+            }catch(\Exception $error){
+                return $this->fail("fail", null, $error->getMessage(), 500);
+            }
+        }
+     }
+
+      /**
+     * @OA\Delete(
+     *     path="/api/appointments/{appointment}/medical-record",
+     *     tags={"MedicalRecord"},
+     *     summary="Delete a medical record",
+     *     @OA\Parameter(
+     *         name="appointment",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=204, description="Deleted"),
+     *     @OA\Response(response=404, description="Not Found")
+     * )
+     */
+    public function destroy(Appointment $appointment)
+    {
+        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
+            $medicalRecord = $this->medicalRecordRepository->deleteMedicalRecord($appointment);
+            return $this->success("success", null , 'medical record deleted successfully', 200 );
+        }
+
+        return $this->fail('fail', null, 'user is not authorized to enter this resource', 403 );
+    }
+
     /**
      * @OA\Post(
      *     path="/api/v1/appointment{appointment}/medical-record",
      *     summary="Store a new medical record",
-     *     tags={"Medical Records"},
+     *     tags={"MedicalRecord"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
@@ -55,47 +135,6 @@ class MedicalRecordController extends Controller
      */
 
 
-     public function index()
-     {
-        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
-            try{
-                $medicalRecords = $this->medicalRecordRepository->getAllMedicalRecords();   
-                return $this->success('success', [ 'medicalRecords' => MedicalRecordResource::collection($medicalRecords)], 'medical records reterived successfully', 200 );
-            }catch(\Exception $error){
-                return $this->fail('fail', null, $error->getMessage(), 500);
-            }
-        }
-
-        return $this->fail("fail", null, 'user is not authorized to enter this resource', 403);
-     }
-
-     public function show(Appointment $appointment)
-     {
-        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
-            try{
-                $medicalRecord = $this->medicalRecordRepository->getMedicalRecord($appointment);
-                if( ! $medicalRecord){
-                    return $this->fail('fail', null, 'medical record not fount', 404 );
-                }
-            return $this->success('success', [ 'medicalRecord'  =>  new MedicalRecordResource($medicalRecord)], 'all medical records reterived successfully', 200 );
-            }catch(\Exception $error){
-                return $this->fail("fail", null, $error->getMessage(), 500);
-            }
-        }
-     }
-
-
-    public function destroy(Appointment $appointment)
-    {
-        if($this->user->hasRole(usr\Role::RECEPTIONIST)){
-            $medicalRecord = $this->medicalRecordRepository->deleteMedicalRecord($appointment);
-            return $this->success("success", null , 'medical record deleted successfully', 200 );
-        }
-
-        return $this->fail('fail', null, 'user is not authorized to enter this resource', 403 );
-    }
-
-
     public function store(StoreMedicalRecordRequest $request,Appointment $appointment)
     {
         if ($this->user->hasRole(usr\Role::RECEPTIONIST)) {
@@ -118,6 +157,35 @@ class MedicalRecordController extends Controller
 
     }
 
+     /**
+     * @OA\Put(
+     *     path="/api/v1/appointment{appointment}/medical-record",
+     *     summary="Store a new medical record",
+     *     tags={"MedicalRecord"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"appointment_id", "record_type_id", "title", "description"},
+     *             @OA\Property(property="appointment_id", type="integer", example=1),
+     *             @OA\Property(property="record_type_id", type="string", format="uuid", example="a12b3c4d-5e6f-7a8b-9c0d-ef1234567890"),
+     *             @OA\Property(property="title", type="string", example="General Checkup"),
+     *             @OA\Property(property="description", type="string", example="The patient reported headaches and fatigue."),
+     *             @OA\Property(
+     *                 property="medicines",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="medicine_id", type="integer", example=5),
+     *                     @OA\Property(property="quantity", type="integer", example=2)
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Medical record created successfully"),
+     *     @OA\Response(response=400, description="Bad Request"),
+     *     @OA\Response(response=401, description="Unauthenticated")
+     * )
+     */
 
     public function update(UpdateMedicalRecord $request, Appointment $appointment)
     {
