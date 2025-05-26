@@ -33,4 +33,9 @@ class TreatmentRepository
         return $treatment;
     }
 
+    public function getTreatments(){
+        $treatments=Treatment::get();
+        return $treatments;
+    }
+
 }

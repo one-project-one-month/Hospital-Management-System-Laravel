@@ -55,15 +55,14 @@ class AppointmentController extends Controller
 
     public function index(){
         try {
-            if(request()->filled('doctor_id', 'appointment_date')){
-                $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate(request()->doctor_id, request()->appointment_date);
-                $doctor = DoctorProfile::where('id', request()->doctor_id)->first();
-                return $this->success('success', ['appointment' => AppointmentResource::collection($appointments),'doctor'=>DoctorProfileResource::make($doctor)], 'Appointments', 200);
-            }
+            $filters=request()->only(['doctor_id', 'appointment_date','patient_profile_id','status']);
 
-            $appointments = $this->appointmentRepo->getAllAppointments();
-            return $this->success('success', ['appointment' => AppointmentResource::collection($appointments)], 'Appointments', 200);
-        } catch (\Exception $e) {
+            if (!empty($filters)) {
+                $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate($filters);
+                $doctor =isset($filters['doctor_id']) ? DoctorProfile::find($filters['doctor_id']) : null ;
+                    return $this->success('success', ['appointment' => AppointmentResource::collection($appointments), 'doctor'=>$doctor? DoctorProfileResource::make($doctor):null], 'Appointments', 200);
+        }
+    } catch (\Exception $e) {
             return $this->fail('fail', null, $e->getMessage(), 500);
         }
     }
@@ -316,16 +315,78 @@ class AppointmentController extends Controller
         }
     }
 
-    public function updateAppointment(UpdateAppointmentRequest $request, $id){
-        $validated = $request->validated();
-        $appointment = $this->appointmentRepo->updateAppointmentStatus($validated, $id);
+
+    /**
+     * @OA\Put(
+     *     path="/appointments/{appointment_id}/confirmed",
+     *     summary="Confirm an appointment",
+     *     tags={"Appointments"},
+     *     @OA\Parameter(
+     *         name="appointment_id",
+     *         in="path",
+     *         description="ID of the appointment to confirm",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Appointment confirmed successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer"),
+     *             @OA\Property(property="status", type="string", example="confirmed"),
+     *             @OA\Property(property="created_at", type="string", format="date-time"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Appointment not found"
+     *     )
+     * )
+     */
+    public function updateAppointment($id){
+        $appointment = $this->appointmentRepo->updateAppointmentStatus($id);
         $updatedAppointment = $this->appointmentRepo->getAppointmentById($id);
         return $this->success('success', ['appointment' => AppointmentResource::make($updatedAppointment)], 'Appointment Updated', 200);
     }
 
-    public function deleteAppointment(UpdateAppointmentRequest $request, $id){
-        $validated = $request->validated();
-        $appointment = $this->appointmentRepo->deleteAppointmentStatus($validated, $id);
+    /**
+     * @OA\Patch(
+     *     path="/appointments/{appointment_id}/cancelled",
+     *     summary="Cancel an appointment",
+     *     tags={"Appointments"},
+     *     @OA\Parameter(
+     *         name="appointment_id",
+     *         in="path",
+     *         description="ID of the appointment to cancel",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Appointment cancelled successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer"),
+     *             @OA\Property(property="status", type="string", example="cancelled"),
+     *             @OA\Property(property="created_at", type="string", format="date-time"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Appointment not found"
+     *     )
+     * )
+     */
+
+    public function deleteAppointment($id){
+        $appointment = $this->appointmentRepo->deleteAppointmentStatus($id);
         if (!$appointment) {
             return $this->fail('fail', null, 'Appointment not found', 404);
         }

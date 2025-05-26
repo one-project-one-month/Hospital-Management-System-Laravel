@@ -9,6 +9,7 @@ use App\Traits\HttpResponse;
 use App\Repository\PatientProfileRepository;
 use App\Http\Resources\PatientProfileResource;
 use App\Http\Requests\PatientProfile\StorePatientProfileRequest;
+use App\Http\Requests\PatientProfile\UpgradePatientProfileRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -212,9 +213,19 @@ class PatientProfileController extends Controller
      * )
      */
 
-    public function update(Request $request, string $id)
+    public function update(UpgradePatientProfileRequest $request, string $id)
     {
-        //
+        try {
+            $validatedData=$request->validated();
+            $patientProfile = $this->patientProfileRepository->updateProfile($validatedData,$id);
+
+            if (!$patientProfile) {
+                return $this->fail('fail', null, 'PatientProfile not found', 404);
+            }
+            return $this->success('success', [PatientProfileResource::make($patientProfile)], 'PatientProfile updated successfully', 200);
+        } catch (\Exception $e) {
+            return $this->fail('fail', null, $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -241,7 +252,16 @@ class PatientProfileController extends Controller
 
     public function destroy(string $id)
     {
-        //
+        try {
+            $patientProfile = $this->patientProfileRepository->deleteProfile($id);
+
+            if (!$patientProfile) {
+                return $this->fail('fail', null, 'PatientProfile not found', 404);
+            }
+            return $this->success('success',null, 'PatientProfile deleted successfully', 204);
+        } catch (\Exception $e) {
+            return $this->fail('fail', null, $e->getMessage(), 500);
+        }
     }
 
 

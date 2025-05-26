@@ -18,8 +18,8 @@ class Treatment extends Model
     ];
 
 
-    public function appointments(): HasMany
+    public function appointment()
     {
-        return $this->hasMany(Appointment::class);
+        return $this->hasOne(Appointment::class);
     }
 }

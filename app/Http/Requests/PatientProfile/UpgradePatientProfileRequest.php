@@ -23,9 +23,11 @@ class UpgradePatientProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name'=>'required|string|max:255',
+            'age'=>'required|integer',
             'date_of_birth' => "required|date",
             'gender' => "required|string|max:255",
-            'phone' => "required|string|max:255",
+            'phone' => "required|string",
             'address' => "required|string|max:2000",
             'relation' => "required|string|max:255",
             'blood_type' => "required|string|max:255",
