@@ -55,15 +55,14 @@ class AppointmentController extends Controller
 
     public function index(){
         try {
-            if(request()->filled('doctor_id', 'appointment_date')){
-                $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate(request()->doctor_id, request()->appointment_date);
-                $doctor = DoctorProfile::where('id', request()->doctor_id)->first();
-                return $this->success('success', ['appointment' => AppointmentResource::collection($appointments),'doctor'=>DoctorProfileResource::make($doctor)], 'Appointments', 200);
-            }
+            $filters=request()->only(['doctor_id', 'appointment_date','patient_profile_id','status']);
 
-            $appointments = $this->appointmentRepo->getAllAppointments();
-            return $this->success('success', ['appointment' => AppointmentResource::collection($appointments)], 'Appointments', 200);
-        } catch (\Exception $e) {
+            if (!empty($filters)) {
+                $appointments = $this->appointmentRepo->getAppointmentsByDoctorAndDate($filters);
+                $doctor =isset($filters['doctor_id']) ? DoctorProfile::find($filters['doctor_id']) : null ;
+                    return $this->success('success', ['appointment' => AppointmentResource::collection($appointments), 'doctor'=>$doctor? DoctorProfileResource::make($doctor):null], 'Appointments', 200);
+        }
+    } catch (\Exception $e) {
             return $this->fail('fail', null, $e->getMessage(), 500);
         }
     }

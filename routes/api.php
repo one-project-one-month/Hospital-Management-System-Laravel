@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\TreatmentController;
 use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\InvoiceMedicineController;
+use App\Http\Controllers\Api\RecetpionistController;
 use App\Http\Controllers\Api\PatientProfileController;
 
 
@@ -40,6 +41,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function(){
 
     //receptionist
     Route::apiResource('appointments/{appointment}/treatments',TreatmentController::class);
+    Route::apiResource('receptionist',RecetpionistController::class);
     Route::get('treatments',[TreatmentController::class,'getAllTreatments']);
     Route::apiResource('invoice/{appointment}/invoice/', InvoiceController::class);
     Route::post('/appointments/receptionist', [AppointmentController::class, 'receptionistBookAppointment']);
