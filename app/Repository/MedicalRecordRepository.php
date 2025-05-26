@@ -26,11 +26,11 @@ class MedicalRecordRepository
     }
 
     public function deleteMedicalRecord(Appointment $appointment){
-        return MedicalRecord::where('appointment_id', $appointment->id)->delete();
+         MedicalRecord::where('appointment_id', $appointment->id)->delete();
     }
 
     public function updateMedicalRecord( $validated_data, Appointment $appointment )
-    {   
+    {
         MedicalRecord::where('appointment_id', $appointment['id'])->update([
             'record_type_id' => $validated_data['record_type_id'],
             'title' => $validated_data['title'],
@@ -59,7 +59,7 @@ class MedicalRecordRepository
         $medicine=Medicine::findOrFail($item['medicine_id']);
         $quantity=$item['quantity'];
         $stock_left = $medicine['stock'] - $quantity;
-        Medicine::where('id', $medicine->id)->update(['stock' => $stock_left]); 
+        Medicine::where('id', $medicine->id)->update(['stock' => $stock_left]);
         $total=$medicine->price * $quantity;
 
         $totalMedicinePrice+=$total;
