@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Models\DoctorProfile;
 use App\Models\DoctorSchedule;
 use App\Models\PatientProfile;
+use App\Models\RecordType;
 use App\Models\Treatment;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -26,6 +27,21 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'receptionist', 'guard_name' => 'api']);
 
         $this->call(MedicineSeeder::class);
+
+        RecordType::create([
+            'name'=>'symptom',
+            'text'=>'blah bgdfd',
+        ]);
+
+        RecordType::create([
+            'name'=>'diagnosis',
+            'text'=>'blah bgdfd',
+        ]);
+
+        RecordType::create([
+            'name'=>'allergy',
+            'text'=>'blah bgdfd',
+        ]);
 
         $admin = User::create([
             'name' => 'Admin',

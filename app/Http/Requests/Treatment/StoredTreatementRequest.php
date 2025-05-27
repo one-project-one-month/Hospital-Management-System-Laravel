@@ -25,7 +25,7 @@ class StoredTreatementRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'appointment_id' => 'exists:appointments,id',
+            // 'appointment_id' => 'exists:appointments,id',
             'title'         => 'required | max:225 | string',
             'description'   => 'required | string',
             'start_date'    => 'required | date',

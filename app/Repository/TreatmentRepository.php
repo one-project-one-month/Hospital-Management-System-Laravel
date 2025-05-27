@@ -16,7 +16,7 @@ class TreatmentRepository
 
 
     public function createTreatment($data){
-        // dd($data);
+
         $treatment = Treatment::create($data);
         return $treatment;
     }
