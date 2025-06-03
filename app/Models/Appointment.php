@@ -36,7 +36,7 @@ class Appointment extends Model
 
     public function treatment() : BelongsTo
     {
-        return $this->belongsTo(Treatment::class);
+        return $this->hasOne(Treatment::class);
     }
 
     public function labResults()
